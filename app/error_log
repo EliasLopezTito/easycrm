@@ -1,0 +1,4 @@
+[25-Feb-2021 21:33:36 America/Chicago] PHP Fatal error:  Uncaught Error: Call to undefined function dd() in /home/artechperu/public_html/mensaje/index.php:23
+Stack trace:
+#0 {main}
+  thrown in /home/artechperu/public_html/mensaje/index.php on line 23
