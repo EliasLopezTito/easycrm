@@ -24,19 +24,21 @@
 
         <ol class="breadcrumb">
 
-            @if(\Illuminate\Support\Facades\Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR)
-            <li class="mr-10">
-                <div class="form-group row">
-                    <div class="col-sm-12">
-                        <select name="reasignar_id" id="reasignar_id" class="form-input">
-                            <option value="">--REASIGNAR--</option>
-                            @foreach($Vendedores as $q)
-                                <option value="{{ $q->id }}">{{ $q->name }}</option>
-                            @endforeach
-                        </select>
+            @if (Auth::guard('web')->user()->id != 1)
+                @if(\Illuminate\Support\Facades\Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR)
+                <li class="mr-10">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <select name="reasignar_id" id="reasignar_id" class="form-input">
+                                <option value="">--REASIGNAR--</option>
+                                @foreach($Vendedores as $q)
+                                    <option value="{{ $q->id }}">{{ $q->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+                @endif
             @endif
 
             <li class="breadcrumb-item">
