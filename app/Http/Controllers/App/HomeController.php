@@ -524,8 +524,19 @@ class HomeController extends Controller
             }else if($request->get('FormId') == "215243078092677"){ //ENFERMERIA
                 $Carrera = Carrera::where('id', 5)->first();
                 $fuente = 43;
-            }else if($request->get('FormId') == "3792492817740864"){ //ENFERMERIA OTRA FUENTE
-                $Carrera = Carrera::where('id', 5)->first();
+            }else if($request->get('FormId') == "3792492817740864"){ //OTRA FUENTE CARRERA A ELEGIR
+                /* $Carrera = Carrera::where('id', 5)->first(); */
+                if($request->get('carrera') == 'fisioterapia'){
+                    $Carrera = Carrera::where('id', 3)->first();
+                }else if($request->get('carrera') == 'enfermeria'){
+                    $Carrera = Carrera::where('id', 1)->first();
+                }else if($request->get('carrera') == 'farmacia'){
+                    $Carrera = Carrera::where('id', 2)->first();
+                }else if($request->get('carrera') == 'laboratorio_clinico'){
+                    $Carrera = Carrera::where('id', 4)->first();
+                }else if($request->get('carrera') == 'protesis_dental'){
+                    $Carrera = Carrera::where('id', 5)->first();
+                }
                 $fuente = 55;
             }else if($request->get('FormId') == "7091620347624516"){ //curso NUTRICION DEPORTIVA
                 $Carrera = Carrera::where('id', 40)->first();
