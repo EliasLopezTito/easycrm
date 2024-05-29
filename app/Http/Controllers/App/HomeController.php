@@ -524,6 +524,9 @@ class HomeController extends Controller
             }else if($request->get('FormId') == "215243078092677"){ //ENFERMERIA
                 $Carrera = Carrera::where('id', 5)->first();
                 $fuente = 43;
+            }else if($request->get('FormId') == "3792492817740864"){ //ENFERMERIA OTRA FUENTE
+                $Carrera = Carrera::where('id', 5)->first();
+                $fuente = 55;
             }else if($request->get('FormId') == "7091620347624516"){ //curso NUTRICION DEPORTIVA
                 $Carrera = Carrera::where('id', 40)->first();
             }else if($request->get('FormId') == "318102581061039"){ //curso INYECTABLES
