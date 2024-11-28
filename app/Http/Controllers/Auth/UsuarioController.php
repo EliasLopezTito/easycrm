@@ -113,7 +113,7 @@ class UsuarioController extends Controller
         return response()->json(['Success' => $status]);
     }
 
-    public function reasignar(Request $request)
+    /* public function reasignar(Request $request)
     {
         $status = false;
         $Message = null;
@@ -157,5 +157,61 @@ class UsuarioController extends Controller
             DB::rollBack();
         }
         return response()->json(['Success' => $status, 'Message' => $Message]);
+    } */
+
+
+    /* CODIGO AÑADIO POR SEBASTIAN  PARA GESTIONAR LAS ASIGNACIONES*/
+    public function reasignar(Request $request)
+    {
+        $status = false;
+        $Message = null;
+
+        $Leads = explode(",", $request->array_leads);
+
+        try {
+
+            DB::beginTransaction();
+
+            // Obtener el ID del vendedor anterior (antes de la reasignación)
+            $oldVendedorId = Cliente::whereIn('id', $Leads)->pluck('user_id')->unique();
+
+            // Descontar los leads al vendedor anterior si existe
+            if ($oldVendedorId->isNotEmpty()) {
+                $oldVendedor = User::where('id', $oldVendedorId->first())->first();
+                if ($oldVendedor) {
+                    $oldVendedor->assigned_leads -= count($Leads); // Descontamos los leads
+                    $oldVendedor->save();
+                }
+            }
+
+            // Guardar el historial de reasignación para cada lead
+            for ($i = 0; $i < count($Leads); $i++) {
+                $HistorialReasignar = new HistorialReasignar();
+                $HistorialReasignar->user_id = Auth::guard('web')->user()->id;
+                $HistorialReasignar->cliente_id =  $Leads[$i];
+                $HistorialReasignar->vendedor_id =  $request->reasignar_id;
+                $HistorialReasignar->observacion = "Reasignó este registro a una Asesora";
+                $HistorialReasignar->save();
+            }
+
+            // Actualizar el cliente con el nuevo vendedor
+            $Cliente = Cliente::whereIn('id', $Leads)->update(['user_id' => $request->reasignar_id]);
+
+            // Sumar los leads al nuevo vendedor
+            $assessor = User::where('id', $request->reasignar_id)->first();
+            if ($assessor) {
+                $assessor->assigned_leads += count($Leads); // Sumamos los leads
+                $assessor->save();
+            }
+
+            $status = true;
+
+            DB::commit();
+        } catch (\Exception $e) {
+            $Message = $e->getMessage();
+            DB::rollBack();
+        }
+        return response()->json(['Success' => $status, 'Message' => $Message]);
     }
+
 }
