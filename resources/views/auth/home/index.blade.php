@@ -14,7 +14,7 @@
     <section class="content-header">
         <h1>
             Inicio
-            <small>Control panel</small>
+            <small>Control paneel</small>
         </h1>
 
         <div class="form-group filterSearchContent">

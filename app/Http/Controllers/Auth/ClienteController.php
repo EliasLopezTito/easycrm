@@ -57,7 +57,12 @@ class ClienteController extends Controller
         $Enterados = Enterado::orderBy('name', 'asc')->get();
         $Carreras = Carrera::all();
         $Ciclos = Ciclo::all();
-        $Asesores = Asesor::where('profile_id', App::$PERFIL_VENDEDOR)->where('activo', '1')->orderBy('name', 'asc')->get();
+        $Asesores = Asesor::where('profile_id', App::$PERFIL_VENDEDOR)
+        ->where('activo', '1')
+        ->where('recibe_lead', '1')
+        ->orderBy('name', 'asc')
+        ->get();
+
 
         return view('auth.cliente._Mantenimiento', [
             'Provincias' => $Provincias, 'Modalidades' => $Modalidades,
