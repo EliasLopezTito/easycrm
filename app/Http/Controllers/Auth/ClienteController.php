@@ -133,27 +133,18 @@ class ClienteController extends Controller
             DB::beginTransaction();
 
             $assessor = $this->getAssessorWithMinimumAssignedLeads();
-            $first_user_id = DB::table('users')->select('id')->where('recibe_lead', 1)->where('activo',1)->whereNull('deleted_at')->first()->id;
-
-            /*if(in_array($request->provincia_id, [1,2])){*/
 
             if (in_array(Auth::guard('web')->user()->profile_id, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
                 $userTurnId = Auth::guard('web')->user()->id;
             } else {
-                /*$user = DB::table('users')->select('id')->where('profile_id', App::$PERFIL_VENDEDOR)
-                    ->where('id', '!=', App::$USUARIO_PROVINCIA)->where('turno', true)->first();*/
                 if (isset($request->name_id)) {
+                    // Asigna el ID del usuario especificado en la solicitud
                     $userTurnId = DB::table('users')->select('id')->where('id', $request->name_id)->first()->id;
                 } else {
-                    $user = $assessor;
-                    $userTurnId = $user != null ? $user->id : $first_user_id;
+                    // Selecciona al asesor con la menor cantidad de leads
+                    $userTurnId = $assessor != null ? $assessor->id : null; 
                 }
             }
-
-            /*}else{
-            $user = DB::table('users')->select('id')->where('id', App::$USUARIO_PROVINCIA)->first();
-            $userTurnId = $user != null ? $user->id : DB::table('users')->select('id')->first()->id;
-        }*/
 
             $clienteExist = Cliente::where('dni', $request->dni)
                 ->orWhere('email', $request->email)
