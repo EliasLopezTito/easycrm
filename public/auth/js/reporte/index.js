@@ -584,57 +584,6 @@ $(function () {
                     series: null
                 }
             });
-
-            /* CODIGO AÑADIDO PARA VERIFICAR */
-            Highcharts.chart('leadsAsesorasSin', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Leads para asesores sin Reasignaciones'
-                },
-                accessibility: {
-                    announceNewData: {
-                        enabled: true
-                    }
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Registros'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '({point.y})'
-                        }
-                    }
-                },
-
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: se le registraron <b>{point.y} leads</b><br/>'
-                },
-                series: [
-                    {
-                        name: "Registros",
-                        colorByPoint: true,
-                        data: data.recibeLeadAsesorSin
-                    }
-                ],
-                drilldown: {
-                    series: null
-                }
-            });
-
             var dataLeadsGeneral = data.recibeLeadsNuevosAsesor;
             const arrayAsesores = [], arrayNuevo = [], arraySeguimiento = [], arrayOportunidad = [], arrayCierre = [], arrayNoContactado = [], arrayPerdido = [], arrayOtros = [], arrayReingreso = [],
             arrayReasignado = [], arrayProximaCampaña = [], arrayRemarketing = [], arrayReintento = [], arrayInvalido = [];

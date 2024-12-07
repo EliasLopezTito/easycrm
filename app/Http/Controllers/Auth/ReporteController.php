@@ -91,7 +91,7 @@ class ReporteController extends Controller
         /* CONSULTA DE MARCO */
         $recibeLeadAsesor = DB::select(
             "SELECT  J1.nombre_asesor as 'name', count(*) as 'y'
-                From (  
+                From (
                     select 
                     CL.nombres as 'nombre_cliente',
                     CL.apellidos as 'apellido_cliente' ,
@@ -103,29 +103,6 @@ class ReporteController extends Controller
                 Group by J1.nombre_asesor 
                 order by y desc"
         );
-
-        /* CONSULTA DE SEBAS */
-        $recibeLeadAsesorSin = DB::select(
-            "SELECT  J1.nombre_asesor as 'name', count(*) as 'y'
-            FROM (
-                SELECT 
-                    CL.nombres as 'nombre_cliente',
-                    CL.apellidos as 'apellido_cliente' ,
-                    US.name as 'nombre_asesor'
-                FROM historial_reasignars HR
-                INNER JOIN users US ON US.id = HR.user_id
-                INNER JOIN clientes CL ON CL.id = HR.cliente_id
-                WHERE 
-                    HR.deleted_at IS NULL 
-                    AND HR.observacion = 'Registro' 
-                    AND CL.deleted_at IS NULL
-                    AND US.deleted_at IS NULL
-                    AND HR.created_at BETWEEN '" . $request->fecha_inicio . " 00:00:00' AND '" . $request->fecha_final . " 23:59:59'
-            ) as J1
-            GROUP BY J1.nombre_asesor 
-            ORDER BY y DESC"
-        );
-        
 
         /* $recibeLeadsNuevosAsesor = DB::select("SELECT
             J1.nombre_asesor as 'name',
@@ -401,7 +378,6 @@ class ReporteController extends Controller
 
             return response()->json([
                 'recibeLeadAsesor' => $recibeLeadAsesor,
-                'recibeLeadAsesorSin' => $recibeLeadAsesorSin,
                 'recibeLeadsNuevosAsesor' => $recibeLeadsNuevosAsesor,
                 'Estados' => $arregloFilterEstados,
                 'EstadosGlobal' => $arregloFilterEstadosGlobal,
@@ -419,7 +395,6 @@ class ReporteController extends Controller
 
         return response()->json([
             'recibeLeadAsesor' => $recibeLeadAsesor,
-            'recibeLeadAsesorSin' => $recibeLeadAsesorSin,
             'recibeLeadsNuevosAsesor' => $recibeLeadsNuevosAsesor,
             'Provincias' => $arregloFilterProvincias,
             'Carreras' => $arregloFilterCarreras,
