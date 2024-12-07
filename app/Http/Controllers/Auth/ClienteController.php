@@ -53,7 +53,8 @@ class ClienteController extends Controller
         $Provincias = Provincia::orderBy('name', 'asc')->get();
         $Modalidades = Modalidad::orderBy('name', 'asc')->get();
         /* $Fuentes = Fuente::whereNotIn('id', [App::$FUENTES_GOOGLE_ADS, App::$FUENTES_FACEBOOK_ADS])->orderBy('name', 'asc')->get(); */
-        $Fuentes = DB::table('fuentes')->get();
+        $Fuentes = DB::table('fuentes')->orderBy('name', 'asc')->get();
+
         $Enterados = Enterado::orderBy('name', 'asc')->get();
         $Carreras = Carrera::all();
         $Ciclos = Ciclo::all();

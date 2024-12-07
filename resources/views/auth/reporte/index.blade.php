@@ -109,6 +109,11 @@
             </div>
 
             <div class="col-md-12 mt-20" {{ (Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR) ? ' ' : 'hidden' }}>
+                <div id="leadsAsesorasSin"></div>
+            </div>
+
+            {{-- CODIGO AÑADIDO PARA VERIFICAR --}}
+            <div class="col-md-12 mt-20" {{ (Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR) ? ' ' : 'hidden' }}>
                 <div id="leadsAsesorasNuevos"></div>
             </div>
         </div>
