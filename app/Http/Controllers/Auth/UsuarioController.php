@@ -113,7 +113,7 @@ class UsuarioController extends Controller
         return response()->json(['Success' => $status]);
     }
 
-    /* public function reasignar(Request $request)
+    public function reasignar(Request $request)
     {
         $status = false;
         $Message = null;
@@ -157,11 +157,11 @@ class UsuarioController extends Controller
             DB::rollBack();
         }
         return response()->json(['Success' => $status, 'Message' => $Message]);
-    } */
+    }
 
 
     /* CODIGO AÑADIO POR SEBASTIAN  PARA GESTIONAR LAS ASIGNACIONES*/
-    public function reasignar(Request $request)
+   /*  public function reasignar(Request $request)
     {
         $status = false;
         $Message = null;
@@ -212,6 +212,6 @@ class UsuarioController extends Controller
             DB::rollBack();
         }
         return response()->json(['Success' => $status, 'Message' => $Message]);
-    }
+    } */
 
 }
