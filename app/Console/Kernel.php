@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             User::query()->update(['assigned_leads' => 0]);
-        })->dailyAt('01:20');
+        })->dailyAt('00:00');
 
         $schedule->call(function () {
             set_time_limit(0);

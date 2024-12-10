@@ -13,6 +13,8 @@ use easyCRM\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+
 
 class UsuarioController extends Controller
 {
@@ -113,7 +115,7 @@ class UsuarioController extends Controller
         return response()->json(['Success' => $status]);
     }
 
-    public function reasignar(Request $request)
+    /* public function reasignar(Request $request)
     {
         $status = false;
         $Message = null;
@@ -157,11 +159,11 @@ class UsuarioController extends Controller
             DB::rollBack();
         }
         return response()->json(['Success' => $status, 'Message' => $Message]);
-    }
+    } */
 
 
     /* CODIGO AÑADIO POR SEBASTIAN  PARA GESTIONAR LAS ASIGNACIONES*/
-   /*  public function reasignar(Request $request)
+    /* public function reasignar(Request $request)
     {
         $status = false;
         $Message = null;
@@ -213,5 +215,68 @@ class UsuarioController extends Controller
         }
         return response()->json(['Success' => $status, 'Message' => $Message]);
     } */
+
+
+    public function reasignar(Request $request)
+    {
+        $status = false;
+        $Message = null;
+
+        // Convertir array de leads en una lista
+        $Leads = explode(",", $request->array_leads);
+
+        // Obtener la fecha de hoy
+        $today = Carbon::today();
+
+        try {
+            DB::beginTransaction();
+
+            // Filtrar los leads que fueron creados hoy
+            $todayLeads = Cliente::whereIn('id', $Leads)
+                ->whereDate('created_at', $today) // Verificar que sean del día actual
+                ->pluck('id')
+                ->toArray();
+
+            // Obtener el ID del vendedor anterior
+            $oldVendedorId = Cliente::whereIn('id', $todayLeads)->pluck('user_id')->unique();
+
+            // Descontar los leads al vendedor anterior (solo si hay leads del día)
+            if ($oldVendedorId->isNotEmpty()) {
+                $oldVendedor = User::where('id', $oldVendedorId->first())->first();
+                if ($oldVendedor) {
+                    $oldVendedor->assigned_leads -= count($todayLeads); // Descontar leads del día
+                    $oldVendedor->save();
+                }
+            }
+
+            // Registrar historial de reasignación
+            foreach ($Leads as $leadId) {
+                $HistorialReasignar = new HistorialReasignar();
+                $HistorialReasignar->user_id = Auth::guard('web')->user()->id;
+                $HistorialReasignar->cliente_id = $leadId;
+                $HistorialReasignar->vendedor_id = $request->reasignar_id;
+                $HistorialReasignar->observacion = "Reasignó este registro a una Asesora";
+                $HistorialReasignar->save();
+            }
+
+            // Actualizar el cliente con el nuevo vendedor
+            Cliente::whereIn('id', $Leads)->update(['user_id' => $request->reasignar_id]);
+
+            // Sumar los leads al nuevo asesor (solo los del día actual)
+            $assessor = User::where('id', $request->reasignar_id)->first();
+            if ($assessor) {
+                $assessor->assigned_leads += count($todayLeads); // Sumar leads del día
+                $assessor->save();
+            }
+
+            $status = true;
+            DB::commit();
+        } catch (\Exception $e) {
+            $Message = $e->getMessage();
+            DB::rollBack();
+        }
+
+        return response()->json(['Success' => $status, 'Message' => $Message]);
+    }
 
 }
