@@ -416,7 +416,7 @@ class ClienteController extends Controller
         $Turnos = Turno::whereNotIn('id', [App::$TURNO_GLOABAL])->get();
         $Sedes = Sede::all();
         $Locales = Local::all();
-        $PresencialSedes = PresencialSede::all();
+        $PresencialSedes = PresencialSede::orderBy('name', 'asc')->get();
         $Modalidades = Modalidad::all();
         $Carreras = Carrera::all();
         $TipoOperaciones = TipoOperacion::all();
