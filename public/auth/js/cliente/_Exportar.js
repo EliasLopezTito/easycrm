@@ -54,7 +54,7 @@ $(function () {
 
         const $export_estado_id_v = $export_estado_id.val() != "" ? $export_estado_id.val() : 0;
         const $export_vendedor_id_v = $export_vendedor_id.val() != "" ? $export_vendedor_id.val() : 0;
-        const $export_modalidad_id_v = $export_modalidad_id.val() != "" ? $export_modalidad_id.val() : 0;
+        const $export_modalidad_id_v = $export_modalidad_id.val() != "" ? $export_modalidad_id.val() : null;  // Usar null si no se selecciona modalidad
         const $export_carrera_id_v = $export_carrera_id.val() != "" ? $export_carrera_id.val() : 0;
         const $export_turno_id_v = $export_turno_id.val() != "" ? $export_turno_id.val() : 0;
 
