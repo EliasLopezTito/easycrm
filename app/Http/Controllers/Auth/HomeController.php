@@ -112,8 +112,7 @@ class HomeController extends Controller
         $Estados =  Auth::guard('web')->user()->profile_id != App::$PERFIL_VENDEDOR ? Estado::all() : Estado::where('id', '!=', App::$ESTADO_OTROS)->get();
         $Vendedores = User::whereIn('profile_id', [App::$PERFIL_VENDEDOR, App::$PERFIL_PROVINCIA, App::$PERFIL_RESTRINGIDO])
         ->where('activo', true)
-        ->where('recibe_lead', '1')
-        ->orderBy('turno_id', 'asc')
+        ->orderBy('name', 'asc')
         ->get();
     
 
