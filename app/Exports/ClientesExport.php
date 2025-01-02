@@ -64,16 +64,6 @@ class ClientesExport implements FromView, Responsable
                     $q->where('estado_id', $estado);
                 }
             })
-           /*  ->where(function ($q) use ($fechaInicio) {
-                if ($fechaInicio) {
-                    $q->whereDate('ultimo_contacto', '>=', $fechaInicio);
-                }
-            }) */
-           /*  ->where(function ($q) use ($fechaFinal) {
-                if ($fechaFinal) {
-                    $q->whereDate('ultimo_contacto', '<=', $fechaFinal);
-                }
-            }) */
              ->where(function ($q) use ($fechaInicio) {
                 if ($fechaInicio) {
                     $q->whereDate('created_at', '>=', $fechaInicio);
