@@ -124,6 +124,13 @@ Route::group(['middleware' => 'auth:web'], function () {
         });
     });
 
+    Route::group(['prefix' => 'reportehistorial', 'roles' => ['Administrador']], function (){
+        Route::middleware('auth.route.access')->group(function () {
+            Route::get('/', 'Auth\HistorialController@index')->name('user.reportehistorial');
+            Route::get('/list_all', 'Auth\HistorialController@list_all')->name('user.reportehistorial.list_all');
+        });
+    });
+
     Route::group(['prefix' => 'estado', 'roles' => ['Administrador']], function (){
         Route::get('/filtroEstado/{id}', 'Auth\EstadoController@filtroEstado')->name('user.filtroEstado');
     });

@@ -147,8 +147,9 @@
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="active-item-here"></span> <i class="fa fa-cog mr-5"></i> <span>Ajustes</span></a>
                             <ul class="dropdown-menu multilevel scale-up-left">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('user.modalidad') }}">Modalidades</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('user.carrera') }}">Cursos</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.modalidad') }}"><i class="fa fa-angle-right"></i> Modalidades</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.carrera') }}"><i class="fa fa-angle-right"></i> Cursos</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.reportehistorial') }}"><i class="fa fa-angle-right"></i> Reporte Historial</a></li>
                             </ul>
                         </li>
                     @endif
