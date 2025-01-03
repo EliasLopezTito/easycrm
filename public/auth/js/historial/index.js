@@ -74,9 +74,9 @@ $(function () {
                     let content = '';
                     data.forEach((item) => {
                         if (item.tipo === 'Registro') {
-                            content += `<p>- ${item.usuario === 'Usuario eliminado' ? item.usuario : item.usuario + ` registró a ${item.vendedor} este cliente`} el ${item.fecha}</p>`;
+                            content += `<p> ✔ ${item.usuario === 'Usuario eliminado' ? item.usuario : item.usuario + ` registró a ${item.vendedor} este cliente`} el ${item.fecha}</p>`;
                         } else {
-                            content += `<p>- ${item.usuario} reasignó a ${item.vendedor} el ${item.fecha}</p>`;
+                            content += `<p> ✔ ${item.usuario} reasignó a ${item.vendedor} el ${item.fecha}</p>`;
                         }
                     });
                     return content;
