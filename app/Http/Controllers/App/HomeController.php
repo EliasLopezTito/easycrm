@@ -589,6 +589,10 @@ class HomeController extends Controller
                 $fuente = 53;
                 $Carrera = Carrera::where('id', 1)->first();
             }
+            else if($request->get('FormId') == "120213979311500623"){ // ENFERMERIA SIMILAR
+                $fuente = 60;
+                $Carrera = Carrera::where('id', 1)->first();
+            }
             
             if($Carrera){
                 $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create',
