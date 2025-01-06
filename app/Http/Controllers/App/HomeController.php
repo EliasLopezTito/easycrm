@@ -590,15 +590,15 @@ class HomeController extends Controller
                 $Carrera = Carrera::where('id', 1)->first();
             }
             else if($request->get('FormId') == "120213979311500623"){ // ENFERMERIA SIMILAR
-                $fuente = 53;
+                $fuente = 60;
                 $Carrera = Carrera::where('id', 1)->first();
             }
             else if($request->get('FormId') == "120213979254620623"){ // ENFERMERIA SIMILAR
-                $fuente = 53;
+                $fuente = 60;
                 $Carrera = Carrera::where('id', 1)->first();
             }
             else if($request->get('FormId') == "120213978723190623"){ // ENFERMERIA SIMILAR
-                $fuente = 53;
+                $fuente = 60;
                 $Carrera = Carrera::where('id', 1)->first();
             }
             
