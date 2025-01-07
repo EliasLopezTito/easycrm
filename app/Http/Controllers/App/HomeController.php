@@ -491,7 +491,7 @@ class HomeController extends Controller
         return response()->json($request->all());
     }
 
-    public function make(Request $request)
+   /*  public function make(Request $request)
     {
         try {
 
@@ -525,7 +525,7 @@ class HomeController extends Controller
                 $Carrera = Carrera::where('id', 5)->first();
                 $fuente = 43;
             }else if($request->get('FormId') == "3792492817740864"){ //OTRA FUENTE CARRERA A ELEGIR
-                /* $Carrera = Carrera::where('id', 5)->first(); */
+                $Carrera = Carrera::where('id', 5)->first();
                 if($request->get('carrera') == 'fisioterapia'){
                     $Carrera = Carrera::where('id', 3)->first();
                 }else if($request->get('carrera') == 'enfermeria'){
@@ -589,18 +589,6 @@ class HomeController extends Controller
                 $fuente = 53;
                 $Carrera = Carrera::where('id', 1)->first();
             }
-            else if($request->get('FormId') == "120213979311500623"){ // ENFERMERIA SIMILAR
-                $fuente = 60;
-                $Carrera = Carrera::where('id', 1)->first();
-            }
-            else if($request->get('FormId') == "120213979254620623"){ // ENFERMERIA SIMILAR
-                $fuente = 60;
-                $Carrera = Carrera::where('id', 1)->first();
-            }
-            else if($request->get('FormId') == "120213978723190623"){ // ENFERMERIA SIMILAR
-                $fuente = 60;
-                $Carrera = Carrera::where('id', 1)->first();
-            }
             
             if($Carrera){
                 $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create',
@@ -661,6 +649,87 @@ class HomeController extends Controller
         Log::info('User Make.', ['id' => 'Success']);
 
         return response()->json($request->all());
+    } */
+
+    public function make(Request $request)
+    {
+        try {
+            $client = new Client();
+
+            Log::info('Make.', ['res' => $request->all()]);
+
+            $nombres = $request->get('FirstName');
+            $apellidos = $request->get('LastName');
+            $email = $request->get('Email');
+            $telefono = $request->get('Phone');
+            $fuente = 60; // Fuente asignada como 60
+            $dni = $telefono ? substr($telefono, -8) : null;
+            $Carrera = null;
+
+            // Condiciones de los nuevos FormId
+            if ($request->get('FormId') == "120213979311500623") { // 2025
+                $Carrera = Carrera::where('id', 1)->first();
+            } else if ($request->get('FormId') == "120213979254620623") { // 2025
+                $Carrera = Carrera::where('id', 1)->first();
+            } else if ($request->get('FormId') == "120213978723190623") { // 2025
+                $Carrera = Carrera::where('id', 1)->first();
+            }
+
+            if ($Carrera) {
+                $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create', [
+                    RequestOptions::HEADERS => [
+                        'Accept' => "application/json",
+                        'Authorization' => "Bearer ZupWuQUrw2vYcH8fzCczPHc5QlTxsK7dB9IhPW42fPRC99i0yIV3iBBtDNGz9T5ECMzN2vCnWSzVKHXTo0Ee3qquxVj52MpbhRLO",
+                        'Cache-Control' => "no-cache",
+                    ],
+                    RequestOptions::JSON => [
+                        "nombres" => $nombres,
+                        "apellidos" => $apellidos,
+                        "dni" => $dni,
+                        "celular" => $telefono,
+                        "email" => $email,
+                        "fecha_nacimiento" => date("Y-m-d H:i:s"),
+                        "provincia" => 0,
+                        "provincia_id" => 1,
+                        "distrito_id" => 1,
+                        "modalidad_id" => $Carrera->modalidad_id,
+                        "carrera_id" => $Carrera->id,
+                        "fuente_id" => $fuente,
+                        "enterado_id" => 1
+                    ]
+                ]);
+
+                Log::info('Make.', [
+                    'Status' => "Success",
+                    'fuente' => $fuente,
+                    'carrera' => $Carrera->name,
+                    'nombres' => $nombres,
+                    'apellidos' => $apellidos,
+                    'email' => $email,
+                    'telefono' => $telefono,
+                    'dni' => $dni
+                ]);
+            } else {
+                Log::info('Make.', [
+                    'Status' => "Error",
+                    'fuente' => $fuente,
+                    'carrera' => 'No asignada',
+                    'nombres' => $nombres,
+                    'apellidos' => $apellidos,
+                    'email' => $email,
+                    'telefono' => $telefono,
+                    'dni' => $dni
+                ]);
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            Log::info('User failed Make.', ['id' => $message]);
+        }
+
+        Log::info('User Make.', ['id' => 'Success']);
+
+        return response()->json($request->all());
     }
+
 
 }
