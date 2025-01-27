@@ -677,6 +677,8 @@ class HomeController extends Controller
                 $Carrera = Carrera::where('id', 3)->first();
             }else if($request->get('FormId') == "572167608758840"){ // 2025 Laboratorio
                 $Carrera = Carrera::where('id', 4)->first();
+            }else if($request->get('FormId') == "465117063360591"){ // 2025 Enfermeria33
+                $Carrera = Carrera::where('id', 1)->first();
             }
 
             if ($Carrera) {
