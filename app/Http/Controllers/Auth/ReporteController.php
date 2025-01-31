@@ -619,15 +619,18 @@ class ReporteController extends Controller
 
     public function reportAdmin()
     {
-        $today = Carbon::now()->format('Ymd');
-        $firstDayMonth = Carbon::now()->startOfMonth()->format('Ymd');
-        /*$today = '20240101';
-        $firstDayMonth = '20241231';*/
+        $test= 1;
+        if($test == 1){
+            $today = '20240101';
+            $firstDayMonth = '20241231';
+        }else{
+            $today = Carbon::now()->format('Ymd');
+            $firstDayMonth = Carbon::now()->startOfMonth()->format('Ymd');
+        }
         $clientData = DB::select("CALL JCELeadsIngresados(?, ?)", [
             $firstDayMonth,
             $today,
         ]);
-        dd($today,$firstDayMonth,$clientData);
         return view('auth.reporte.report-admin')->with('clientData', $clientData);
     }
 }

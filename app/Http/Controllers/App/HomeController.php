@@ -662,7 +662,8 @@ class HomeController extends Controller
             $apellidos = $request->get('LastName');
             $email = $request->get('Email');
             $telefono = $request->get('Phone');
-            $fuente = 60; // Fuente asignada como 60
+            /*$fuente = 60; // Fuente asignada como 60*/
+            $fuente = 5; // Fuente Facebook Ads
             $dni = $telefono ? substr($telefono, -8) : null;
             $Carrera = null;
 
