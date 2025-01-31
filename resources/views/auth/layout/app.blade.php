@@ -114,6 +114,13 @@
                         </a>
                     </li>
                     @endif
+                    @if(Auth::check() && Auth::user()->email == "useraul@gmail.com")
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user.reporte-admin') }}"><span class="active-item-here"></span>
+                                <i class="fa fa-pie-chart mr-5"></i> <span>Reportes Administrativo</span>
+                            </a>
+                        </li>
+                    @endif
                     @if(Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR)
                         <li class="nav-item">
                             <a id="importExcel" class="nav-link" href="javascript:void(0)"><span class="active-item-here"></span>
