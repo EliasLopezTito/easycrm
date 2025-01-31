@@ -624,8 +624,8 @@ class ReporteController extends Controller
         /*$today = '20240101';
         $firstDayMonth = '20241231';*/
         $clientData = DB::select("CALL JCELeadsIngresados(?, ?)", [
-            $today,
             $firstDayMonth,
+            $today,
         ]);
         dd($today,$firstDayMonth,$clientData);
         return view('auth.reporte.report-admin')->with('clientData', $clientData);
