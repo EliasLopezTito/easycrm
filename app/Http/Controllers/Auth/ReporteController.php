@@ -627,7 +627,7 @@ class ReporteController extends Controller
             $today,
             $firstDayMonth,
         ]);
-        dd($clientData);
+        dd($today,$firstDayMonth,$clientData);
         return view('auth.reporte.report-admin')->with('clientData', $clientData);
     }
 }
