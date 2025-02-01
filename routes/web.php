@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth:web'], function () {
             Route::post('/', 'Auth\ReporteController@filtro')->name('user.reporte.filtro');
 
             Route::get('/reporte-admin', 'Auth\ReporteController@reportAdmin')->name('user.reporte-admin');
+            Route::post('/store-reporte-admin', 'Auth\ReporteController@storeReportAdmin')->name('user.store-reporte-admin');
 
             Route::get('/vendedores', 'Auth\ReporteController@vendedores')->name('user.reporte.vendedores');
             Route::post('/filtro_vendedores', 'Auth\ReporteController@filtro_vendedores')->name('user.reporte.filtro_vendedores');

@@ -1,0 +1,15 @@
+.content-header{
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+.btn-link{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dt-button.btn-success {
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    color: white !important;
+}

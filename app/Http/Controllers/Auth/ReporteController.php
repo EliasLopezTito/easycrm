@@ -619,18 +619,60 @@ class ReporteController extends Controller
 
     public function reportAdmin()
     {
-        $test= 1;
+        $test= 0;
+        //Testeo
         if($test == 1){
-            $today = '20240101';
-            $firstDayMonth = '20241231';
+            $today = '20241231';
+            $firstDayMonth = '20241201';
         }else{
             $today = Carbon::now()->format('Ymd');
             $firstDayMonth = Carbon::now()->startOfMonth()->format('Ymd');
         }
+        //Datos requeridos
         $clientData = DB::select("CALL JCELeadsIngresados(?, ?)", [
             $firstDayMonth,
             $today,
         ]);
-        return view('auth.reporte.report-admin')->with('clientData', $clientData);
+        $formattedToday = Carbon::createFromFormat('Ymd', $today)->format('Y-m-d');
+        $formattedFirstDayMonth = Carbon::createFromFormat('Ymd', $firstDayMonth)->format('Y-m-d');
+        return view('auth.reporte.report-admin')->with('clientData', $clientData)->with('formattedToday', $formattedToday)->with('formattedFirstDayMonth', $formattedFirstDayMonth);
     }
+    public function storeReportAdmin(Request $request)
+    {
+        $fechaInicio = $request->input('fechaInicio');
+        $fechaFinal = $request->input('fechaFinal');
+        $clientData = DB::select("CALL JCELeadsIngresados(?, ?)", [
+            $fechaInicio,
+            $fechaFinal,
+        ]);
+        $data = array_map(function($client) {
+            return [
+                $client->Cliente,
+                $client->DNI,
+                $client->Celular,
+                $client->Whatsapp,
+                $client->Email,
+                $client->fecha_nacimiento,
+                $client->Plataforma,
+                $client->Fuente,
+                $client->Provincia,
+                $client->Distrito,
+                $client->Especialidad,
+                $client->Modalidad,
+                $client->Estado,
+                $client->Detalle_Estado,
+                $client->Turno,
+                $client->Horario,
+                $client->Sede,
+                $client->Observacion,
+                $client->Fecha_ultimo_contacto,
+                $client->Año,
+                $client->Mes
+            ];
+        }, $clientData);
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
 }
