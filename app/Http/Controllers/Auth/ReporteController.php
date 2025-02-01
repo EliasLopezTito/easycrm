@@ -629,10 +629,11 @@ class ReporteController extends Controller
             $firstDayMonth = Carbon::now()->startOfMonth()->format('Ymd');
         }
         //Datos requeridos
-        $clientData = DB::select("CALL JCELeadsIngresados(?, ?)", [
+        /*$clientData = DB::select("CALL JCELeadsIngresados(?, ?)", [
             $firstDayMonth,
             $today,
-        ]);
+        ]);*/
+        $clientData = Cliente::where('id', 0)->get();
         $formattedToday = Carbon::createFromFormat('Ymd', $today)->format('Y-m-d');
         $formattedFirstDayMonth = Carbon::createFromFormat('Ymd', $firstDayMonth)->format('Y-m-d');
         return view('auth.reporte.report-admin')->with('clientData', $clientData)->with('formattedToday', $formattedToday)->with('formattedFirstDayMonth', $formattedFirstDayMonth);

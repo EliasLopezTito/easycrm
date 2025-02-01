@@ -58,31 +58,31 @@
                 </thead>
                 <tbody>
                     @foreach ($clientData as $client)
-                        <tr>
-                            <td>{{ $client->Cliente }}</td>
-                            <td>{{ $client->DNI }}</td>
-                            <td>{{ $client->Celular }}</td>
-                            <td>{{ $client->Whatsapp }}</td>
-                            <td>{{ $client->Email }}</td>
-                            <td>{{ $client->fecha_nacimiento }}</td>
-                            <td>{{ $client->Plataforma }}</td>
-                            <td>{{ $client->Fuente }}</td>
-                            <td>{{ $client->Provincia }}</td>
-                            <td>{{ $client->Distrito }}</td>
-                            <td>{{ $client->Especialidad }}</td>
-                            <td>{{ $client->Modalidad }}</td>
-                            <td>{{ $client->Estado }}</td>
-                            <td>{{ $client->Detalle_Estado }}</td>
-                            <td>{{ $client->Turno }}</td>
-                            <td>{{ $client->Horario }}</td>
-                            <td>{{ $client->Sede }}</td>
-                            <td>{{ $client->Observacion }}</td>
-                            <td>{{ $client->Fecha_ultimo_contacto }}</td>
-                            <td>{{ $client->Año }}</td>
-                            <td>{{ $client->Mes }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
+                            <tr>
+                                <td>{{ $client->Cliente }}</td>
+                                <td>{{ $client->DNI }}</td>
+                                <td>{{ $client->Celular }}</td>
+                                <td>{{ $client->Whatsapp }}</td>
+                                <td>{{ $client->Email }}</td>
+                                <td>{{ $client->fecha_nacimiento }}</td>
+                                <td>{{ $client->Plataforma }}</td>
+                                <td>{{ $client->Fuente }}</td>
+                                <td>{{ $client->Provincia }}</td>
+                                <td>{{ $client->Distrito }}</td>
+                                <td>{{ $client->Especialidad }}</td>
+                                <td>{{ $client->Modalidad }}</td>
+                                <td>{{ $client->Estado }}</td>
+                                <td>{{ $client->Detalle_Estado }}</td>
+                                <td>{{ $client->Turno }}</td>
+                                <td>{{ $client->Horario }}</td>
+                                <td>{{ $client->Sede }}</td>
+                                <td>{{ $client->Observacion }}</td>
+                                <td>{{ $client->Fecha_ultimo_contacto }}</td>
+                                <td>{{ $client->Año }}</td>
+                                <td>{{ $client->Mes }}</td>
+                            </tr>
+                        @endforeach
+                </tbody>                
             </table>
         </div>
 
