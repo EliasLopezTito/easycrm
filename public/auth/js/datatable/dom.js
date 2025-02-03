@@ -1,17 +1,17 @@
 $(document).ready(function() {
     var table = $('#clienteData').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            extend: 'excel',
-                            text: 'Exportar a Excel',
-                            className: 'btn btn-success'
-                        }
-                    ],
-                    language: {
-                        url: routeSpanish
-                    },
-                });
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Exportar a Excel',
+                className: 'btn btn-success'
+            }
+        ],
+        language: {
+            url: routeSpanish
+        },
+    });
     $('#btnConsult').on('click', function() {
         var fechaInicio = $('#fechaInicio').val();
         var fechaFinal = $('#fechaFinal').val();
