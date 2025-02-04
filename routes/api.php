@@ -24,3 +24,5 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/make', 'App\HomeController@make')->name('webhooks.make');
     });
 });
+
+Route::post('/add-customer-events', 'App\HomeController@addCustomerEvents')->name('add-customer-events');

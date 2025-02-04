@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use easyCRM\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
 {
@@ -742,5 +744,29 @@ class HomeController extends Controller
         return response()->json($request->all());
     }
 
+    public function addCustomerEvents(Request $request)
+    {
+        try {
+            DB::table('customers_events')->insert([
+                'event_id' => $request->eventId,
+                'carrera_id' => $request->carrera_id,
+                'name' => $request->nom,
+                'surnames' => $request->ape,
+                'email' => $request->maix,
+                'phone' => $request->tel,
+                'dni' => $request->dni,
+                'fuente_id' => $request->fuente_id,
+                'created_at' => Carbon::now(),
+            ]);
+    
+            return response()->json(['message' => 'Registro guardado correctamente'], 201);
+        
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error al guardar el registro',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 }
