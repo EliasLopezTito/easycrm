@@ -26,3 +26,4 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::post('/add-customer-events', 'App\HomeController@addCustomerEvents')->name('add-customer-events');
+Route::get('/get-customer-events', 'App\HomeController@getCustomerEvents')->name('get-customer-events');

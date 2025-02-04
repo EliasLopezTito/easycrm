@@ -768,5 +768,27 @@ class HomeController extends Controller
             ], 500);
         }
     }
+    public function getCustomerEvents()
+    {
+        // Realizar la consulta
+        $customerEventData = DB::table('customers_events')
+            ->join('events', 'customers_events.event_id', '=', 'events.id')
+            ->join('carreras', 'customers_events.carrera_id', '=', 'carreras.id')
+            ->join('fuentes', 'customers_events.fuente_id', '=', 'fuentes.id')
+            ->select(
+                'customers_events.name as nameCustomer',
+                'customers_events.surnames as surnamesCustomer',
+                'events.name as nameEvent',
+                'customers_events.email as emailCustomer',
+                'carreras.name as nameCarrera',
+                'customers_events.phone as phoneCustomer',
+                'customers_events.dni as dniCustomer',
+                'fuentes.name as nameFuente'
+            )
+            ->get();
+
+        // Devolver los resultados en formato JSON
+        return response()->json($customerEventData);
+    }
 
 }
