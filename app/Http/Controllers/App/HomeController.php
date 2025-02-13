@@ -686,6 +686,20 @@ class HomeController extends Controller
                 $Carrera = Carrera::where('id', 5)->first();
             }else if($request->get('FormId') == "959142959418089"){ // 2025 Farmasia
                 $Carrera = Carrera::where('id', 2)->first();
+            }else if($request->get('FormId') == "1465473047742411"){ // 2025 Curso TRATAMIENTO FACIAL
+                $Carrera = Carrera::where('id', 42)->first();
+            }else if($request->get('FormId') == "8878121772298886"){ // 2025 Curso PRIMEROS AUXILIOS
+                $Carrera = Carrera::where('id', 8)->first();
+            }else if($request->get('FormId') == "918426343833149"){ // 2025 Curso NUTRICIÓN DEPORTIVA
+                $Carrera = Carrera::where('id', 40)->first();
+            }else if($request->get('FormId') == "560066173700027"){ // 2025 Curso MASOTERAPIA
+                $Carrera = Carrera::where('id', 51)->first();
+            }else if($request->get('FormId') == "3730661810580159"){ // 2025 Curso MARKETING FARMACÉUTICO
+                $Carrera = Carrera::where('id', 29)->first();
+            }else if($request->get('FormId') == "1200554285017951"){ // 2025 Curso Inyectables
+                $Carrera = Carrera::where('id', 37)->first();
+            }else if($request->get('FormId') == "2079222755851344"){ // 2025 Curso SEMI PRESENCIAL CIRUGIA MENOR Y SUTURAS
+                $Carrera = Carrera::where('id', 26)->first();
             }
 
             if ($Carrera) {
