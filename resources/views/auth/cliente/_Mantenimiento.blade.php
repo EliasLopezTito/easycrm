@@ -117,6 +117,7 @@
                                         <option value="4">Llamada</option>
                                         <option value="8">Tradicional</option>
                                         <option value="3">Recomendado</option>
+                                        <option value="10">WhatsApp</option>
                                     </select>
                                     <span data-valmsg-for="fuente_id"></span>
                                 </div>
