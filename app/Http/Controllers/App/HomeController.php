@@ -850,6 +850,9 @@ class HomeController extends Controller
             ->whereBetween('clientes.updated_at', [$startDate, $endDate])
             ->orderBy('clientes.updated_at', 'asc')
             ->get();
-        return response()->json($clientData);
+        return response()->json([
+            'count' => $clientData->count(),
+            'data' => $clientData
+        ]);
     }
 }
