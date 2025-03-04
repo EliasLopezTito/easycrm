@@ -848,6 +848,7 @@ class HomeController extends Controller
             ->where('clientes.estado_detalle_id', 8)
             ->whereNull('clientes.deleted_at')
             ->whereBetween('clientes.updated_at', [$startDate, $endDate])
+            ->orderBy('clientes.updated_at', 'asc')
             ->get();
         return response()->json($clientData);
     }
