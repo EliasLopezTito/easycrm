@@ -842,7 +842,7 @@ class HomeController extends Controller
                 'clientes.codigo_alumno as codeAlumnClient',
                 'clientes.created_at as createdAtClient',
                 'clientes.updated_at as updatedAtClient',
-                'users.name as usersAsesor'
+                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor')
             )
             ->where('clientes.estado_id', 4)
             ->where('clientes.estado_detalle_id', 8)
