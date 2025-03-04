@@ -816,9 +816,16 @@ class HomeController extends Controller
             ->get();
         return response()->json($customerEventData);
     }
-    public function getClientRegistered()
+    public function getClientRegistered(Request $request)
     {
-        $clientData = DB::table('clientes')->where('estado_id', 4)->where('estado_detalle_id', 8)->whereNull('deleted_at')->get();
+        $startDate = Carbon::parse($request->start)->startOfDay();
+        $endDate = Carbon::parse($request->end)->endOfDay();
+        $clientData = DB::table('clientes')
+            ->where('estado_id', 4)
+            ->where('estado_detalle_id', 8)
+            ->whereNull('deleted_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
         return response()->json($clientData);
     }
 }
