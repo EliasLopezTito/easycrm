@@ -821,10 +821,33 @@ class HomeController extends Controller
         $startDate = Carbon::parse($request->start)->startOfDay();
         $endDate = Carbon::parse($request->end)->endOfDay();
         $clientData = DB::table('clientes')
-            ->where('estado_id', 4)
-            ->where('estado_detalle_id', 8)
-            ->whereNull('deleted_at')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->join('tipo_operacions', 'clientes.tipo_operacion_id', '=', 'tipo_operacions.id')
+            ->join('turnos', 'clientes.turno_id', '=', 'turnos.id')
+            ->join('sedes', 'clientes.sede_id', '=', 'sedes.id')
+            ->join('users', 'clientes.user_id', '=', 'users.id')
+            ->select(
+                'tipo_operacions.name as nameOperation',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'clientes.fecha_nacimiento as dateOfBirth',
+                'clientes.celular as phoneClient',
+                'clientes.whatsapp as whatsappClient',
+                'clientes.email as emailClient',
+                'clientes.direccion as addressClient',
+                'turnos.name as shiftClient',
+                'sedes.name as sedeClient',
+                'clientes.nro_operacion as nrOperationClient',
+                'clientes.monto as montoClient',
+                'clientes.nombre_titular as nameTitularClient',
+                'clientes.codigo_alumno as codeAlumnClient',
+                'clientes.created_at as createdAtClient',
+                'clientes.updated_at as updatedAtClient',
+                'users.name as usersAsesor'
+            )
+            ->where('clientes.estado_id', 4)
+            ->where('clientes.estado_detalle_id', 8)
+            ->whereNull('clientes.deleted_at')
+            ->whereBetween('clientes.updated_at', [$startDate, $endDate])
             ->get();
         return response()->json($clientData);
     }
