@@ -52,7 +52,9 @@ class HomeController extends Controller
             $leadgen_id = $input["entry"][0]["changes"][0]["value"]["leadgen_id"];
             $token = Storage::disk('public_html')->get('token_facebook.txt');
 
-            $response = $client->request('GET', 'https://graph.facebook.com/'.$leadgen_id,
+            $response = $client->request(
+                'GET',
+                'https://graph.facebook.com/' . $leadgen_id,
                 [
                     RequestOptions::HEADERS => [
                         'Accept' => "application/json",
@@ -64,7 +66,9 @@ class HomeController extends Controller
                 ]
             );
 
-            $response_carrera = $client->request('GET', 'https://graph.facebook.com/'.$form_id,
+            $response_carrera = $client->request(
+                'GET',
+                'https://graph.facebook.com/' . $form_id,
                 [
                     RequestOptions::HEADERS => [
                         'Accept' => "application/json",
@@ -79,59 +83,64 @@ class HomeController extends Controller
             $result = json_decode($response->getBody());
             $result_carrera = json_decode($response_carrera->getBody());
 
-            if($result)
-            {
+            if ($result) {
                 $data = $result->field_data;
-                $nombres = null; $apellidos = null; $email =null; $telefono = null; $dni = null;
+                $nombres = null;
+                $apellidos = null;
+                $email = null;
+                $telefono = null;
+                $dni = null;
 
-                if($data[0] != null && ($data[0]->name == "nombre" || $data[0]->name == "first_name")){
+                if ($data[0] != null && ($data[0]->name == "nombre" || $data[0]->name == "first_name")) {
                     $nombres = $data[0]->values[0];
-                }else if($data[1] != null && ($data[1]->name == "nombre" || $data[1]->name == "first_name")){
+                } else if ($data[1] != null && ($data[1]->name == "nombre" || $data[1]->name == "first_name")) {
                     $nombres = $data[1]->values[0];
-                }else if($data[2] != null && ($data[2]->name == "nombre" || $data[2]->name == "first_name")) {
+                } else if ($data[2] != null && ($data[2]->name == "nombre" || $data[2]->name == "first_name")) {
                     $nombres = $data[2]->values[0];
-                }else if($data[3] != null && ($data[3]->name == "nombre" || $data[3]->name == "first_name")){
+                } else if ($data[3] != null && ($data[3]->name == "nombre" || $data[3]->name == "first_name")) {
                     $nombres = $data[3]->values[0];
                 }
 
-                if($data[0] != null && ($data[0]->name == "apellido" || $data[0]->name == "last_name")){
+                if ($data[0] != null && ($data[0]->name == "apellido" || $data[0]->name == "last_name")) {
                     $apellidos = $data[0]->values[0];
-                }else if($data[1] != null && ($data[1]->name == "apellido" || $data[1]->name == "last_name")){
+                } else if ($data[1] != null && ($data[1]->name == "apellido" || $data[1]->name == "last_name")) {
                     $apellidos = $data[1]->values[0];
-                }else if($data[2] != null && ($data[2]->name == "apellido" || $data[2]->name == "last_name")) {
+                } else if ($data[2] != null && ($data[2]->name == "apellido" || $data[2]->name == "last_name")) {
                     $apellidos = $data[2]->values[0];
-                }else if($data[3] != null && ($data[3]->name == "apellido" || $data[3]->name == "last_name")){
+                } else if ($data[3] != null && ($data[3]->name == "apellido" || $data[3]->name == "last_name")) {
                     $apellidos = $data[3]->values[0];
                 }
 
-                if($data[0] != null && $data[0]->name == "email"){
+                if ($data[0] != null && $data[0]->name == "email") {
                     $email = $data[0]->values[0];
-                }else if($data[1] != null && $data[1]->name == "email"){
+                } else if ($data[1] != null && $data[1]->name == "email") {
                     $email = $data[1]->values[0];
-                }else if($data[2] != null && $data[2]->name == "email") {
+                } else if ($data[2] != null && $data[2]->name == "email") {
                     $email = $data[2]->values[0];
-                }else if($data[3] != null && $data[3]->name == "email"){
+                } else if ($data[3] != null && $data[3]->name == "email") {
                     $email = $data[3]->values[0];
                 }
 
-                if($data[0] != null && $data[0]->name == "phone_number"){
+                if ($data[0] != null && $data[0]->name == "phone_number") {
                     $telefono = $data[0]->values[0];
-                }else if($data[1] != null && $data[1]->name == "phone_number"){
+                } else if ($data[1] != null && $data[1]->name == "phone_number") {
                     $telefono = $data[1]->values[0];
-                }else if($data[2] != null && $data[2]->name == "phone_number") {
+                } else if ($data[2] != null && $data[2]->name == "phone_number") {
                     $telefono = $data[2]->values[0];
-                }else if($data[3] != null && $data[3]->name == "phone_number"){
+                } else if ($data[3] != null && $data[3]->name == "phone_number") {
                     $telefono = $data[3]->values[0];
                 }
 
-                if($telefono) {
-                    $telefono = str_replace("+51", "",$telefono);
+                if ($telefono) {
+                    $telefono = str_replace("+51", "", $telefono);
                     $dni = substr($telefono, -8);
                 }
 
                 $Carrera = Carrera::where('alias', $result_carrera->name)->first();
 
-                $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create',
+                $client->request(
+                    'POST',
+                    'https://easycrm.ial.edu.pe/api/cliente/create',
                     [
                         RequestOptions::HEADERS => [
                             'Accept' => "application/json",
@@ -158,12 +167,9 @@ class HomeController extends Controller
 
                 //Log::info('User access.', ['result' => $nombres." "$apellidos]);
             }
-
-        }catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $message = $e->getMessage();
             Log::info('User failed.', ['id' => $message]);
-
         }
     }
 
@@ -186,7 +192,9 @@ class HomeController extends Controller
             $leadgen_id = $input["entry"][0]["changes"][0]["value"]["leadgen_id"];
             $token = Storage::disk('public_html')->get('token_facebook.txt');
 
-            $response = $client->request('GET', 'https://graph.facebook.com/'.$leadgen_id,
+            $response = $client->request(
+                'GET',
+                'https://graph.facebook.com/' . $leadgen_id,
                 [
                     RequestOptions::HEADERS => [
                         'Accept' => "application/json",
@@ -198,7 +206,9 @@ class HomeController extends Controller
                 ]
             );
 
-            $response_carrera = $client->request('GET', 'https://graph.facebook.com/'.$form_id,
+            $response_carrera = $client->request(
+                'GET',
+                'https://graph.facebook.com/' . $form_id,
                 [
                     RequestOptions::HEADERS => [
                         'Accept' => "application/json",
@@ -213,59 +223,64 @@ class HomeController extends Controller
             $result = json_decode($response->getBody());
             $result_carrera = json_decode($response_carrera->getBody());
 
-            if($result)
-            {
+            if ($result) {
                 $data = $result->field_data;
-                $nombres = null; $apellidos = null; $email =null; $telefono = null; $dni = null;
+                $nombres = null;
+                $apellidos = null;
+                $email = null;
+                $telefono = null;
+                $dni = null;
 
-                if($data[0] != null && ($data[0]->name == "nombre" || $data[0]->name == "first_name")){
+                if ($data[0] != null && ($data[0]->name == "nombre" || $data[0]->name == "first_name")) {
                     $nombres = $data[0]->values[0];
-                }else if($data[1] != null && ($data[1]->name == "nombre" || $data[1]->name == "first_name")){
+                } else if ($data[1] != null && ($data[1]->name == "nombre" || $data[1]->name == "first_name")) {
                     $nombres = $data[1]->values[0];
-                }else if($data[2] != null && ($data[2]->name == "nombre" || $data[2]->name == "first_name")) {
+                } else if ($data[2] != null && ($data[2]->name == "nombre" || $data[2]->name == "first_name")) {
                     $nombres = $data[2]->values[0];
-                }else if($data[3] != null && ($data[3]->name == "nombre" || $data[3]->name == "first_name")){
+                } else if ($data[3] != null && ($data[3]->name == "nombre" || $data[3]->name == "first_name")) {
                     $nombres = $data[3]->values[0];
                 }
 
-                if($data[0] != null && ($data[0]->name == "apellido" || $data[0]->name == "last_name")){
+                if ($data[0] != null && ($data[0]->name == "apellido" || $data[0]->name == "last_name")) {
                     $apellidos = $data[0]->values[0];
-                }else if($data[1] != null && ($data[1]->name == "apellido" || $data[1]->name == "last_name")){
+                } else if ($data[1] != null && ($data[1]->name == "apellido" || $data[1]->name == "last_name")) {
                     $apellidos = $data[1]->values[0];
-                }else if($data[2] != null && ($data[2]->name == "apellido" || $data[2]->name == "last_name")) {
+                } else if ($data[2] != null && ($data[2]->name == "apellido" || $data[2]->name == "last_name")) {
                     $apellidos = $data[2]->values[0];
-                }else if($data[3] != null && ($data[3]->name == "apellido" || $data[3]->name == "last_name")){
+                } else if ($data[3] != null && ($data[3]->name == "apellido" || $data[3]->name == "last_name")) {
                     $apellidos = $data[3]->values[0];
                 }
 
-                if($data[0] != null && $data[0]->name == "email"){
+                if ($data[0] != null && $data[0]->name == "email") {
                     $email = $data[0]->values[0];
-                }else if($data[1] != null && $data[1]->name == "email"){
+                } else if ($data[1] != null && $data[1]->name == "email") {
                     $email = $data[1]->values[0];
-                }else if($data[2] != null && $data[2]->name == "email") {
+                } else if ($data[2] != null && $data[2]->name == "email") {
                     $email = $data[2]->values[0];
-                }else if($data[3] != null && $data[3]->name == "email"){
+                } else if ($data[3] != null && $data[3]->name == "email") {
                     $email = $data[3]->values[0];
                 }
 
-                if($data[0] != null && $data[0]->name == "phone_number"){
+                if ($data[0] != null && $data[0]->name == "phone_number") {
                     $telefono = $data[0]->values[0];
-                }else if($data[1] != null && $data[1]->name == "phone_number"){
+                } else if ($data[1] != null && $data[1]->name == "phone_number") {
                     $telefono = $data[1]->values[0];
-                }else if($data[2] != null && $data[2]->name == "phone_number") {
+                } else if ($data[2] != null && $data[2]->name == "phone_number") {
                     $telefono = $data[2]->values[0];
-                }else if($data[3] != null && $data[3]->name == "phone_number"){
+                } else if ($data[3] != null && $data[3]->name == "phone_number") {
                     $telefono = $data[3]->values[0];
                 }
 
-                if($telefono) {
-                    $telefono = str_replace("+51", "",$telefono);
+                if ($telefono) {
+                    $telefono = str_replace("+51", "", $telefono);
                     $dni = substr($telefono, -8);
                 }
 
                 $Carrera = Carrera::where('alias', $result_carrera->name)->first();
 
-                $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create',
+                $client->request(
+                    'POST',
+                    'https://easycrm.ial.edu.pe/api/cliente/create',
                     [
                         RequestOptions::HEADERS => [
                             'Accept' => "application/json",
@@ -292,12 +307,9 @@ class HomeController extends Controller
 
                 //Log::info('User access.', ['result' => $nombres." "$apellidos]);
             }
-
-        }catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $message = $e->getMessage();
             Log::info('User failed.', ['id' => $message]);
-
         }
     }
 
@@ -315,13 +327,15 @@ class HomeController extends Controller
             $telefono = $request->get('phone_number');
             $dni = null;
 
-            if($telefono) {
+            if ($telefono) {
                 $dni = substr($telefono, -8);
             }
 
             $Carrera = Carrera::where('alias', 'Form ENFE')->first();
 
-            $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create',
+            $client->request(
+                'POST',
+                'https://easycrm.ial.edu.pe/api/cliente/create',
                 [
                     RequestOptions::HEADERS => [
                         'Accept' => "application/json",
@@ -343,18 +357,17 @@ class HomeController extends Controller
                         "fuente_id" => 34,
                         "enterado_id" => 7
                     ]
-                  ]
-                );
+                ]
+            );
 
-                Log::info('Zapier .', [
-                    'nombres' => $nombres,
-                    'apellidos' => $apellidos,
-                    'email' => $email,
-                    'telefono' => $telefono,
-                    'dni' => $dni]);
-
-        }catch (\Exception $e)
-        {
+            Log::info('Zapier .', [
+                'nombres' => $nombres,
+                'apellidos' => $apellidos,
+                'email' => $email,
+                'telefono' => $telefono,
+                'dni' => $dni
+            ]);
+        } catch (\Exception $e) {
             $message = $e->getMessage();
             Log::info('User failed.', ['id' => $message]);
         }
@@ -373,32 +386,34 @@ class HomeController extends Controller
         $email = $request->get('Email');
         $telefono = $request->get('Phone');
         $dni = null;
-        if($telefono) {
+        if ($telefono) {
             $dni = substr($telefono, -8);
         }
         $Carrera = Carrera::where('id', 5)->first();
-        $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create',
-        [
-            RequestOptions::HEADERS => [
-                'Accept' => "application/json",
-                'Authorization' => "Bearer ZupWuQUrw2vYcH8fzCczPHc5QlTxsK7dB9IhPW42fPRC99i0yIV3iBBtDNGz9T5ECMzN2vCnWSzVKHXTo0Ee3qquxVj52MpbhRLO",
-                'Cache-Control' => "no-cache",
-            ],
-            RequestOptions::JSON => [
-                "nombres" => $nombres,
-                "apellidos" => $apellidos,
-                "dni" => $dni,
-                "celular" => $telefono,
-                "email" => $email,
-                "fecha_nacimiento" => date("Y-m-d H:i:s"),
-                "provincia" => 0,
-                "provincia_id" => 1,
-                "distrito_id" => 1,
-                "modalidad_id" => $Carrera->modalidad_id,
-                "carrera_id" => $Carrera->id,
-                "fuente_id" => 34,
-                "enterado_id" => 7
-            ]
+        $client->request(
+            'POST',
+            'https://easycrm.ial.edu.pe/api/cliente/create',
+            [
+                RequestOptions::HEADERS => [
+                    'Accept' => "application/json",
+                    'Authorization' => "Bearer ZupWuQUrw2vYcH8fzCczPHc5QlTxsK7dB9IhPW42fPRC99i0yIV3iBBtDNGz9T5ECMzN2vCnWSzVKHXTo0Ee3qquxVj52MpbhRLO",
+                    'Cache-Control' => "no-cache",
+                ],
+                RequestOptions::JSON => [
+                    "nombres" => $nombres,
+                    "apellidos" => $apellidos,
+                    "dni" => $dni,
+                    "celular" => $telefono,
+                    "email" => $email,
+                    "fecha_nacimiento" => date("Y-m-d H:i:s"),
+                    "provincia" => 0,
+                    "provincia_id" => 1,
+                    "distrito_id" => 1,
+                    "modalidad_id" => $Carrera->modalidad_id,
+                    "carrera_id" => $Carrera->id,
+                    "fuente_id" => 34,
+                    "enterado_id" => 7
+                ]
             ]
         );
         return response()->json($request->all());
@@ -420,21 +435,23 @@ class HomeController extends Controller
             $dni = null;
             $Carrera = null;
 
-            if($telefono) {
+            if ($telefono) {
                 $dni = substr($telefono, -8);
             }
 
-            if($request->get('FormId') == "7354427944133050640"){ // API FUENTE TIKTOK ADS
+            if ($request->get('FormId') == "7354427944133050640") { // API FUENTE TIKTOK ADS
                 $Carrera = Carrera::where('id', 5)->first();
                 $fuente = 34;
-            }else{
+            } else {
                 $fuente = 34;
-                $Carrera = Carrera::where('id', 5)->first(); 
+                $Carrera = Carrera::where('id', 5)->first();
             }
-            
-            if($Carrera){
-                $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create',
-                [
+
+            if ($Carrera) {
+                $client->request(
+                    'POST',
+                    'https://easycrm.ial.edu.pe/api/cliente/create',
+                    [
                         RequestOptions::HEADERS => [
                             'Accept' => "application/json",
                             'Authorization' => "Bearer ZupWuQUrw2vYcH8fzCczPHc5QlTxsK7dB9IhPW42fPRC99i0yIV3iBBtDNGz9T5ECMzN2vCnWSzVKHXTo0Ee3qquxVj52MpbhRLO",
@@ -453,7 +470,7 @@ class HomeController extends Controller
                             "modalidad_id" => $Carrera->modalidad_id,
                             "carrera_id" => $Carrera->id,
                             "fuente_id" => $fuente,
-                            "enterado_id" => 1 
+                            "enterado_id" => 1
                         ]
                     ]
                 );
@@ -467,8 +484,9 @@ class HomeController extends Controller
                     'apellidos' => $apellidos,
                     'email' => $email,
                     'telefono' => $telefono,
-                    'dni' => $dni]);
-            }else{
+                    'dni' => $dni
+                ]);
+            } else {
                 Log::info('Make .', [
                     'Status' => "Error make tiktokads",
                     'fuente' => $fuente,
@@ -478,12 +496,10 @@ class HomeController extends Controller
                     'apellidos' => $apellidos,
                     'email' => $email,
                     'telefono' => $telefono,
-                    'dni' => $dni]);                
+                    'dni' => $dni
+                ]);
             }
-                
-
-        }catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $message = $e->getMessage();
             Log::info('User failed Make.', ['id' => $message]);
         }
@@ -493,7 +509,7 @@ class HomeController extends Controller
         return response()->json($request->all());
     }
 
-   /*  public function make(Request $request)
+    /*  public function make(Request $request)
     {
         try {
 
@@ -676,29 +692,29 @@ class HomeController extends Controller
                 $Carrera = Carrera::where('id', 1)->first();
             } else if ($request->get('FormId') == "120213978723190623") { // 2025
                 $Carrera = Carrera::where('id', 1)->first();
-            }else if($request->get('FormId') == "1138904161269308"){ // 2025 Fisioterapia
+            } else if ($request->get('FormId') == "1138904161269308") { // 2025 Fisioterapia
                 $Carrera = Carrera::where('id', 3)->first();
-            }else if($request->get('FormId') == "572167608758840"){ // 2025 Laboratorio
+            } else if ($request->get('FormId') == "572167608758840") { // 2025 Laboratorio
                 $Carrera = Carrera::where('id', 4)->first();
-            }else if($request->get('FormId') == "465117063360591"){ // 2025 Enfermeria
+            } else if ($request->get('FormId') == "465117063360591") { // 2025 Enfermeria
                 $Carrera = Carrera::where('id', 1)->first();
-            }else if($request->get('FormId') == "570038382409604"){ // 2025 Protesis Dental
+            } else if ($request->get('FormId') == "570038382409604") { // 2025 Protesis Dental
                 $Carrera = Carrera::where('id', 5)->first();
-            }else if($request->get('FormId') == "959142959418089"){ // 2025 Farmasia
+            } else if ($request->get('FormId') == "959142959418089") { // 2025 Farmasia
                 $Carrera = Carrera::where('id', 2)->first();
-            }else if($request->get('FormId') == "1465473047742411"){ // 2025 Curso TRATAMIENTO FACIAL
+            } else if ($request->get('FormId') == "1465473047742411") { // 2025 Curso TRATAMIENTO FACIAL
                 $Carrera = Carrera::where('id', 42)->first();
-            }else if($request->get('FormId') == "8878121772298886"){ // 2025 Curso PRIMEROS AUXILIOS
+            } else if ($request->get('FormId') == "8878121772298886") { // 2025 Curso PRIMEROS AUXILIOS
                 $Carrera = Carrera::where('id', 8)->first();
-            }else if($request->get('FormId') == "918426343833149"){ // 2025 Curso NUTRICIÓN DEPORTIVA
+            } else if ($request->get('FormId') == "918426343833149") { // 2025 Curso NUTRICIÓN DEPORTIVA
                 $Carrera = Carrera::where('id', 40)->first();
-            }else if($request->get('FormId') == "560066173700027"){ // 2025 Curso MASOTERAPIA
+            } else if ($request->get('FormId') == "560066173700027") { // 2025 Curso MASOTERAPIA
                 $Carrera = Carrera::where('id', 51)->first();
-            }else if($request->get('FormId') == "3730661810580159"){ // 2025 Curso MARKETING FARMACÉUTICO
+            } else if ($request->get('FormId') == "3730661810580159") { // 2025 Curso MARKETING FARMACÉUTICO
                 $Carrera = Carrera::where('id', 29)->first();
-            }else if($request->get('FormId') == "1200554285017951"){ // 2025 Curso Inyectables
+            } else if ($request->get('FormId') == "1200554285017951") { // 2025 Curso Inyectables
                 $Carrera = Carrera::where('id', 37)->first();
-            }else if($request->get('FormId') == "2079222755851344"){ // 2025 Curso SEMI PRESENCIAL CIRUGIA MENOR Y SUTURAS
+            } else if ($request->get('FormId') == "2079222755851344") { // 2025 Curso SEMI PRESENCIAL CIRUGIA MENOR Y SUTURAS
                 $Carrera = Carrera::where('id', 26)->first();
             }
 
@@ -772,9 +788,8 @@ class HomeController extends Controller
                 'fuente_id' => $request->fuente_id,
                 'created_at' => Carbon::now(),
             ]);
-    
+
             return response()->json(['message' => 'Registro guardado correctamente'], 201);
-        
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Error al guardar el registro',
@@ -784,7 +799,6 @@ class HomeController extends Controller
     }
     public function getCustomerEvents()
     {
-        // Realizar la consulta
         $customerEventData = DB::table('customers_events')
             ->join('events', 'customers_events.event_id', '=', 'events.id')
             ->join('carreras', 'customers_events.carrera_id', '=', 'carreras.id')
@@ -800,9 +814,11 @@ class HomeController extends Controller
                 'fuentes.name as nameFuente'
             )
             ->get();
-
-        // Devolver los resultados en formato JSON
         return response()->json($customerEventData);
     }
-
+    public function getClientRegistered()
+    {
+        $clientData = DB::table('clientes')->where('estado_id', 4)->where('estado_detalle_id', 8)->whereNull('deleted_at')->get();
+        return response()->json($clientData);
+    }
 }
