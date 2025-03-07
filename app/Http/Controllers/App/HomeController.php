@@ -826,6 +826,7 @@ class HomeController extends Controller
             ->join('sedes', 'clientes.sede_id', '=', 'sedes.id')
             ->join('users', 'clientes.user_id', '=', 'users.id')
             ->select(
+                'clientes.id as idUnico',
                 'tipo_operacions.name as nameOperation',
                 'clientes.dni as dniClient',
                 DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
@@ -842,6 +843,12 @@ class HomeController extends Controller
                 'clientes.codigo_alumno as codeAlumnClient',
                 'clientes.created_at as createdAtClient',
                 'clientes.updated_at as updatedAtClient',
+                //DB::raw('CASE WHEN clientes.mayor = 1 THEN "Sí" ELSE "No" END as mayor'),
+                //DB::raw('CASE 
+                //WHEN clientes.modalidad_pago = 1 THEN "Presencial" 
+                //WHEN clientes.modalidad_pago = 2 THEN "Virtual" 
+                //ELSE "Desconocido" 
+                //END as modalidadPago'),
                 DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor')
             )
             ->where('clientes.estado_id', 4)
