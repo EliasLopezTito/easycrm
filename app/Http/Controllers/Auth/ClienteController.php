@@ -804,23 +804,24 @@ class ClienteController extends Controller
                 ]);
             }
 
-            $dni = $request->dni;
-            if (strlen($dni) != 8) {
-                $apiUrl = "https://my.apidev.pro/api/dni/$dni?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
-                try {
-                    $client = new \GuzzleHttp\Client();
-                    $response = $client->get($apiUrl);
-                    $data = json_decode($response->getBody(), true);
-                    if (!$data['success']) {
-                        return response()->json(['Success' => false, 'Errors' => ['dni' => 'El DNI no existe.']], 400);
-                    }
-                    return response()->json(['Success' => true, 'Data' => $data]);
-                } catch (\Exception $e) {
-                    return response()->json(['Success' => false, 'Errors' => ['server' => 'Error al conectar con la API.']], 500);
-                }
-            }
-
             if ($request->estado_detalle_id == 8) {
+
+                $dni = $request->dni;
+                if (strlen($dni) != 8) {
+                    $apiUrl = "https://my.apidev.pro/api/dni/$dni?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
+                    try {
+                        $client = new \GuzzleHttp\Client();
+                        $response = $client->get($apiUrl);
+                        $data = json_decode($response->getBody(), true);
+                        if (!$data['success']) {
+                            return response()->json(['Success' => false, 'Errors' => ['dni' => 'El DNI no existe.']], 400);
+                        }
+                        return response()->json(['Success' => true, 'Data' => $data]);
+                    } catch (\Exception $e) {
+                        return response()->json(['Success' => false, 'Errors' => ['server' => 'Error al conectar con la API.']], 500);
+                    }
+                }
+
                 DB::table('clientes')
                     ->where('id', $request->cliente_id)
                     ->update([
