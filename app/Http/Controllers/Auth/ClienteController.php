@@ -804,73 +804,54 @@ class ClienteController extends Controller
                 ]);
             }
 
-            if ($request->estado_detalle_id == 8) {
-
-                $dni = $request->dni;
-                if (strlen($dni) != 8) {
-                    $apiUrl = "https://my.apidev.pro/api/dni/$dni?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
-                    try {
+            try {
+                if ($request->estado_detalle_id == 8) {
+                    $dni = $request->dni;
+                    if (strlen($dni) != 8) {
+                        $apiUrl = "https://my.apidev.pro/api/dni/$dni?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
                         $client = new \GuzzleHttp\Client();
                         $response = $client->get($apiUrl);
                         $data = json_decode($response->getBody(), true);
                         if (!$data['success']) {
-                            return response()->json(['Success' => false, 'Errors' => ['dni' => 'El DNI no existe.']], 400);
-                        }
-                    } catch (\Exception $e) {
-                        return response()->json(['Success' => false, 'Errors' => ['server' => 'Error al conectar con la API.']], 500);
-                    }
-                }
-
-                DB::table('clientes')
-                    ->where('id', $request->cliente_id)
-                    ->update([
-                        'mayor' => $request->mayor,
-                        'updated_at' => Carbon::now(),
-                    ]);
-                if ($request->modalidad_pago == 2) {
-                    $imgData = DB::table('client_registration_images')
-                        ->where('id_client', $request->cliente_id)
-                        ->first();
-
-                    // Si no hay imágenes previas, validar que se suba el vaucher
-                    if (!$imgData && !$request->hasFile('vaucher')) {
-                        return response()->json([
-                            'Success' => false,
-                            'Errors' => ['vaucher' => 'Debe subir la imagen del comprobante de pago.']
-                        ], 400);
-                    }
-
-                    // Definir ruta base y carpeta del cliente
-                    $basePath = public_path('assets/img-matriculado');
-                    $clientFolder = $basePath . '/' . $request->cliente_id;
-
-                    // Crear carpeta si no existe
-                    if (!File::exists($clientFolder)) {
-                        File::makeDirectory($clientFolder, 0777, true, true);
-                    }
-
-                    // Procesar imágenes (solo guardamos lo que llega)
-                    $filenames = [];
-                    foreach (['dniFront', 'dniRear', 'vaucher'] as $key) {
-                        if ($request->hasFile($key)) {
-                            $file = $request->file($key);
-                            $extension = $file->getClientOriginalExtension();
-                            $filename = strtolower(str_replace(['dniFront', 'dniRear'], ['dni-front', 'dni-rear'], $key));
-                            $filename = "{$filename}-{$request->cliente_id}.{$extension}";
-                            $file->move($clientFolder, $filename);
-                            $filenames[$key] = $filename;
+                            dd('Error: El DNI no existe.');
                         }
                     }
 
-                    // Crear array de actualización (lo que no llega se pone NULL en inserción)
-                    $updateData = [
-                        'dni_front' => $filenames['dniFront'] ?? ($imgData ? null : null),
-                        'dni_rear' => $filenames['dniRear'] ?? ($imgData ? null : null),
-                        'vaucher' => $filenames['vaucher'] ?? ($imgData ? null : null),
-                    ];
+                    DB::table('clientes')
+                        ->where('id', $request->cliente_id)
+                        ->update([
+                            'mayor' => $request->mayor,
+                            'updated_at' => Carbon::now(),
+                        ]);
 
-                    try {
-                        // Verificar modalidad de pago
+                    if ($request->modalidad_pago == 2) {
+                        $imgData = DB::table('client_registration_images')
+                            ->where('id_client', $request->cliente_id)
+                            ->first();
+
+                        if (!$imgData && !$request->hasFile('vaucher')) {
+                            dd('Error: Debe subir la imagen del comprobante de pago.');
+                        }
+
+                        $basePath = public_path('assets/img-matriculado');
+                        $clientFolder = $basePath . '/' . $request->cliente_id;
+
+                        if (!File::exists($clientFolder)) {
+                            File::makeDirectory($clientFolder, 0777, true, true);
+                        }
+
+                        $filenames = [];
+                        foreach (['dniFront', 'dniRear', 'vaucher'] as $key) {
+                            if ($request->hasFile($key)) {
+                                $file = $request->file($key);
+                                $extension = $file->getClientOriginalExtension();
+                                $filename = strtolower(str_replace(['dniFront', 'dniRear'], ['dni-front', 'dni-rear'], $key));
+                                $filename = "{$filename}-{$request->cliente_id}.{$extension}";
+                                $file->move($clientFolder, $filename);
+                                $filenames[$key] = $filename;
+                            }
+                        }
+
                         if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
                             DB::table('clientes')
                                 ->where('id', $request->cliente_id)
@@ -879,20 +860,20 @@ class ClienteController extends Controller
                                     'updated_at' => Carbon::now(),
                                 ]);
                         } else {
-                            return response()->json([
-                                'Success' => false,
-                                'Errors' => ['modalidad' => 'Debes seleccionar alguna modalidad de pago.']
-                            ], 400);
+                            dd('Error: Debes seleccionar alguna modalidad de pago.');
                         }
 
                         if ($imgData) {
-                            // Si ya existe, solo actualiza los valores que llegaron
-                            $updateData['updated_at'] = Carbon::now();
+                            $updateData = array_merge((array)$imgData, [
+                                'dni_front'  => $filenames['dniFront'] ?? null,
+                                'dni_rear'   => $filenames['dniRear'] ?? null,
+                                'vaucher'    => $filenames['vaucher'] ?? null,
+                                'updated_at' => Carbon::now(),
+                            ]);
                             DB::table('client_registration_images')
                                 ->where('id_client', $request->cliente_id)
-                                ->update(array_merge($imgData, $updateData));
+                                ->update($updateData);
                         } else {
-                            // Si es un nuevo registro, inserta todos los datos (asigna NULL si no llegaron)
                             $updateData = [
                                 'id_client'  => $request->cliente_id,
                                 'dni_front'  => $filenames['dniFront'] ?? null,
@@ -900,15 +881,9 @@ class ClienteController extends Controller
                                 'vaucher'    => $filenames['vaucher'] ?? null,
                                 'created_at' => Carbon::now(),
                             ];
-
                             DB::table('client_registration_images')->insert($updateData);
                         }
-                    } catch (\Exception $e) {
-                        dd($e->getMessage());
-                    }
-                } else {
-                    // Para modalidad de pago diferente
-                    try {
+                    } else {
                         if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
                             DB::table('clientes')
                                 ->where('id', $request->cliente_id)
@@ -917,16 +892,14 @@ class ClienteController extends Controller
                                     'updated_at' => Carbon::now(),
                                 ]);
                         } else {
-                            return response()->json([
-                                'Success' => false,
-                                'Errors' => ['modalidad' => 'Debes seleccionar alguna modalidad de pago.']
-                            ], 400);
+                            dd('Error: Debes seleccionar alguna modalidad de pago.');
                         }
-                    } catch (\Exception $e) {
-                        dd($e->getMessage());
                     }
                 }
+            } catch (\Exception $e) {
+                dd($e->getMessage());
             }
+
 
 
             if (!$validator->fails()) {
