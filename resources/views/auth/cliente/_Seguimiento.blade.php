@@ -185,7 +185,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="containerModalidad">
-                                                <select name="modalidad_pago" class="form-input" id="modalidad_pago" required>
+                                                <select name="modalidad_pago" class="form-input" id="modalidad_pago">
                                                     <option value="1" selected>Modalidad de pago: <b>Presencial</b></option>
                                                     <option value="2">Modalidad de pago: <b>Virtual</b></option>
                                                 </select>
@@ -193,7 +193,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="containerModalidad">
-                                                <select name="mayor" class="form-input" id="mayor" required>
+                                                <select name="mayor" class="form-input" id="mayor">
                                                     <option value="1" selected>Mayor de edad: <b>Si</b></option>
                                                     <option value="0">Mayor de edad: <b>No</b></option>
                                                 </select>
