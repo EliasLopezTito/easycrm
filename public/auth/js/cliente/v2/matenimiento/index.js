@@ -33,7 +33,7 @@ $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
 
     // Agregar opciones manualmente en carrera
     let carreras = [
-        { id: 70, nombre: "Otros" }
+        { id: 71, nombre: "Otros" }
     ];
 
     let $carreraSelect = $("#carrera_id");
@@ -62,6 +62,7 @@ $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
                             $(".name, .last-name, .date").attr("readonly", true);
                         } else {
                             $(".name, .last-name, .date").attr("readonly", false);
+                            $(".name, .last-name, .date").val("");
                         }
                     },
                     error: function () {
