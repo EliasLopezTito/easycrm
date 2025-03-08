@@ -2,8 +2,7 @@
 
 App::setLocale('es');
 
-Route::group(['prefix' => 'webhooks'], function ()
-{
+Route::group(['prefix' => 'webhooks'], function () {
     Route::post('/', 'App\HomeController@webhooks')->name('webhooks');
     Route::get('/auth', 'App\HomeController@webhooks_auth')->name('webhooks.auth');
     Route::get('/auth/platform', 'App\HomeController@webhooks_auth_platform')->name('webhooks.auth_platform');
@@ -13,14 +12,13 @@ Route::group(['prefix' => 'webhooks'], function ()
     Route::post('/make', 'App\HomeController@make')->name('webhooks.make');
     Route::get('/tiktokads', 'App\HomeController@tiktokads')->name('webhooks.tiktokads');
     Route::post('/maketiktokads', 'App\HomeController@maketiktokads')->name('webhooks.maketiktokads');
-
 });
 
 Route::group(['middleware' => 'auth:web'], function () {
 
     Route::get('/', 'Auth\HomeController@index')->name('user.home');
 
-    Route::group(['roles' => ['Administrador', 'Asesor', 'Perdidos', 'Reingresos' , 'Cajero', 'Provincia']], function () {
+    Route::group(['roles' => ['Administrador', 'Asesor', 'Perdidos', 'Reingresos', 'Cajero', 'Provincia']], function () {
         Route::middleware('auth.route.access')->group(function () {
             Route::post('/', 'Auth\HomeController@index')->name('user.home.post');
             Route::group(['prefix' => 'cliente'], function () {
@@ -41,6 +39,7 @@ Route::group(['middleware' => 'auth:web'], function () {
 
                 Route::post('/store', 'Auth\ClienteController@store')->name('user.client.store');
                 Route::post('/updateDatosContacto', 'Auth\ClienteController@updateDatosContacto')->name('user.client.updateDatosContacto');
+                Route::post('/updateDatosCliente', 'Auth\ClienteController@updateDatosCliente')->name('user.client.updateDatosCliente');
                 Route::post('/storeSeguimiento', 'Auth\ClienteController@storeSeguimiento')->name('user.client.storeSeguimiento');
                 Route::post('/storeSeguimientoAdicional', 'Auth\ClienteController@storeSeguimientoAdicional')->name('user.client.storeSeguimientoAdicional');
                 Route::post('/list_filter_seguimiento', 'Auth\ClienteController@list_filter_seguimiento')->name('user.client.list_filter');
@@ -52,7 +51,7 @@ Route::group(['middleware' => 'auth:web'], function () {
 
     /*  RUTA API DNI */
     Route::get('/buscar_reniec/{data}', 'Auth\ClienteController@consultar_reniec')->name('buscar_reniec');
-    
+
     Route::group(['prefix' => 'reporte', 'roles' => ['Administrador', 'Asesor', 'Perdidos']], function () {
         Route::middleware('auth.route.access')->group(function () {
             Route::get('/', 'Auth\ReporteController@index')->name('user.reporte');
@@ -71,7 +70,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/seguimiento', 'Auth\SeguimientoController@index')->name('seguimiento.index');
     Route::get('/seguimiento/usuarios/', 'Auth\SeguimientoController@usuarios')->name('seguimiento.usuarios');
 
-    
+
     Route::group(['prefix' => 'cliente'], function () {
         Route::post('/store', 'Auth\ClienteController@store')->name('user.client.store');
     });
@@ -95,7 +94,7 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::post('/delete', 'Auth\ClienteController@delete')->name('user.client.delete');
     });
 
-    Route::group(['prefix' => 'usuario', 'roles' => ['Administrador']], function (){
+    Route::group(['prefix' => 'usuario', 'roles' => ['Administrador']], function () {
         Route::middleware('auth.route.access')->group(function () {
             Route::get('/', 'Auth\UsuarioController@index')->name('user.user');
             Route::get('/list_all', 'Auth\UsuarioController@list_all')->name('user.user.list_all');
@@ -106,7 +105,7 @@ Route::group(['middleware' => 'auth:web'], function () {
         });
     });
 
-    Route::group(['prefix' => 'modalidad', 'roles' => ['Administrador']], function (){
+    Route::group(['prefix' => 'modalidad', 'roles' => ['Administrador']], function () {
         Route::middleware('auth.route.access')->group(function () {
             Route::get('/', 'Auth\ModalidadController@index')->name('user.modalidad');
             Route::get('/list_all', 'Auth\ModalidadController@list_all')->name('user.modalidad.list_all');
@@ -116,7 +115,7 @@ Route::group(['middleware' => 'auth:web'], function () {
         });
     });
 
-    Route::group(['prefix' => 'curso', 'roles' => ['Administrador']], function (){
+    Route::group(['prefix' => 'curso', 'roles' => ['Administrador']], function () {
         Route::get('/filtroCurso/{id}', 'Auth\CarreraController@filtroCurso')->name('user.filtroCarrera');
         Route::middleware('auth.route.access')->group(function () {
             Route::get('/', 'Auth\CarreraController@index')->name('user.carrera');
@@ -127,29 +126,28 @@ Route::group(['middleware' => 'auth:web'], function () {
         });
     });
 
-    Route::group(['prefix' => 'reportehistorial', 'roles' => ['Administrador']], function (){
+    Route::group(['prefix' => 'reportehistorial', 'roles' => ['Administrador']], function () {
         Route::middleware('auth.route.access')->group(function () {
             Route::get('/', 'Auth\HistorialController@index')->name('user.reportehistorial');
             Route::get('/list_all', 'Auth\HistorialController@list_all')->name('user.reportehistorial.list_all');
         });
     });
 
-    Route::group(['prefix' => 'estado', 'roles' => ['Administrador']], function (){
+    Route::group(['prefix' => 'estado', 'roles' => ['Administrador']], function () {
         Route::get('/filtroEstado/{id}', 'Auth\EstadoController@filtroEstado')->name('user.filtroEstado');
     });
 
-    Route::group(['prefix' => 'local', 'roles' => ['Administrador']], function (){
+    Route::group(['prefix' => 'local', 'roles' => ['Administrador']], function () {
         Route::get('/filtroLocal/{id}', 'Auth\LocalController@filtroLocal')->name('user.filtroLocal');
     });
 
-    Route::group(['prefix' => 'horario', 'roles' => ['Administrador']], function (){
+    Route::group(['prefix' => 'horario', 'roles' => ['Administrador']], function () {
         Route::get('/filtroHorario/{turno_id}/{carrera_id}/{tipo}', 'Auth\HorarioController@filtroHorario')->name('user.filtroHorario');
         Route::get('/filtroCarrera/{modalidad_id}/', 'Auth\HorarioController@filtroCarrera')->name('user.filtroCarrera');
     });
 
     Route::get('/changePassword/partialView', 'Auth\LoginController@partialView_change_password')->name('auth.login.partialView_change_password');
     Route::post('/changePassword', 'Auth\LoginController@change_password')->name('auth.login.change_password');
-
 });
 
 // Login Routes...

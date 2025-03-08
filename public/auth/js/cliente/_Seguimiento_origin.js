@@ -91,7 +91,7 @@ $(function(){
             if([ESTADOS.CIERRE, ESTADOS.REINGRESO].includes(parseInt($estado_id.val()))){
                 $("#datosAdicionales").removeClass("hidden").find("input, select").val("").prop("required", true);
                 $("#proximaAccion").addClass("hidden").find("input, select").val("").prop("required", false);
-                $(".direccion_matricula").removeClass("hidden").find("input#direccion").prop("required", true);
+                $(".direccion_matricula").removeClass("hidden").find("input#direccion").val("").prop("required", true);
             }else{
                 $("#proximaAccion").removeClass("hidden").find("input, select").val("").prop("required", true);
                 $("#datosAdicionales").addClass("hidden").find("input, select").val("").prop("required", false);
@@ -272,19 +272,8 @@ $(function(){
                     }else{
                         var name_usuario = v.users.name
                     }
-                    let imgLinks = '';
-                    if (data.imgData) {
-                        if (data.imgData.dni_front) {
-                            imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.dni_front}" target="_blank">Ver DNI Frente</a></p>`;
-                        }
-                        if (data.imgData.dni_rear) {
-                            imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.dni_rear}" target="_blank">Ver DNI Detrás</a></p>`;
-                        }
-                        if (data.imgData.vaucher) {
-                            imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.vaucher}" target="_blank">Ver Voucher</a></p>`;
-                        }
-                    }
-                    let imgLinksHtml = (i === 0) ? imgLinks : "";
+
+
                     /*----SE AGREGO LA CONDICIONAL SI EXISTE LOCAL_ID PARA LAS MATRICULAS PASADAS-----*/
                     if(v.clientes.local_id != null){
                         html += '<div class="item">'+
@@ -295,7 +284,7 @@ $(function(){
                                         '<p class="info-details-title">'+ name_usuario + ' realizó ' +v.acciones.name+ ', el ' + date[0] + ' de ' + date[1] + ' a las ' + moment.utc(v.created_at).format('h:mm a') + ' | Estado: ' + v.estados.name + ' | ' +
                                         ((v.estado_detalle_id == ESTADOS_DETALLE.MATRICULADO) ?  '<br> Matriculado en ' + v.clientes.modalidades.name  +  ' de ' + v.clientes.carreras.name+ ', en la sede: ' + v.clientes.sedes.name + ', en el local: ' + v.clientes.locales.name + ', en el turno: ' + v.clientes.turnos.name + ' y en el horario de: ' + v.clientes.horarios.horario + ' | N° Operación: ' + v.clientes.nro_operacion
                                         + ' | Monto: S/ ' + v.clientes.monto + ' | Código alumno: ' + v.clientes.codigo_alumno  + '.' : (v.estado_detalle_id == ESTADOS_DETALLE.REINGRESO) ? ' Semestre de Reingreso: ' + v.clientes.semestre_inicio.name + ' | Ciclo de Reingreso: ' + v.clientes.ciclo_inicio.name + ' | Cursos jalados: ' + (v.clientes.cursos_jalados != null && v.clientes.cursos_jalados == 1 ? 'Si' : 'No') : '' ) + '</p>'+
-                                        '<p>' + (v.comentario != null ? v.comentario : "-") +'</p>'+ imgLinksHtml +
+                                        '<p>' + (v.comentario != null ? v.comentario : "-") +'</p>'+
                                     '</div>'+
                             '</div>'+
                         '</div>';
@@ -308,7 +297,7 @@ $(function(){
                                         '<p class="info-details-title">'+ name_usuario + ' realizó ' +v.acciones.name+ ', el ' + date[0] + ' de ' + date[1] + ' a las ' + moment.utc(v.created_at).format('h:mm a') + ' | Estado: ' + v.estados.name + ' | ' +
                                         ((v.estado_detalle_id == ESTADOS_DETALLE.MATRICULADO) ?  '<br> Matriculado en ' + v.clientes.modalidades.name  +  ' de ' + v.clientes.carreras.name+ ', en la sede: ' + v.clientes.sedes.name  + ', en el turno: ' + v.clientes.turnos.name + ' y en el horario de: ' + v.clientes.horarios.horario + ' | N° Operación: ' + v.clientes.nro_operacion
                                         + ' | Monto: S/ ' + v.clientes.monto + ' | Código alumno: ' + v.clientes.codigo_alumno  + '.' : (v.estado_detalle_id == ESTADOS_DETALLE.REINGRESO) ? ' Semestre de Reingreso: ' + v.clientes.semestre_inicio.name + ' | Ciclo de Reingreso: ' + v.clientes.ciclo_inicio.name + ' | Cursos jalados: ' + (v.clientes.cursos_jalados != null && v.clientes.cursos_jalados == 1 ? 'Si' : 'No') : '' ) + '</p>'+
-                                        '<p>' + (v.comentario != null ? v.comentario : "-") +'</p>'+ imgLinksHtml +
+                                        '<p>' + (v.comentario != null ? v.comentario : "-") +'</p>'+
                                     '</div>'+
                             '</div>'+
                         '</div>';
@@ -334,15 +323,6 @@ $(function(){
                     ([PERFILES.VENDEDOR,PERFILES.CALL].includes(usuarioLoggin.profile_id) && data.data[0].clientes.estado_id == ESTADOS.OTROS)))
                     $(".content-actions-client").html("");
                     $direccion.val(data.data[0].clientes.direccion);
-                $("#dni").attr("readonly", true);
-                $("#nombres").attr("readonly", true);
-                $("#apellidos").attr("readonly", true);
-                $("#fecha_nacimiento").attr("readonly", true);
-                $("#dni").attr("readonly", true);
-                $("#celular").attr("readonly", true);
-                $("#provincia_id").attr("desabilied", true);
-                $("#distrito_id").attr("desabilied", true);
-                $("#seacrhReniec").prop("desabilied", true);
             }else
                 $contentHistory.html("<p>No existe historial registrada actualmente.</p>");
         });
@@ -494,6 +474,7 @@ function longitudInput()
 
 function buscarDNI()
 {
+
     $(".buscarDNI").keyup(function(){
         if($(".buscarDNI").val().length === 8){
             $data = $(".buscarDNI").val();
@@ -503,6 +484,8 @@ function buscarDNI()
                     $('#nombres').val('')
                     $('#apellidos').val('')
                 }else{
+                    /* console.log(JSON.parse(data)) */
+                    /* AÑADIENDO DATOS */
                     $("#nombres").val(respuesta.nombres)
                     $("#apellidos").val(respuesta.apellidoPaterno+' '+respuesta.apellidoMaterno)
                     $("#alerta-cierre").prop('hidden',true);

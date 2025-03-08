@@ -2,7 +2,7 @@ var OnSuccessRegistroCliente, OnFailureRegistroCliente;
 $(function(){
 
     const $modal = $("#modalMantenimientoCliente"), $form = $("form#registroCliente"),
-          $modalidad_id = $("#modalidad_id"), $carrera_id = $form.find("#carrera_id"), $provincia_id = $form.find("#provincia_id"),  $distrito_id = $form.find("#distrito_id");
+        $modalidad_id = $("#modalidad_id"), $carrera_id = $form.find("#carrera_id"), $provincia_id = $form.find("#provincia_id"),  $distrito_id = $form.find("#distrito_id");
 
     $provincia_id.change(function(){
         $distrito_id.html("");

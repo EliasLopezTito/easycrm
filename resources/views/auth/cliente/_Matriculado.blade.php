@@ -1,7 +1,7 @@
 <div id="modalMatriculadoCliente" class="modal modal-fill fade" data-backdrop="false" tabindex="-1">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-sm" style="width: 400px">
         <form enctype="multipart/form-data" action="{{ route('user.client.updateMatriculado') }}" id="matriculadoCliente" method="POST"
-              data-ajax="true" data-close-modal="true" data-ajax-loading="#loading" data-ajax-success="OnSuccessMatriculadoCliente" data-ajax-failure="OnFailureMatriculadoCliente">
+            data-ajax="true" data-close-modal="true" data-ajax-loading="#loading" data-ajax-success="OnSuccessMatriculadoCliente" data-ajax-failure="OnFailureMatriculadoCliente">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Actualizar Matricula</h5>
@@ -65,6 +65,19 @@
                                 @endforeach
                             </select>
                             <span data-valmsg-for="horario_id"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="horario_id">Imagen del Dni Frontal</label>
+                            <label for="dniFront" style="margin-top: 10px;">Foto del DNI (Parte Frontal)</label>
+                            <input type="file" name="dniFront" id="dniFront" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                            <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior)</label>
+                            <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                            <label for="vaucher" style="margin-top: 10px;">Foto del Comprobante de Pago</label>
+                            <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
                         </div>
                     </div>
                 </div>

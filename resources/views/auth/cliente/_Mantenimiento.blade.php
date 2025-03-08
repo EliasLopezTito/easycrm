@@ -15,12 +15,12 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="nombres">Nombres</label>
-                                <input type="text" class="form-input" name="nombres" id="nombres" required>
+                                <input type="text" class="form-input name" name="nombres" id="nombres" required>
                                 <span data-valmsg-for="nombres"></span>
                             </div>
                             <div class="col-md-4">
                                 <label for="apellidos">Apellidos</label>
-                                <input type="text" class="form-input" name="apellidos" id="apellidos" required>
+                                <input type="text" class="form-input last-name" name="apellidos" id="apellidos" required>
                                 <span data-valmsg-for="apellidos"></span>
                             </div>
                             <div class="col-md-4">
@@ -33,9 +33,18 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-3">
-                                <label for="dni">DNI</label>
-                                <input type="text" class="form-input" name="dni" id="dni" minlength="8" maxlength="10" onkeypress="return isNumberKey(event)" required>
+                                <div class="input-group" style="display: flex; align-items: center;margin-top: 25px">
+                                    <select name="validationIdentidad" id="validationIdentidad" class="form-input" 
+                                            style="width: 30%; min-width: 60px; text-align: center;">
+                                        <option value="1">DNI</option>
+                                        <option value="2">Carnet Ext</option>
+                                    </select>
+                                    <input type="text" class="form-input searchDni" name="dni" id="dni" 
+                                        minlength="8" maxlength="10" onkeypress="return isNumberKey(event)" 
+                                        required style="width: 70%;">
+                                </div>
                                 <span data-valmsg-for="dni"></span>
+                                <input type="hidden" name="direccion" id="direccion" class="direccion">
                             </div>
                             <div class="col-md-3">
                                 <label for="celular">Celular</label>
@@ -49,7 +58,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="fecha_nacimiento">Fecha Nacimiento</label>
-                                <input type="date" class="form-input" name="fecha_nacimiento" id="fecha_nacimiento">
+                                <input type="date" class="form-input date" name="fecha_nacimiento" id="fecha_nacimiento">
                                 <span data-valmsg-for="fecha_nacimiento"></span>
                             </div>
                         </div>
@@ -158,7 +167,7 @@
                                     <select name="name_id" class="form-input"  id="name_id">
                                             <option value="">-- Seleccione --</option>
                                             @foreach($Asesores as $q)
-                                                <option value="{{ $q->id }}">{{ $q->name }}</option>
+                                                <option value="{{ $q->id }}" @if ($q->id == Auth::guard('web')->user()->id) selected @endif>{{ $q->name }}</option>
                                             @endforeach
                                         </select>
                                     <span data-valmsg-for="name_id"></span>
@@ -171,7 +180,7 @@
 
                     {{-- id usuario  --}}
                     <input type="hidden" name="creador_id" value="{{ \Illuminate\Support\Facades\Auth::guard('web')->user()->id }}">
-                 
+                
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-bold btn-pure btn-primary">Registrar Lead</button>
@@ -182,3 +191,4 @@
 </div>
 
 <script type="text/javascript" src="auth/js/cliente/_Mantenimiento.min.js"></script>
+<script src="{{ asset('auth/js/cliente/v2/matenimiento/index.js') }}"></script>

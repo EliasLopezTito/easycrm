@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="user content-card">
             <ul>
-                <li><h5 class="name-client">{{ $Cliente->nombres." ".$Cliente->apellidos }}</h5></li>
+                <li><h5>{{ $Cliente->nombres." ".$Cliente->apellidos }}</h5></li>
 
                 @if($Cliente->estado_detalle_id != \easyCRM\App::$ESTADO_DETALLE_MATRICULADO)
                 <li>Interesado en
@@ -44,7 +44,7 @@
                     <tr>
                         {{-- <td><label for="dni">DNI: </label></td> --}}
                         <td style="padding-left:0px !important;">
-                            <select name="" id="tipo_do" class="documento" style="width:100px;" @if ($Cliente->estado_detalle_id == 8) disabled @endif>
+                            <select name="" id="tipo_do" class="documento" style="width:100px;">
                                 <option id="tipo_do_val1" value="1">DNI</option>
                                 <option id="tipo_do_val2" value="2">CARNÉT DE EXTRANJERIA</option>
                             </select>
@@ -53,82 +53,70 @@
                             <img src="https://cdn-icons-png.flaticon.com/512/5623/5623014.png" style="margin-right:10px; margin-bottom:5px;" width="20px" alt="">
                             <strong>Por favor!</strong> Revise y valide el documento de identidad de este lead.
                         </div>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 5px;">
-                                <input type="text" class="form-input buscarDNI" name="dni" id="dni" minlength="8" maxlength="10" value="{{ $Cliente->dni }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8) readonly @endif>
-                                <span data-valmsg-for="dni"></span>
-                                @if ($Cliente->estado_detalle_id != 8)
-                                    <button class="btn btn-primary" type="button" id="seacrhReniec"><img src="{{ asset('assets/img/log-reniec.png') }}" style="width: 40px;" alt="log-reniec"></button>
-                                @endif
-                            </div>
+                        <td><input type="text" class="form-input buscarDNI" name="dni" id="dni" minlength="8" maxlength="10" value="{{ $Cliente->dni }}" autocomplete="off" onkeypress="return isNumberKey(event)" required>
+                            <span data-valmsg-for="dni"></span>
                         </td>
                         {{-- <td id="btn_buscar" hidden><a href="javascript:void(0)" class="btn btn-sm btn-primary btn-buscar-dni">Buscar</a></td> --}}
                     </tr>
                     <tr>
                         <td><label for="nombres">Nombres: </label></td>
-                        <td><input type="text" class="form-input" id="nombres" name="nombres" value="{{ $Cliente->nombres }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
+                        <td><input type="text" class="form-input" id="nombres" name="nombres" value="{{ $Cliente->nombres }}" autocomplete="off" required>
                             <span data-valmsg-for="nombres"></span>
                         </td>
                     </tr>
                     <tr>
                         <td><label for="apellidos">Apellidos: </label></td>
-                        <td><input type="text" class="form-input" id="apellidos" name="apellidos" value="{{ $Cliente->apellidos }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
+                        <td><input type="text" class="form-input" id="apellidos" name="apellidos" value="{{ $Cliente->apellidos }}" autocomplete="off" required>
                             <span data-valmsg-for="apellidos"></span>
                         </td>
                     </tr>
                     <tr>
                         <td><label for="fecha_nacimiento">Fecha Nacimiento: </label></td>
-                        <td><input type="date" class="form-input" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ $Cliente->fecha_nacimiento != null ? \Carbon\Carbon::parse($Cliente->fecha_nacimiento)->format('Y-m-d') : "-" }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
+                        <td><input type="date" class="form-input" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ $Cliente->fecha_nacimiento != null ? \Carbon\Carbon::parse($Cliente->fecha_nacimiento)->format('Y-m-d') : "-" }}" autocomplete="off" >
                             <span data-valmsg-for="fecha_nacimiento"></span>
                         </td>
                     </tr>
                     <tr>
                         <td><label for="celular">Celular: </label></td>
-                        <td><input type="text" class="form-input" name="celular" id="celular" minlength="9" maxlength="15" value="{{ $Cliente->celular }}" autocomplete="off" onkeypress="return isNumberKey(event)" required @if ($Cliente->estado_detalle_id == 8) readonly @endif>
+                        <td><input type="text" class="form-input" name="celular" id="celular" minlength="9" maxlength="15" value="{{ $Cliente->celular }}" autocomplete="off" onkeypress="return isNumberKey(event)" required>
                             <span data-valmsg-for="celular"></span>
                         </td>
                     </tr>
                     <tr>
                         <td><label for="whatsapp">Whatsapp: </label></td>
-                        <td><input type="text" class="form-input" name="whatsapp" id="whatsapp" minlength="9" maxlength="15" value="{{ $Cliente->whatsapp != null ? $Cliente->whatsapp : "" }}" autocomplete="off" onkeypress="return isNumberKey(event)" required @if ($Cliente->estado_detalle_id == 8) readonly @endif>
+                        <td><input type="text" class="form-input" name="whatsapp" id="whatsapp" minlength="9" maxlength="15" value="{{ $Cliente->whatsapp != null ? $Cliente->whatsapp : "" }}" autocomplete="off" onkeypress="return isNumberKey(event)">
                             <span data-valmsg-for="whatsapp"></span>
                         </td>
                         <td><a href="javascript:sendMessage({{ $Cliente->whatsapp }})" id="whatsapp_link" title="Enviar un mensjae a {{ $Cliente->whatsapp }}" data-message="{{ $Cliente->whatsapp }}"><img src="/auth/image/icon/whatsApp.png" alt=""></a></td>
                     </tr>
                     <tr>
                         <td><label for="email">Email: </label></td>
-                        <td><input type="email" class="form-input" name="email" id="email" value="{{ $Cliente->email }}" autocomplete="off"  required @if ($Cliente->estado_detalle_id == 8) readonly @endif>
+                        <td><input type="email" class="form-input" name="email" id="email" value="{{ $Cliente->email }}" autocomplete="off"  required>
                             <span data-valmsg-for="email"></span>
                         </td>
                         <td><a href="mailto:{{ $Cliente->email }}" id="gmail" title="Enviar un correo a {{ $Cliente->email }}" data-mail="{{ $Cliente->email }}"><img src="/auth/image/icon/Mail.png" alt=""></a></td>
                     </tr>
                     <tr>
                         <td><label for="provincia_id">Provincia: </label></td>
-                        <td><select name="provincia_id" id="provincia_id" class="form-input" required @if ($Cliente->estado_detalle_id == 8) disabled @endif>
+                        <td><select name="provincia_id" id="provincia_id" class="form-input">
                                 @foreach($Provincias as $q)
                                     <option value="{{ $q->id }}" {{ $Cliente->provincia_id == $q->id ? "selected" : ""}}>{{ $q->name }}</option>
                                 @endforeach
                             </select>
                         </td>
-                        @if ($Cliente->estado_detalle_id == 8)
-                            <input type="hidden" name="provincia_id" value="{{ $Cliente->provincia_id }}">
-                        @endif
                     </tr>
                     <tr>
                         <td><label for="distrito_id">Distrito: </label></td>
-                        <td><select name="distrito_id" id="distrito_id" class="form-input" @if ($Cliente->estado_detalle_id == 8) disabled @endif>
+                        <td><select name="distrito_id" id="distrito_id" class="form-input">
                                 @foreach($Distritos as $q)
                                     <option value="{{ $q->id }}" {{ $Cliente->distrito_id == $q->id ? "selected" : ""}}>{{ $q->name }}</option>
                                 @endforeach
                             </select>
                         </td>
-                        @if ($Cliente->estado_detalle_id == 8)
-                            <input type="hidden" name="distrito_id" value="{{ $Cliente->distrito_id }}">
-                        @endif
                     </tr>
                     <tr class="direccion_matricula {{ $Cliente->estado_detalle_id == \easyCRM\App::$ESTADO_DETALLE_MATRICULADO ? "" : "hidden" }}">
                         <td><label for="direccion">Dirección: </label></td>
-                        <td><input type="text" class="form-input" name="direccion" id="direccion" value="{{ $Cliente->direccion ?? '' }}" autocomplete="off" @if ($Cliente->estado_detalle_id == 8) readonly @endif>
+                        <td><input type="text" class="form-input" name="direccion" id="direccion" value="{{ $Cliente->direccion }}" autocomplete="off">
                             <span data-valmsg-for="direccion"></span>
                         </td>
                     </tr>
@@ -178,43 +166,6 @@
                             <span data-valmsg-for="estado_detalle_id"></span>
                         </div>
                     </div>
-                    <div id="mainContainer" style="display: none;">
-                        <div class="form-group" style="margin-top: 20px">
-                            <div class="row">
-                                <div class="col-md-12 mt-3">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="containerModalidad">
-                                                <select name="modalidad_pago" class="form-input" id="modalidad_pago" required>
-                                                    <option value="1" selected>Modalidad de pago: <b>Presencial</b></option>
-                                                    <option value="2">Modalidad de pago: <b>Virtual</b></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="containerModalidad">
-                                                <select name="mayor" class="form-input" id="mayor" required>
-                                                    <option value="1" selected>Mayor de edad: <b>Si</b></option>
-                                                    <option value="0">Mayor de edad: <b>No</b></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="containerImg" style="display: none;">
-                                        <label for="dniFront" style="margin-top: 10px;">Foto del DNI (Parte Frontal) - Opcional</label>
-                                        <input type="file" name="dniFront" id="dniFront" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                        
-                                        <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
-                                        <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                        
-                                        <label for="vaucher" style="margin-top: 10px;">Foto del Comprobante de Pago - Obligatorio </label>
-                                        <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                    </div>
-                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>                    
                 </div>
                 <div class="form-group">
                     <div class="row">
@@ -620,6 +571,7 @@
                 @endif
             </div>
 
+
             <div class="mt-20 pb-5">
                 <h5>Historial del registro</h5>
                 <hr>
@@ -699,4 +651,3 @@
 
 <script type="text/javascript" src="auth/plugins/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 <script type="text/javascript" src="auth/js/cliente/_Seguimiento.js"></script>
-<script src="{{ asset('auth/js/cliente/v2/index.js') }}"></script>

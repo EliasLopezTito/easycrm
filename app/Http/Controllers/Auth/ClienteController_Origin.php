@@ -2,7 +2,6 @@
 
 namespace easyCRM\Http\Controllers\Auth;
 
-use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use easyCRM\Accion;
 use easyCRM\App;
@@ -60,10 +59,10 @@ class ClienteController extends Controller
         $Carreras = Carrera::all();
         $Ciclos = Ciclo::all();
         $Asesores = Asesor::where('profile_id', App::$PERFIL_VENDEDOR)
-            ->where('activo', '1')
-            ->where('recibe_lead', '1')
-            ->orderBy('name', 'asc')
-            ->get();
+        ->where('activo', '1')
+        ->where('recibe_lead', '1')
+        ->orderBy('name', 'asc')
+        ->get();
 
 
         return view('auth.cliente._Mantenimiento', [
@@ -91,31 +90,29 @@ class ClienteController extends Controller
         /* dd($request); */
         $client = new Client();
         /* $client->request('POST', 'https://easycrm.ial.edu.pe/api/cliente/create', */
-        $client->request(
-            'POST',
-            'http://127.0.0.1:8000/api/cliente/create',
-            [
-                RequestOptions::HEADERS => [
-                    'Accept' => "application/json",
-                    'Authorization' => "Bearer ZupWuQUrw2vYcH8fzCczPHc5QlTxsK7dB9IhPW42fPRC99i0yIV3iBBtDNGz9T5ECMzN2vCnWSzVKHXTo0Ee3qquxVj52MpbhRLO",
-                    'Cache-Control' => "no-cache",
-                ],
-                RequestOptions::JSON => [
-                    "nombres" => $request->nombres,
-                    "apellidos" => $request->apellidos,
-                    "dni" => $request->dni,
-                    "celular" => $request->celular,
-                    "email" => $request->email,
-                    "fecha_nacimiento" => $request->fecha_nacimiento,
-                    "provincia" => 0,
-                    "provincia_id" => $request->provincia_id,
-                    "distrito_id" => $request->distrito_id,
-                    "modalidad_id" => $request->modalidad_id,
-                    "carrera_id" => $request->carrera_id,
-                    "fuente_id" => $request->fuente_id,
-                    "enterado_id" => $request->enterado_id
-                ]
+        $client->request('POST', 'http://127.0.0.1:8000/api/cliente/create',
+        [
+            RequestOptions::HEADERS => [
+                'Accept' => "application/json",
+                'Authorization' => "Bearer ZupWuQUrw2vYcH8fzCczPHc5QlTxsK7dB9IhPW42fPRC99i0yIV3iBBtDNGz9T5ECMzN2vCnWSzVKHXTo0Ee3qquxVj52MpbhRLO",
+                'Cache-Control' => "no-cache",
+            ],
+            RequestOptions::JSON => [
+                "nombres" => $request->nombres,
+                "apellidos" => $request->apellidos,
+                "dni" => $request->dni,
+                "celular" => $request->celular,
+                "email" => $request->email,
+                "fecha_nacimiento" => $request->fecha_nacimiento,
+                "provincia" => 0,
+                "provincia_id" => $request->provincia_id,
+                "distrito_id" => $request->distrito_id,
+                "modalidad_id" => $request->modalidad_id,
+                "carrera_id" => $request->carrera_id,
+                "fuente_id" => $request->fuente_id,
+                "enterado_id" => $request->enterado_id
             ]
+          ]
         );
         return response()->json($request->all());
     }
@@ -146,7 +143,7 @@ class ClienteController extends Controller
                     $userTurnId = DB::table('users')->select('id')->where('id', $request->name_id)->first()->id;
                 } else {
                     // Selecciona al asesor con la menor cantidad de leads
-                    $userTurnId = $assessor != null ? $assessor->id : null;
+                    $userTurnId = $assessor != null ? $assessor->id : null; 
                 }
             }
 
@@ -398,80 +395,6 @@ class ClienteController extends Controller
             }
         }
 
-        if ($Cliente->estado_detalle_id == 8) {
-            $imgData = DB::table('client_registration_images')
-                ->where('id_client', $request->id)
-                ->first();
-
-            // Si no hay imágenes previas, debe subir las 3 imágenes
-            if (!$imgData) {
-                if (!$request->hasFile('dniFront') || !$request->hasFile('dniRear') || !$request->hasFile('vaucher')) {
-                    return response()->json(['Success' => false, 'Errors' => ['img' => 'Debe subir las 3 imágenes obligatorias.']], 400);
-                }
-            }
-
-            // Definir ruta base y carpeta del cliente
-            $basePath = public_path('assets/img-matriculado');
-            $clientFolder = $basePath . '/' . $request->id;
-
-            // Crear carpeta si no existe
-            if (!File::exists($clientFolder)) {
-                File::makeDirectory($clientFolder, 0777, true, true);
-            }
-
-            // Procesar imágenes
-            $filenames = [];
-            foreach (['dniFront', 'dniRear', 'vaucher'] as $key) {
-                if ($request->hasFile($key)) {
-                    $file = $request->file($key);
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = strtolower(str_replace(['dniFront', 'dniRear'], ['dni-front', 'dni-rear'], $key));
-                    $filename = "{$filename}-{$request->id}.{$extension}";
-
-                    // Ruta completa del nuevo archivo
-                    $filePath = $clientFolder . '/' . $filename;
-
-                    // Si existe un archivo anterior, elimínalo antes de subir el nuevo
-                    if (File::exists($filePath)) {
-                        File::delete($filePath);
-                    }
-
-                    // Mueve el nuevo archivo a la carpeta
-                    $file->move($clientFolder, $filename);
-                    $filenames[$key] = $filename;
-                }
-            }
-
-            // Definir si se está insertando o actualizando
-            $updateData = [];
-            if (isset($filenames['dniFront'])) {
-                $updateData['dni_front'] = $filenames['dniFront'];
-            }
-            if (isset($filenames['dniRear'])) {
-                $updateData['dni_rear'] = $filenames['dniRear'];
-            }
-            if (isset($filenames['vaucher'])) {
-                $updateData['vaucher'] = $filenames['vaucher'];
-            }
-
-            try {
-                if ($imgData) {
-                    // Si ya existe, actualiza los datos y `updated_at`
-                    $updateData['updated_at'] = now();
-                    DB::table('client_registration_images')
-                        ->where('id_client', $request->id)
-                        ->update($updateData);
-                } else {
-                    // Si es un nuevo registro, inserta con `created_at`
-                    $updateData['id_client'] = $request->id;
-                    $updateData['created_at'] = now();
-                    DB::table('client_registration_images')->insert($updateData);
-                }
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
-        }
-
         return response()->json(['Success' => $Status, 'Errors' => $validator->errors()]);
     }
 
@@ -627,102 +550,6 @@ class ClienteController extends Controller
         return response()->json(['Success' => $Status, 'Title' => $Title, 'Message' => $Message, 'Errors' => $errors]);
     }
 
-    public function updateDatosCliente(Request $request)
-    {
-
-        $Exist = false;
-        $Status = false;
-        $Title = "Error";
-        $Message = "Algo salio mal, verifique los campos ingresados.";
-
-        $Cliente = Cliente::find($request->id);
-
-        if (in_array($Cliente->estado_detalle_id, [App::$ESTADO_DETALLE_MATRICULADO, App::$ESTADO_DETALLE_TRASLADO])) {
-            $validator = Validator::make($request->all(), [
-                'nombres' => 'required',
-                'apellidos' => 'required',
-                'provincia_id' => 'required',
-                'distrito_id' => 'required',
-                'dni' => 'required|min:8|max:10',
-                'celular' => 'required|min:9|max:15',
-                'email' => 'required|email',
-                'whatsapp' => 'nullable|min:9|max:15',
-            ]);
-        } else {
-            $validator = Validator::make($request->all(), [
-                'nombres' => 'required',
-                'apellidos' => 'required',
-                'provincia_id' => 'required',
-                'distrito_id' => 'required',
-                'dni' => 'required|min:8|max:10',
-                'celular' => 'required|min:9|max:15',
-                'email' => 'required|email',
-                'whatsapp' => 'nullable|min:9|max:15'
-            ]);
-        }
-
-        $errors = [];
-        $ErrorsModel = [];
-
-        if (!$validator->fails()) {
-
-            $validatorDNI = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('dni', $request->dni)->first();
-
-            if ($validatorDNI && $validatorDNI->id != $Cliente->id) {
-                array_push($errors, ['dni' => ['El dni ya está en uso.']]);
-            }
-
-            $validatorCelular = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('celular', $request->celular)->first();
-
-            /* if ($validatorCelular && $validatorCelular->id != $Cliente->id) {
-                array_push($errors, ['celular' => ['El celular ya está en uso.']]);
-            } */
-
-            $validatorEmail = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('email', $request->email)->first();
-
-            /* if ($validatorEmail && $validatorEmail->id != $Cliente->id) {
-                array_push($errors, ['email' => ['El email ya está en uso.']]);
-            } */
-
-            $validatorWhatsapp = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('whatsapp', $request->whatsapp)->first();
-
-            /* if ($request->whatsapp && $validatorWhatsapp && $validatorWhatsapp->id != $Cliente->id) {
-                array_push($errors, ['whatsapp' => ['El whatsapp ya está en uso.']]);
-            } */
-        }
-
-        if (count($errors) > 0) {
-            $Exist = true;
-            $errors = $errors[0];
-        } else {
-            $errors = $validator->errors();
-        }
-
-        if (!$Exist && !$validator->fails()) {
-            $Cliente->nombres = $request->nombres;
-            $Cliente->apellidos = $request->apellidos;
-            $Cliente->dni = $request->dni;
-            $Cliente->celular = $request->celular;
-            $Cliente->whatsapp = $request->whatsapp;
-            $Cliente->email = $request->email;
-            $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
-
-            $Cliente->provincia_id = $request->provincia_id;
-            $Cliente->distrito_id = $request->distrito_id;
-            $Cliente->direccion = $request->direccion;
-            $Cliente->updated_at = Carbon::now();
-            $Cliente->updated_modified_by = auth()->user()->id;
-
-            if ($Cliente->save()) {
-                $Status = true;
-                $Title = "Datos Actualizados";
-                $Message = "Se han guardado los cambios realizados.";
-            }
-        }
-
-        return response()->json(['Success' => $Status, 'Title' => $Title, 'Message' => $Message, 'Errors' => $errors]);
-    }
-
     public function storeSeguimiento(Request $request)
     {
         $status = false;
@@ -804,131 +631,6 @@ class ClienteController extends Controller
                 ]);
             }
 
-            $dni = $request->dni;
-            if (strlen($dni) != 8) {
-                $apiUrl = "https://my.apidev.pro/api/dni/$dni?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
-                try {
-                    $client = new \GuzzleHttp\Client();
-                    $response = $client->get($apiUrl);
-                    $data = json_decode($response->getBody(), true);
-                    if (!$data['success']) {
-                        return response()->json(['Success' => false, 'Errors' => ['dni' => 'El DNI no existe.']], 400);
-                    }
-                    return response()->json(['Success' => true, 'Data' => $data]);
-                } catch (\Exception $e) {
-                    return response()->json(['Success' => false, 'Errors' => ['server' => 'Error al conectar con la API.']], 500);
-                }
-            }
-
-            if ($request->estado_detalle_id == 8) {
-                DB::table('clientes')
-                    ->where('id', $request->cliente_id)
-                    ->update([
-                        'mayor' => $request->mayor,
-                        'updated_at' => Carbon::now(),
-                    ]);
-                if ($request->modalidad_pago == 2) {
-                    $imgData = DB::table('client_registration_images')
-                        ->where('id_client', $request->cliente_id)
-                        ->first();
-
-                    // Si no hay imágenes previas, validar que se suba el vaucher
-                    if (!$imgData && !$request->hasFile('vaucher')) {
-                        return response()->json([
-                            'Success' => false,
-                            'Errors' => ['vaucher' => 'Debe subir la imagen del comprobante de pago.']
-                        ], 400);
-                    }
-
-                    // Definir ruta base y carpeta del cliente
-                    $basePath = public_path('assets/img-matriculado');
-                    $clientFolder = $basePath . '/' . $request->cliente_id;
-
-                    // Crear carpeta si no existe
-                    if (!File::exists($clientFolder)) {
-                        File::makeDirectory($clientFolder, 0777, true, true);
-                    }
-
-                    // Procesar imágenes (solo guardamos lo que llega)
-                    $filenames = [];
-                    foreach (['dniFront', 'dniRear', 'vaucher'] as $key) {
-                        if ($request->hasFile($key)) {
-                            $file = $request->file($key);
-                            $extension = $file->getClientOriginalExtension();
-                            $filename = strtolower(str_replace(['dniFront', 'dniRear'], ['dni-front', 'dni-rear'], $key));
-                            $filename = "{$filename}-{$request->cliente_id}.{$extension}";
-                            $file->move($clientFolder, $filename);
-                            $filenames[$key] = $filename;
-                        }
-                    }
-
-                    // Crear array de actualización (lo que no llega se pone NULL en inserción)
-                    $updateData = [
-                        'dni_front' => $filenames['dniFront'] ?? ($imgData ? null : null),
-                        'dni_rear' => $filenames['dniRear'] ?? ($imgData ? null : null),
-                        'vaucher' => $filenames['vaucher'] ?? ($imgData ? null : null),
-                    ];
-
-                    try {
-                        // Verificar modalidad de pago
-                        if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
-                            DB::table('clientes')
-                                ->where('id', $request->cliente_id)
-                                ->update([
-                                    'modalidad_pago' => $request->modalidad_pago,
-                                    'updated_at' => Carbon::now(),
-                                ]);
-                        } else {
-                            return response()->json([
-                                'Success' => false,
-                                'Errors' => ['modalidad' => 'Debes seleccionar alguna modalidad de pago.']
-                            ], 400);
-                        }
-
-                        if ($imgData) {
-                            // Si ya existe, solo actualiza los valores que llegaron
-                            $updateData['updated_at'] = Carbon::now();
-                            DB::table('client_registration_images')
-                                ->where('id_client', $request->cliente_id)
-                                ->update(array_merge($imgData, $updateData));
-                        } else {
-                            // Si es un nuevo registro, inserta todos los datos (asigna NULL si no llegaron)
-                            $updateData = [
-                                'id_client'  => $request->cliente_id,
-                                'dni_front'  => $filenames['dniFront'] ?? null,
-                                'dni_rear'   => $filenames['dniRear'] ?? null,
-                                'vaucher'    => $filenames['vaucher'] ?? null,
-                                'created_at' => Carbon::now(),
-                            ];
-
-                            DB::table('client_registration_images')->insert($updateData);
-                        }
-                    } catch (\Exception $e) {
-                        dd($e->getMessage());
-                    }
-                } else {
-                    // Para modalidad de pago diferente
-                    try {
-                        if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
-                            DB::table('clientes')
-                                ->where('id', $request->cliente_id)
-                                ->update([
-                                    'modalidad_pago' => $request->modalidad_pago,
-                                    'updated_at' => Carbon::now(),
-                                ]);
-                        } else {
-                            return response()->json([
-                                'Success' => false,
-                                'Errors' => ['modalidad' => 'Debes seleccionar alguna modalidad de pago.']
-                            ], 400);
-                        }
-                    } catch (\Exception $e) {
-                        dd($e->getMessage());
-                    }
-                }
-            }
-
-
             if (!$validator->fails()) {
                 $Seguimiento = ClienteSeguimiento::create($request->all());
                 if ($Seguimiento) {
@@ -937,6 +639,7 @@ class ClienteController extends Controller
                     $Cliente->estado_id = $request->estado_id;
                     $Cliente->estado_detalle_id = $request->estado_detalle_id;
                     $Cliente->ultimo_contacto = Carbon::now();
+
                     if (in_array($request->estado_detalle_id, [App::$ESTADO_DETALLE_MATRICULADO, App::$ESTADO_DETALLE_TRASLADO])) {
                         $Cliente->direccion = $request->direccion;
                         $Cliente->turno_id = $request->turno_id;
@@ -1112,19 +815,7 @@ class ClienteController extends Controller
             ->with('clientes.users')->with('clientes')->with('clientes.turnos')->with('clientes.sedes')->with('clientes.carreras')->with('clientes.modalidades')->with('clientes.locales')
             ->with('clientes.horarios')->with('clientes.semestreInicio')->with('clientes.cicloInicio')
             ->with('estados')->with('estadoDetalle')->orderby('created_at', 'desc')->get();
-        if (!$Seguimientos->isEmpty()) {
-            $estadoDetalleId = $Seguimientos[0]->estado_detalle_id;
-            if ($estadoDetalleId == 8) {
-                $imgData = DB::table('client_registration_images')
-                    ->where('id_client', $request->id)
-                    ->first();
-            } else {
-                $imgData = null;
-            }
-        } else {
-            $imgData = null;
-        }
-        return response()->json(['data' => $Seguimientos, 'imgData' => $imgData]);
+        return response()->json(['data' => $Seguimientos]);
     }
 
     public function list_filter_seguimiento_adicional(Request $request)
