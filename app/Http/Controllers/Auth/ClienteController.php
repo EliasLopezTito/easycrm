@@ -816,7 +816,6 @@ class ClienteController extends Controller
                         if (!$data['success']) {
                             return response()->json(['Success' => false, 'Errors' => ['dni' => 'El DNI no existe.']], 400);
                         }
-                        return response()->json(['Success' => true, 'Data' => $data]);
                     } catch (\Exception $e) {
                         return response()->json(['Success' => false, 'Errors' => ['server' => 'Error al conectar con la API.']], 500);
                     }
