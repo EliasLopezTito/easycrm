@@ -22,8 +22,45 @@ $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
     $("#provincia_id").val(1).trigger("change");
 
     let distritos = [
-        { id: 15, nombre: "Lima" }
-    ];
+        { id: 15, nombre: "Lima" },
+        { id: 1, nombre: "Ancón" },
+        { id: 2, nombre: "Ate Vitarte" },
+        { id: 3, nombre: "Barranco" },
+        { id: 4, nombre: "Breña" },
+        { id: 5, nombre: "Carabayllo" },
+        { id: 6, nombre: "Chaclacayo" },
+        { id: 7, nombre: "Chorrillos" },
+        { id: 8, nombre: "Cieneguilla" },
+        { id: 9, nombre: "Comas" },
+        { id: 10, nombre: "El Agustino" },
+        { id: 11, nombre: "Independencia" },
+        { id: 12, nombre: "Jesús María" },
+        { id: 13, nombre: "La Molina" },
+        { id: 14, nombre: "La Victoria" },
+        { id: 16, nombre: "Lince" },
+        { id: 17, nombre: "Los Olivos" },
+        { id: 18, nombre: "Lurigancho" },
+        { id: 19, nombre: "Lurin" },
+        { id: 20, nombre: "Magdalena del Mar" },
+        { id: 21, nombre: "Miraflores" },
+        { id: 22, nombre: "Pachacamac" },
+        { id: 23, nombre: "Pucusana" },
+        { id: 24, nombre: "Pueblo Libre" },
+        { id: 25, nombre: "Puente Piedra" },
+        { id: 26, nombre: "Rímac" },
+        { id: 27, nombre: "San Borja" },
+        { id: 28, nombre: "San Isidro" },
+        { id: 29, nombre: "San Juan de Lurigancho" },
+        { id: 30, nombre: "San Juan de Miraflores" },
+        { id: 31, nombre: "San Luis" },
+        { id: 32, nombre: "San Martín de Porres" },
+        { id: 33, nombre: "San Miguel" },
+        { id: 34, nombre: "Santa Anita" },
+        { id: 35, nombre: "Santiago de Surco" },
+        { id: 36, nombre: "Surquillo" },
+        { id: 37, nombre: "Villa El Salvador" },
+        { id: 38, nombre: "Villa María del Triunfo" }
+    ];    
 
     let $distritoSelect = $("#distrito_id");
     $distritoSelect.empty(); // Limpia opciones anteriores
@@ -33,7 +70,15 @@ $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
 
     // Agregar opciones manualmente en carrera
     let carreras = [
-        { id: 71, nombre: "Otros" }
+        { id: 71, nombre: "OTROS" },
+        { id: 1, nombre: "ENFERMERIA" },
+        { id: 2, nombre: "FARMACIA" },
+        { id: 3, nombre: "FISIOTERAPIA" },
+        { id: 4, nombre: "LABORATORIO CLINICO" },
+        { id: 5, nombre: "PROTESIS DENTAL" },
+        { id:44, nombre: "SEMI PRESENCIAL ENFERMERIA" },
+        { id:45, nombre: "SEMI PRESENCIAL FARMACIA" },
+        { id:46, nombre: "SEMI PRESENCIAL FISIOTERAPIA" },
     ];
 
     let $carreraSelect = $("#carrera_id");
