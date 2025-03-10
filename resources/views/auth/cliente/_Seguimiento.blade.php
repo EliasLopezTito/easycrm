@@ -207,6 +207,9 @@
                                         <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
                                         <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
                                         
+                                        <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Opcional</label>
+                                        <input type="file" name="izyPay" id="izyPay" class="form-input" accept="image/png, image/jpeg, image/jpg">
+
                                         <label for="vaucher" style="margin-top: 10px;">Foto del Comprobante de Pago - Obligatorio </label>
                                         <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
                                     </div>

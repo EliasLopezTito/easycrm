@@ -280,6 +280,9 @@ $(function(){
                         if (data.imgData.dni_rear) {
                             imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.dni_rear}" target="_blank">Ver DNI Detrás</a></p>`;
                         }
+                        if (data.imgData.izy_pay) {
+                            imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.izy_pay}" target="_blank">Ver IZYPAY</a></p>`;
+                        }
                         if (data.imgData.vaucher) {
                             imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.vaucher}" target="_blank">Ver Voucher</a></p>`;
                         }
