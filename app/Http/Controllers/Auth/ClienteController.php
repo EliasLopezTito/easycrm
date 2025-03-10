@@ -1075,7 +1075,13 @@ class ClienteController extends Controller
             ->with('clientes.users')->with('clientes')->with('clientes.turnos')->with('clientes.sedes')->with('clientes.carreras')->with('clientes.modalidades')->with('clientes.locales')
             ->with('clientes.horarios')->with('clientes.semestreInicio')->with('clientes.cicloInicio')
             ->with('estados')->with('estadoDetalle')->orderby('created_at', 'desc')->get();
-        return response()->json(['data' => $Seguimientos]);
+        $imgData = DB::table('client_registration_images')
+            ->where('id_client', $request->id)
+            ->first();
+        if (!$imgData) {
+            $imgData = null;
+        }
+        return response()->json(['data' => $Seguimientos, 'imgData' => $imgData]);
     }
 
     public function list_filter_seguimiento_adicional(Request $request)
