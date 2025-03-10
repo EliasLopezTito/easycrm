@@ -334,11 +334,9 @@ $(function(){
                     ([PERFILES.VENDEDOR,PERFILES.CALL].includes(usuarioLoggin.profile_id) && data.data[0].clientes.estado_id == ESTADOS.OTROS)))
                     $(".content-actions-client").html("");
                     $direccion.val(data.data[0].clientes.direccion);
-                $("#dni").attr("readonly", true);
                 $("#nombres").attr("readonly", true);
                 $("#apellidos").attr("readonly", true);
                 $("#fecha_nacimiento").attr("readonly", true);
-                $("#dni").attr("readonly", true);
                 $("#celular").attr("readonly", true);
                 $("#provincia_id").attr("desabilied", true);
                 $("#distrito_id").attr("desabilied", true);

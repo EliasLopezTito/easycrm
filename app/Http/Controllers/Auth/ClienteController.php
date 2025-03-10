@@ -806,18 +806,6 @@ class ClienteController extends Controller
 
             try {
                 if ($request->estado_detalle_id == 8) {
-                    $dni = $request->dni;
-                    if ($request->mayor == 2) {
-                        if (strlen($dni) != 8) {
-                            $apiUrl = "https://my.apidev.pro/api/dni/$dni?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
-                            $client = new \GuzzleHttp\Client();
-                            $response = $client->get($apiUrl);
-                            $data = json_decode($response->getBody(), true);
-                            if (!$data['success']) {
-                                dd('Error: El DNI no existe.');
-                            }
-                        }
-                    }
 
                     DB::table('clientes')
                         ->where('id', $request->cliente_id)

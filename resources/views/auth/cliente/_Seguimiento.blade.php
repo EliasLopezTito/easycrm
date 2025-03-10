@@ -44,7 +44,7 @@
                     <tr>
                         {{-- <td><label for="dni">DNI: </label></td> --}}
                         <td style="padding-left:0px !important;">
-                            <select name="" id="tipo_do" class="documento" style="width:100px;" @if ($Cliente->estado_detalle_id == 8) disabled @endif>
+                            <select name="" id="tipo_do" class="documento" style="width:100px;">
                                 <option id="tipo_do_val1" value="1">DNI</option>
                                 <option id="tipo_do_val2" value="2">CARNÉT DE EXTRANJERIA</option>
                             </select>
@@ -55,7 +55,7 @@
                         </div>
                         <td>
                             <div style="display: flex; align-items: center; gap: 5px;">
-                                <input type="text" class="form-input buscarDNI" name="dni" id="dni" minlength="8" maxlength="10" value="{{ $Cliente->dni }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8) readonly @endif>
+                                <input type="text" class="form-input buscarDNI" name="dni" id="dni" minlength="8" maxlength="15" value="{{ $Cliente->dni }}" autocomplete="off" required>
                                 <span data-valmsg-for="dni"></span>
                                 @if ($Cliente->estado_detalle_id != 8)
                                     <button class="btn btn-primary" type="button" id="seacrhReniec"><img src="{{ asset('assets/img/log-reniec.png') }}" style="width: 40px;" alt="log-reniec"></button>
@@ -699,4 +699,6 @@
 
 <script type="text/javascript" src="auth/plugins/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 <script type="text/javascript" src="auth/js/cliente/_Seguimiento.js"></script>
-<script src="{{ asset('auth/js/cliente/v2/index.js') }}"></script>
+@if ($Cliente->estado_detalle_id != 8)
+    <script src="{{ asset('auth/js/cliente/v2/index.js') }}"></script>
+@endif
