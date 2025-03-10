@@ -119,7 +119,7 @@ class ReporteController extends Controller
         Group by J1.nombre_asesor 
         order by y desc"); */
 
-        $recibeLeadsNuevosAsesor = DB::select("CALL seguimiento_asesores_por_fecha_de_registro('".$request->fecha_inicio."', '".$request->fecha_final."');");
+        $recibeLeadsNuevosAsesor = DB::select("CALL seguimiento_asesores_por_fecha_de_registro('" . $request->fecha_inicio . "', '" . $request->fecha_final . "');");
 
         $arregloFilterProvincias = [];
         foreach ($Provincias as $q) {
@@ -619,12 +619,12 @@ class ReporteController extends Controller
 
     public function reportAdmin()
     {
-        $test= 0;
+        $test = 0;
         //Testeo
-        if($test == 1){
+        if ($test == 1) {
             $today = '20241231';
             $firstDayMonth = '20241201';
-        }else{
+        } else {
             $today = Carbon::now()->format('Ymd');
             $firstDayMonth = Carbon::now()->startOfMonth()->format('Ymd');
         }
@@ -646,7 +646,7 @@ class ReporteController extends Controller
             $fechaInicio,
             $fechaFinal,
         ]);
-        $data = array_map(function($client) {
+        $data = array_map(function ($client) {
             return [
                 $client->Cliente,
                 $client->DNI,
@@ -675,5 +675,40 @@ class ReporteController extends Controller
             'data' => $data
         ]);
     }
-
+    public function editClient()
+    {
+        return view('auth.cliente.edit-client');
+    }
+    public function storeSearchClient(Request $request)
+    {
+        $clientData = Cliente::where('dni', $request->numberSearch)->first();
+        if (!$clientData) {
+            $clientData = Cliente::where('celular', $request->numberSearch)->first();
+        }
+        return response()->json([
+            'data' => $clientData
+        ]);
+    }
+    public function editClientUnit($id)
+    {
+        $clientData = Cliente::where('id', $id)->first();
+        return view('auth.cliente.edit-client-unit')->with('clientData', $clientData);
+    }
+    public function storeEditClientUnit(Request $request)
+    {
+        $userLogin = Auth::user();
+        $clientData = Cliente::where('id', $request->idClient)->update([
+            'nombres' => $request->name,
+            'apellidos' => $request->lastName,
+            'email' => $request->email,
+            'dni' => $request->dni,
+            'celular' => $request->celular,
+            'whatsapp' => $request->whatsapp,
+            'fecha_nacimiento' => $request->date,
+            'direccion' => $request->direction,
+            'updated_at' => Carbon::now(),
+            'updated_modified_by' => $userLogin->id,
+        ]);
+        return redirect()->back()->with('success', 'Cliente actualizado correctamente.');
+    }
 }

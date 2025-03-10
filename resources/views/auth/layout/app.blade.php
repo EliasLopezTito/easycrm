@@ -121,6 +121,13 @@
                             </a>
                         </li>
                     @endif
+                    @if(Auth::check() && Auth::user()->profile_id  == 1)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user.edit-client') }}"><span class="active-item-here"></span>
+                                <i class="fa fa-users mr-5"></i>  <span>Edición de Cliente</span>
+                            </a>
+                        </li>
+                    @endif
                     @if(Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR)
                         <li class="nav-item">
                             <a id="importExcel" class="nav-link" href="javascript:void(0)"><span class="active-item-here"></span>
