@@ -1,5 +1,5 @@
 $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
-    $(".form-input").off("keypress").on("keypress", function (event) {
+    $("#registroCliente .form-input").off("keypress").on("keypress", function (event) {
         if (event.which === 13) {
             event.preventDefault();
             let inputs = $(".form-input");
