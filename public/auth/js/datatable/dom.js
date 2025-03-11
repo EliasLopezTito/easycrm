@@ -63,28 +63,29 @@ $(document).ready(function() {
         }
     });
 
-    function actualizarTabla(cliente) {
+    function actualizarTabla(clientes) {
         let tableBody = $("#clienteDataSearch tbody");
-        tableBody.empty(); // Limpiar la tabla antes de agregar nuevos datos
-    
-        if (cliente) { // Verificamos si el objeto tiene datos
-            let row = `
-                <tr>
-                    <td>${cliente.nombres || "No disponible"}</td>
-                    <td>${cliente.apellidos || "No disponible"}</td>
-                    <td>${cliente.dni || "No disponible"}</td>
-                    <td>${cliente.celular || "No disponible"}</td>
-                    <td>${cliente.whatsapp ? cliente.whatsapp : "No disponible"}</td>
-                    <td>${cliente.email ? cliente.email : "No disponible"}</td>
-                    <td>${cliente.fecha_nacimiento ? cliente.fecha_nacimiento : "No disponible"}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm seleccionar-cliente" data-id="${cliente.id}">
-                            Seleccionar
-                        </button>
-                    </td>
-                </tr>
-            `;
-            tableBody.append(row);
+        tableBody.empty();
+        if (clientes.length > 0) {
+            clientes.forEach(cliente => {
+                let row = `
+                    <tr>
+                        <td>${cliente.nombres || "No disponible"}</td>
+                        <td>${cliente.apellidos || "No disponible"}</td>
+                        <td>${cliente.dni || "No disponible"}</td>
+                        <td>${cliente.celular || "No disponible"}</td>
+                        <td>${cliente.whatsapp ? cliente.whatsapp : "No disponible"}</td>
+                        <td>${cliente.email ? cliente.email : "No disponible"}</td>
+                        <td>${cliente.fecha_nacimiento ? cliente.fecha_nacimiento : "No disponible"}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm seleccionar-cliente" data-id="${cliente.id}">
+                                Seleccionar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
             $(".seleccionar-cliente").on("click", function () {
                 let clientId = $(this).data("id");
                 let url = routeEditClient.replace(":id", clientId);
@@ -93,5 +94,5 @@ $(document).ready(function() {
         } else {
             tableBody.append('<tr><td colspan="8" class="text-center">No se encontraron resultados</td></tr>');
         }
-    }
+    }    
 });

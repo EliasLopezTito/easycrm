@@ -681,9 +681,9 @@ class ReporteController extends Controller
     }
     public function storeSearchClient(Request $request)
     {
-        $clientData = Cliente::where('dni', $request->numberSearch)->first();
+        $clientData = Cliente::where('dni', $request->numberSearch)->get();
         if (!$clientData) {
-            $clientData = Cliente::where('celular', $request->numberSearch)->first();
+            $clientData = Cliente::where('celular', $request->numberSearch)->get();
         }
         return response()->json([
             'data' => $clientData
