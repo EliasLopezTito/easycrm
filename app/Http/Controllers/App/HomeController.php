@@ -830,6 +830,7 @@ class HomeController extends Controller
                 'tipo_operacions.name as nameOperation',
                 'clientes.dni as dniClient',
                 DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'clientes.nombres as nameClient',
                 'clientes.apellido_paterno as paternalSurname',
                 'clientes.apellido_materno as maternalSurname',
                 'clientes.fecha_nacimiento as dateOfBirth',
