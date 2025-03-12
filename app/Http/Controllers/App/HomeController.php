@@ -864,4 +864,11 @@ class HomeController extends Controller
             'data' => $clientData
         ]);
     }
+    public function getClientFollowUp(Request $request)
+    {
+        $clientImgData = DB::table('client_registration_images')->where('id_client', $request->id)->first();
+        return response()->json([
+            'data' => $clientImgData
+        ]);
+    }
 }
