@@ -51,7 +51,7 @@ $(function () {
             html += '<li><ul class="menu inner-content-div">';
             $.each(data.data, function (i, v) {
                 let icon = "fa fa-circle-o"; let color = "";
-                if (v.cliente_seguimientos) {
+                /*if (v.cliente_seguimientos) {
                     switch (v.cliente_seguimientos.accion_realizar_id) {
                         case ACCIONES.TELEFONO: icon = "fa fa-phone"; color = "text-success"; break;
                         case ACCIONES.CORREO: icon = "fa fa-envelope"; color = "text-warning"; break;
@@ -59,7 +59,7 @@ $(function () {
                         case ACCIONES.WHATSAPP: icon = "fa fa-whatsapp"; color = "text-success"; break;
                     }
                     html += '<li><a href="#" data-info="info-' + v.clientes.id + '" class="card-detail-notification"><i class="fa ' + icon + ' ' + color + '"></i>' + v.cliente_seguimientos.accion_realizar.name + ' a ' + v.clientes.nombres + ' a las ' + v.cliente_seguimientos.hora_accion_realizar + '</a></li>';
-                }
+                }*/
                 if (v.user_id) {
                     html += '<li><a href="/' + v.data_export_format.path + '" target="_blank" data-info="info-' + v.data_export_format.file_name + '"  ><i class="fa text-success"></i>Exportación desde ' + v.data_export_format.fechaInicio + ' al ' + v.data_export_format.fechaFinal + '</a></li>';
                 }
