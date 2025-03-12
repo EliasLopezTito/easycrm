@@ -170,11 +170,11 @@ class ClienteController extends Controller
                     if (($request->modalidad_id == App::$MODALIDAD_CURSO) ||
                         ($request->modalidad_id == App::$MODALIDAD_CARRERA && $clienteExist->modalidad_id == App::$MODALIDAD_CURSO)
                     ) {
-                        $Cliente_Cursos = Cliente::where('dni', $request->dni)->orWhere('email', $request->email)->orWhere('celular', $request->celular)
-                            ->pluck('carrera_id')->whereNull('deleted_at')->toArray();
+                        $Cliente_Cursos = Cliente::where('dni', $request->dni)->orWhere('email', $request->email)->orWhere('celular', $request->celular)->whereNull('deleted_at')
+                            ->pluck('carrera_id')->toArray();
 
-                        $Cliente_Carreras = Cliente::where('dni', $request->dni)->orWhere('email', $request->email)->orWhere('celular', $request->celular)
-                            ->pluck('modalidad_id')->whereNull('deleted_at')->toArray();
+                        $Cliente_Carreras = Cliente::where('dni', $request->dni)->orWhere('email', $request->email)->orWhere('celular', $request->celular)->whereNull('deleted_at')
+                            ->pluck('modalidad_id')->toArray();
 
                         if (
                             ($request->modalidad_id == App::$MODALIDAD_CURSO && !in_array($request->carrera_id, $Cliente_Cursos)) ||
