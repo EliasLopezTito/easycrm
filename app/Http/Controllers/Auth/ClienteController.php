@@ -156,18 +156,25 @@ class ClienteController extends Controller
                 ->orderby('created_at', 'desc')->first();
 
             if ($clienteExist != null) {
-                $fecha_inicio_act_camp = Carbon::now()->format('d') >= 16 ? Carbon::now()->firstOfMonth()->addDay(15) : Carbon::now()->subMonth('1')->firstOfMonth()->addDay(15);
-                $fecha_final_act_camp = Carbon::now()->format('d') >= 16 ? Carbon::now()->endOfMonth()->addDay(15) : Carbon::now()->subMonth('1')->endOfMonth()->addDay(15);
+                $hoy = Carbon::now();
+                $diaHoy = $hoy->format('d');
+                if ($diaHoy >= 16) {
+                    $fecha_inicio_act_camp = $hoy->copy()->day(16);
+                    $fecha_final_act_camp = $hoy->copy()->addMonthNoOverflow()->day(15);
+                } else {
+                    $fecha_inicio_act_camp = $hoy->copy()->subMonthNoOverflow()->day(16);
+                    $fecha_final_act_camp = $hoy->copy()->day(15);
+                }
 
                 if (($clienteExist->created_at >= $fecha_inicio_act_camp  && $clienteExist->created_at <= $fecha_final_act_camp)) {
                     if (($request->modalidad_id == App::$MODALIDAD_CURSO) ||
                         ($request->modalidad_id == App::$MODALIDAD_CARRERA && $clienteExist->modalidad_id == App::$MODALIDAD_CURSO)
                     ) {
                         $Cliente_Cursos = Cliente::where('dni', $request->dni)->orWhere('email', $request->email)->orWhere('celular', $request->celular)
-                            ->pluck('carrera_id')->toArray();
+                            ->pluck('carrera_id')->whereNull('deleted_at')->toArray();
 
                         $Cliente_Carreras = Cliente::where('dni', $request->dni)->orWhere('email', $request->email)->orWhere('celular', $request->celular)
-                            ->pluck('modalidad_id')->toArray();
+                            ->pluck('modalidad_id')->whereNull('deleted_at')->toArray();
 
                         if (
                             ($request->modalidad_id == App::$MODALIDAD_CURSO && !in_array($request->carrera_id, $Cliente_Cursos)) ||
@@ -562,7 +569,7 @@ class ClienteController extends Controller
 
         if (!$validator->fails()) {
 
-            $validatorDNI = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('dni', $request->dni)->first();
+            $validatorDNI = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('dni', $request->dni)->whereNull('deleted_at')->first();
 
             if ($validatorDNI && $validatorDNI->id != $Cliente->id) {
                 array_push($errors, ['dni' => ['El dni ya está en uso.']]);
@@ -602,6 +609,10 @@ class ClienteController extends Controller
             $Cliente->whatsapp = $request->whatsapp;
             $Cliente->email = $request->email;
             $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
+
+            $Cliente->apellido_paterno = $request->apellidoPaterno ?: null;
+            $Cliente->apellido_materno = $request->apellidoMaterno ?: null;
+
 
             if ($Cliente->estado_detalle_id != App::$ESTADO_DETALLE_MATRICULADO) {
                 $Cliente->carrera_id = $request->carrera_id;
@@ -666,7 +677,7 @@ class ClienteController extends Controller
 
         if (!$validator->fails()) {
 
-            $validatorDNI = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('dni', $request->dni)->first();
+            $validatorDNI = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('dni', $request->dni)->whereNull('deleted_at')->first();
 
             if ($validatorDNI && $validatorDNI->id != $Cliente->id) {
                 array_push($errors, ['dni' => ['El dni ya está en uso.']]);
@@ -706,6 +717,9 @@ class ClienteController extends Controller
             $Cliente->whatsapp = $request->whatsapp;
             $Cliente->email = $request->email;
             $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
+
+            $Cliente->apellido_paterno = $request->apellidoPaterno ?: null;
+            $Cliente->apellido_materno = $request->apellidoMaterno ?: null;
 
             $Cliente->provincia_id = $request->provincia_id;
             $Cliente->distrito_id = $request->distrito_id;

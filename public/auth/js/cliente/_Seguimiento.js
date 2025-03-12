@@ -205,6 +205,8 @@ $(function(){
         formData.append("direccion", $direccion.val());
         formData.append("estado_id", $estado_id.val());
         formData.append("estado_detalle_id", $estado_detalle_id.val());
+        formData.append("apellidoPaterno", $('#apellidoPaterno').val());
+        formData.append("apellidoMaterno", $('#apellidoMaterno').val());
 
         $("#carrera_hidden_id").val($carrera_id.val());
 

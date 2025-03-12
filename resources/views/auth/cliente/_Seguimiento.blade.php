@@ -60,6 +60,8 @@
                                 @if ($Cliente->estado_detalle_id != 8)
                                     <button class="btn btn-primary" type="button" id="seacrhReniec"><img src="{{ asset('assets/img/log-reniec.png') }}" style="width: 40px;" alt="log-reniec"></button>
                                 @endif
+                                <input type="hidden" name="apellidoPaterno" id="apellidoPaterno">
+                                <input type="hidden" name="apellidoMaterno" id="apellidoMaterno">
                             </div>
                         </td>
                         {{-- <td id="btn_buscar" hidden><a href="javascript:void(0)" class="btn btn-sm btn-primary btn-buscar-dni">Buscar</a></td> --}}

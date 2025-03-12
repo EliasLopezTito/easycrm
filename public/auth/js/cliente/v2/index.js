@@ -81,6 +81,8 @@ $(document).ready(function() {
                             $('#distrito_id').val(valorSeleccionado).change();
                         }, 500); 
                         $("#direccion").val(response.data.direccion_completa);
+                        $("#apellidoPaterno").val(response.data.apellido_paterno);
+                        $("#apellidoMaterno").val(response.data.apellido_materno);
                         //deactivate
                         $("#nombres").attr("readonly", true);
                         $("#apellidos").attr("readonly", true);
@@ -105,6 +107,8 @@ $(document).ready(function() {
                             formData.append("provincia_id", $('#provincia_id').val());
                             formData.append("distrito_id", $('#distrito_id').val());
                             formData.append("direccion", $('#direccion').val());
+                            formData.append("apellidoPaterno", $("#apellidoPaterno").val());
+                            formData.append("apellidoMaterno", $("#apellidoMaterno").val());
                             actionAjax("/cliente/updateDatosCliente", formData, "POST", function (data) {
                                 $form.find("span[data-valmsg-for]").text("");
                                 if (data.Success) {
@@ -127,6 +131,8 @@ $(document).ready(function() {
                         $("#nombres").val("");
                         $("#apellidos").val("")
                         $("#fecha_nacimiento").val("");
+                        $("#apellidoPaterno").val("");
+                        $("#apellidoMaterno").val("");
                         $("#nombres").attr("readonly", false);
                         $("#apellidos").attr("readonly", false);
                         $("#fecha_nacimiento").attr("readonly", false);
@@ -193,6 +199,8 @@ $(document).ready(function() {
                         $('#distrito_id').val(valorSeleccionado).change();
                     }, 500); 
                     $("#direccion").val(response.data.direccion_completa);
+                    $("#apellidoPaterno").val(response.data.apellido_paterno);
+                    $("#apellidoMaterno").val(response.data.apellido_materno);
                     //deactivate
                     $("#nombres").attr("readonly", true);
                     $("#apellidos").attr("readonly", true);
