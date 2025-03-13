@@ -1005,6 +1005,10 @@ class ClienteController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json([
+                'Success' => false,
+                'Errors' => $e->getMessage()
+            ]);
         }
 
         return response()->json(['Success' => $status, 'Errors' => $validator->errors()]);
