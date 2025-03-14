@@ -207,8 +207,13 @@ class ClienteController extends Controller
                 $register = true;
             }
 
+            $lastName = $request->apellido_paterno . " " . $request->apellido_materno;
+
             $request->merge([
                 'user_id' =>  $userTurnId,
+                'apellido_paterno' =>  $request->apellido_paterno,
+                'apellido_materno' =>  $request->apellido_materno,
+                'apellidos' =>  $lastName,
                 'estado_id' => App::$ESTADO_NUEVO,
                 'estado_detalle_id' => App::$ESTADO_DETALLE_NUEVO,
                 'proviene_id' => App::$LLAMADA,
@@ -279,7 +284,6 @@ class ClienteController extends Controller
                     'deleted_modified_by' => 'required'
                 ]);
             }
-
             if (!$validator->fails()) {
                 if ($duplicado) {
                     return response()->json(['Success' => $status, 'Message' => "El cliente ya se encuentra registrado en esta campaña"]);
@@ -405,80 +409,6 @@ class ClienteController extends Controller
             }
         }
 
-        if ($Cliente->estado_detalle_id == 8) {
-            $imgData = DB::table('client_registration_images')
-                ->where('id_client', $request->id)
-                ->first();
-
-            // Si no hay imágenes previas, debe subir las 3 imágenes
-            if (!$imgData) {
-                if (!$request->hasFile('dniFront') || !$request->hasFile('dniRear') || !$request->hasFile('vaucher')) {
-                    return response()->json(['Success' => false, 'Errors' => ['img' => 'Debe subir las 3 imágenes obligatorias.']], 400);
-                }
-            }
-
-            // Definir ruta base y carpeta del cliente
-            $basePath = public_path('assets/img-matriculado');
-            $clientFolder = $basePath . '/' . $request->id;
-
-            // Crear carpeta si no existe
-            if (!File::exists($clientFolder)) {
-                File::makeDirectory($clientFolder, 0777, true, true);
-            }
-
-            // Procesar imágenes
-            $filenames = [];
-            foreach (['dniFront', 'dniRear', 'vaucher'] as $key) {
-                if ($request->hasFile($key)) {
-                    $file = $request->file($key);
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = strtolower(str_replace(['dniFront', 'dniRear'], ['dni-front', 'dni-rear'], $key));
-                    $filename = "{$filename}-{$request->id}.{$extension}";
-
-                    // Ruta completa del nuevo archivo
-                    $filePath = $clientFolder . '/' . $filename;
-
-                    // Si existe un archivo anterior, elimínalo antes de subir el nuevo
-                    if (File::exists($filePath)) {
-                        File::delete($filePath);
-                    }
-
-                    // Mueve el nuevo archivo a la carpeta
-                    $file->move($clientFolder, $filename);
-                    $filenames[$key] = $filename;
-                }
-            }
-
-            // Definir si se está insertando o actualizando
-            $updateData = [];
-            if (isset($filenames['dniFront'])) {
-                $updateData['dni_front'] = $filenames['dniFront'];
-            }
-            if (isset($filenames['dniRear'])) {
-                $updateData['dni_rear'] = $filenames['dniRear'];
-            }
-            if (isset($filenames['vaucher'])) {
-                $updateData['vaucher'] = $filenames['vaucher'];
-            }
-
-            try {
-                if ($imgData) {
-                    // Si ya existe, actualiza los datos y `updated_at`
-                    $updateData['updated_at'] = now();
-                    DB::table('client_registration_images')
-                        ->where('id_client', $request->id)
-                        ->update($updateData);
-                } else {
-                    // Si es un nuevo registro, inserta con `created_at`
-                    $updateData['id_client'] = $request->id;
-                    $updateData['created_at'] = now();
-                    DB::table('client_registration_images')->insert($updateData);
-                }
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
-        }
-
         return response()->json(['Success' => $Status, 'Errors' => $validator->errors()]);
     }
 
@@ -538,10 +468,15 @@ class ClienteController extends Controller
 
         $Cliente = Cliente::find($request->id);
 
+        $lastName = $request->apellido_paterno . " " . $request->apellido_materno;
+
+        $request->merge([
+            'apellidos' =>  $lastName,
+        ]);
+
         if (in_array($Cliente->estado_detalle_id, [App::$ESTADO_DETALLE_MATRICULADO, App::$ESTADO_DETALLE_TRASLADO])) {
             $validator = Validator::make($request->all(), [
                 'nombres' => 'required',
-                'apellidos' => 'required',
                 'provincia_id' => 'required',
                 'distrito_id' => 'required',
                 'dni' => 'required|min:8|max:10',
@@ -553,7 +488,6 @@ class ClienteController extends Controller
         } else {
             $validator = Validator::make($request->all(), [
                 'nombres' => 'required',
-                'apellidos' => 'required',
                 'carrera_id' => 'required',
                 'provincia_id' => 'required',
                 'distrito_id' => 'required',
@@ -566,7 +500,6 @@ class ClienteController extends Controller
 
         $errors = [];
         $ErrorsModel = [];
-
         if (!$validator->fails()) {
 
             $validatorDNI = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('dni', $request->dni)->whereNull('deleted_at')->first();
@@ -604,14 +537,17 @@ class ClienteController extends Controller
         if (!$Exist && !$validator->fails()) {
             $Cliente->nombres = $request->nombres;
             $Cliente->apellidos = $request->apellidos;
+            $Cliente->apellido_paterno = $request->apellido_paterno;
+            $Cliente->apellido_materno = $request->apellido_materno;
+
             $Cliente->dni = $request->dni;
             $Cliente->celular = $request->celular;
             $Cliente->whatsapp = $request->whatsapp;
             $Cliente->email = $request->email;
             $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
 
-            $Cliente->apellido_paterno = $request->apellidoPaterno ?: null;
-            $Cliente->apellido_materno = $request->apellidoMaterno ?: null;
+            $Cliente->apellido_paterno = $request->apellido_paterno ?: null;
+            $Cliente->apellido_materno = $request->apellido_materno ?: null;
 
 
             if ($Cliente->estado_detalle_id != App::$ESTADO_DETALLE_MATRICULADO) {
@@ -648,10 +584,15 @@ class ClienteController extends Controller
 
         $Cliente = Cliente::find($request->id);
 
+        $lastName = $request->apellido_paterno . " " . $request->apellido_materno;
+
+        $request->merge([
+            'apellidos' =>  $lastName,
+        ]);
+
         if (in_array($Cliente->estado_detalle_id, [App::$ESTADO_DETALLE_MATRICULADO, App::$ESTADO_DETALLE_TRASLADO])) {
             $validator = Validator::make($request->all(), [
                 'nombres' => 'required',
-                'apellidos' => 'required',
                 'provincia_id' => 'required',
                 'distrito_id' => 'required',
                 'dni' => 'required|min:8|max:10',
@@ -662,7 +603,6 @@ class ClienteController extends Controller
         } else {
             $validator = Validator::make($request->all(), [
                 'nombres' => 'required',
-                'apellidos' => 'required',
                 'provincia_id' => 'required',
                 'distrito_id' => 'required',
                 'dni' => 'required|min:8|max:10',
@@ -674,7 +614,6 @@ class ClienteController extends Controller
 
         $errors = [];
         $ErrorsModel = [];
-
         if (!$validator->fails()) {
 
             $validatorDNI = DB::table('clientes')->select('id')->where('modalidad_id', $Cliente->modalidad_id)->where('dni', $request->dni)->whereNull('deleted_at')->first();
@@ -718,8 +657,8 @@ class ClienteController extends Controller
             $Cliente->email = $request->email;
             $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
 
-            $Cliente->apellido_paterno = $request->apellidoPaterno ?: null;
-            $Cliente->apellido_materno = $request->apellidoMaterno ?: null;
+            $Cliente->apellido_paterno = $request->apellido_paterno ?: null;
+            $Cliente->apellido_materno = $request->apellido_materno ?: null;
 
             $Cliente->provincia_id = $request->provincia_id;
             $Cliente->distrito_id = $request->distrito_id;
@@ -834,9 +773,15 @@ class ClienteController extends Controller
                             ->first();
 
                         if (!$imgData && !$request->hasFile('vaucher')) {
-                            dd('Error: Debe subir la imagen del comprobante de pago.');
+                            dd('Error: Debe subir la imagen del comprobante de pagos.');
                         }
-
+                        if ($request->tipo_operacion_id == 4 || $request->tipo_operacion_id == 5 || $request->tipo_operacion_id == 6) {
+                            if (!$imgData) {
+                                if (!$request->hasFile('vaucher') || !$request->hasFile('izyPay')) {
+                                    dd('Error: Debe subir la imagen del comprobante de pago y de IZIPAY.');
+                                }
+                            }
+                        }
                         $basePath = public_path('assets/img-matriculado');
                         $clientFolder = $basePath . '/' . $request->cliente_id;
 
@@ -866,13 +811,16 @@ class ClienteController extends Controller
                         } else {
                             dd('Error: Debes seleccionar alguna modalidad de pago.');
                         }
-
+                        $schoolName = $request->schoolName ?: null;
+                        $completionDate = $request->completionDate ?: null;
                         if ($imgData) {
                             $updateData = array_merge((array)$imgData, [
                                 'dni_front'  => $filenames['dniFront'] ?? null,
                                 'dni_rear'   => $filenames['dniRear'] ?? null,
                                 'izy_pay'    => $filenames['izyPay'] ?? null,
                                 'vaucher'    => $filenames['vaucher'] ?? null,
+                                'school_name' => $schoolName,
+                                'completion_date' => $completionDate,
                                 'updated_at' => Carbon::now(),
                             ]);
                             DB::table('client_registration_images')
@@ -885,6 +833,8 @@ class ClienteController extends Controller
                                 'dni_rear'   => $filenames['dniRear'] ?? null,
                                 'izy_pay'    => $filenames['izyPay'] ?? null,
                                 'vaucher'    => $filenames['vaucher'] ?? null,
+                                'school_name' => $schoolName,
+                                'completion_date' => $completionDate,
                                 'created_at' => Carbon::now(),
                             ];
                             DB::table('client_registration_images')->insert($updateData);
@@ -1205,5 +1155,76 @@ class ClienteController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
         return response()->json($response);
+    }
+
+    public function uploadBoxImages(Request $request)
+    {
+        try {
+            $imgData = DB::table('client_registration_images')
+                ->where('id_client', $request->idClient)
+                ->first();
+            $basePath = public_path('assets/img-matriculado');
+            $clientFolder = $basePath . '/' . $request->idClient;
+            if (!File::exists($clientFolder)) {
+                File::makeDirectory($clientFolder, 0777, true, true);
+            }
+            $filenames = [];
+            foreach (['dniFront', 'dniRear', 'izyPay', 'vaucher'] as $key) {
+                if ($request->hasFile($key)) {
+                    $file = $request->file($key);
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = strtolower(str_replace(['dniFront', 'dniRear', 'izyPay'], ['dni-front', 'dni-rear', 'izy-pay'], $key));
+                    $filename = "{$filename}-{$request->idClient}.{$extension}";
+                    $file->move($clientFolder, $filename);
+                    $filenames[$key] = $filename;
+                }
+            }
+            $schoolName = $request->input('schoolNameUpdate') ?: null;
+            $completionDate = $request->input('completionDateUpdate') ?: null;
+            if ($imgData) {
+                $updateData = array_merge((array)$imgData, [
+                    'dni_front'  => $filenames['dniFront'] ?? $imgData->dni_front,
+                    'dni_rear'   => $filenames['dniRear'] ?? $imgData->dni_rear,
+                    'izy_pay'    => $filenames['izyPay'] ?? $imgData->izy_pay,
+                    'vaucher'    => $filenames['vaucher'] ?? $imgData->vaucher,
+                    'school_name' => $schoolName,
+                    'completion_date' => $completionDate,
+                    'updated_at' => Carbon::now(),
+                ]);
+                DB::table('client_registration_images')
+                    ->where('id_client', $request->idClient)
+                    ->update($updateData);
+            } else {
+                DB::table('client_registration_images')->insert([
+                    'id_client'  => $request->idClient,
+                    'dni_front'  => $filenames['dniFront'] ?? null,
+                    'dni_rear'   => $filenames['dniRear'] ?? null,
+                    'izy_pay'    => $filenames['izyPay'] ?? null,
+                    'vaucher'    => $filenames['vaucher'] ?? null,
+                    'school_name' => $schoolName,
+                    'completion_date' => $completionDate,
+                    'created_at' => Carbon::now(),
+                ]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => '¡Imágenes subidas correctamente!'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error al subir las imágenes: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getDataClient(Request $request)
+    {
+        $imgData = DB::table('client_registration_images')
+            ->where('id_client', $request->idClient)
+            ->first();
+        return response()->json([
+            'success' => true,
+            'data' => $imgData
+        ], 200);
     }
 }

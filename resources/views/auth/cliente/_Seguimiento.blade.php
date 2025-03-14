@@ -22,7 +22,7 @@
     </div>
 </div>
 <form enctype="multipart/form-data" action="{{ in_array($Cliente->estado_detalle_id, [\easyCRM\App::$ESTADO_DETALLE_MATRICULADO , \easyCRM\App::$ESTADO_DETALLE_REINGRESO]) ? route('user.client.storeSeguimientoAdicional') : route('user.client.storeSeguimiento') }}" id="registroSeguimiento" method="POST"
-      data-ajax="true" data-close-modal="true" data-ajax-loading="#loading" data-ajax-success="OnSuccessRegistroSeguimiento" data-ajax-failure="OnFailureRegistroSeguimiento">
+    data-ajax="true" data-close-modal="true" data-ajax-loading="#loading" data-ajax-success="OnSuccessRegistroSeguimiento" data-ajax-failure="OnFailureRegistroSeguimiento">
     @csrf
     <input type="hidden" id="id" name="id" value="{{ $Cliente->id }}">
     <input type="hidden" id="carrera_hidden_id" name="carrera_hidden_id" value="{{ $Cliente->carrera_id }}">
@@ -60,8 +60,6 @@
                                 @if ($Cliente->estado_detalle_id != 8)
                                     <button class="btn btn-primary" type="button" id="seacrhReniec"><img src="{{ asset('assets/img/log-reniec.png') }}" style="width: 40px;" alt="log-reniec"></button>
                                 @endif
-                                <input type="hidden" name="apellidoPaterno" id="apellidoPaterno">
-                                <input type="hidden" name="apellidoMaterno" id="apellidoMaterno">
                             </div>
                         </td>
                         {{-- <td id="btn_buscar" hidden><a href="javascript:void(0)" class="btn btn-sm btn-primary btn-buscar-dni">Buscar</a></td> --}}
@@ -73,9 +71,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="apellidos">Apellidos: </label></td>
-                        <td><input type="text" class="form-input" id="apellidos" name="apellidos" value="{{ $Cliente->apellidos }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
-                            <span data-valmsg-for="apellidos"></span>
+                        <td><label for="apellido_paterno">Apellido Paterno: </label></td>
+                        <td><input type="text" class="form-input" id="apellido_paterno" name="apellido_paterno" value="{{ $Cliente->apellido_paterno }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
+                            <span data-valmsg-for="apellido_paterno"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="apellido_materno">Apellido Materno: </label></td>
+                        <td><input type="text" class="form-input" id="apellido_materno" name="apellido_materno" value="{{ $Cliente->apellido_materno }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
+                            <span data-valmsg-for="apellido_materno"></span>
                         </td>
                     </tr>
                     <tr>
@@ -209,11 +213,17 @@
                                         <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
                                         <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
                                         
-                                        <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Opcional</label>
+                                        <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE o IZY PAY</label>
                                         <input type="file" name="izyPay" id="izyPay" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
-                                        <label for="vaucher" style="margin-top: 10px;">Foto del Comprobante de Pago - Obligatorio </label>
+                                        <label for="vaucher" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
                                         <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
+
+                                        <label for="schoolName" style="margin-top: 10px;">Nombre del Colegio</label>
+                                        <input type="text" name="schoolName" id="schoolName" class="form-input">
+
+                                        <label for="completionDate" style="margin-top: 10px;">Fecha de Expiración</label>
+                                        <input type="date" name="completionDate" id="completionDate" class="form-input">
                                     </div>
                     
                                 </div>
@@ -484,6 +494,32 @@
                 <div id="content-history">
                     <p>No existe historial registrada actualmente.</p>
                 </div>
+                <div class="text-center">
+                    @if ($Cliente->estado_detalle_id == 8 || Auth::user()->email == "useraul@gmail.com" || Auth::user()->profile_id == 2)
+                        <button type="button" class="btn btn-primary" id="seeFromImng">Editar</button>
+                        <div id="formInpuImg" style="display: none" class="mb-5">
+                            <label for="dniFrontUpdate" style="margin-top: 10px;">Foto del DNI (Parte Frontal)</label>
+                            <input type="file" name="dniFrontUpdate" id="dniFrontUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                            
+                            <label for="dniRearUpdate" style="margin-top: 10px;">Foto del DNI (Parte Posterior)</label>
+                            <input type="file" name="dniRearUpdate" id="dniRearUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                            
+                            <label for="izyPayUpdate" style="margin-top: 10px;">Foto del IZYPAY</label>
+                            <input type="file" name="izyPayUpdate" id="izyPayUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
+    
+                            <label for="vaucherUpdate" style="margin-top: 10px;">Foto del Comprobante de Pago</label>
+                            <input type="file" name="vaucherUpdate" id="vaucherUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
+
+                            <label for="schoolNameUpdate" style="margin-top: 10px;">Nombre del Colegio</label>
+                            <input type="text" name="schoolNameUpdate" id="schoolNameUpdate" class="form-input">
+
+                            <label for="completionDateUpdate" style="margin-top: 10px;">Fecha de Expiración</label>
+                            <input type="date" name="completionDateUpdate" id="completionDateUpdate" class="form-input">
+                            <br>
+                            <button type="button" id="increaseImgs" class="btn btn-secondary">Guardar</button>
+                        </div>
+                    @endif
+                </div>
                 @if(in_array($Cliente->estado_detalle_id,[\easyCRM\App::$ESTADO_DETALLE_MATRICULADO, \easyCRM\App::$ESTADO_DETALLE_REINGRESO]))
                     <h5>Nueva oportunidad</h5>
                     <hr>
@@ -706,4 +742,13 @@
 <script type="text/javascript" src="auth/js/cliente/_Seguimiento.js"></script>
 @if ($Cliente->estado_detalle_id != 8)
     <script src="{{ asset('auth/js/cliente/v2/index.js') }}"></script>
+@endif
+@if ($Cliente->estado_detalle_id == 8)
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        var uploadUrl = "{{ route('user.client.uploadBoxImages') }}";
+        var getUrl = "{{ route('user.client.getDataClient') }}";
+        var csrfToken = "{{ csrf_token() }}";
+    </script>
+    <script src="{{ asset('auth/js/cliente/v2/increase.js') }}"></script>
 @endif

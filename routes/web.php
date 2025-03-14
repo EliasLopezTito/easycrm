@@ -40,6 +40,8 @@ Route::group(['middleware' => 'auth:web'], function () {
                 Route::post('/store', 'Auth\ClienteController@store')->name('user.client.store');
                 Route::post('/updateDatosContacto', 'Auth\ClienteController@updateDatosContacto')->name('user.client.updateDatosContacto');
                 Route::post('/updateDatosCliente', 'Auth\ClienteController@updateDatosCliente')->name('user.client.updateDatosCliente');
+                Route::post('/uploadBoxImages', 'Auth\ClienteController@uploadBoxImages')->name('user.client.uploadBoxImages');
+                Route::post('/getDataClient', 'Auth\ClienteController@getDataClient')->name('user.client.getDataClient');
                 Route::post('/storeSeguimiento', 'Auth\ClienteController@storeSeguimiento')->name('user.client.storeSeguimiento');
                 Route::post('/storeSeguimientoAdicional', 'Auth\ClienteController@storeSeguimientoAdicional')->name('user.client.storeSeguimientoAdicional');
                 Route::post('/list_filter_seguimiento', 'Auth\ClienteController@list_filter_seguimiento')->name('user.client.list_filter');

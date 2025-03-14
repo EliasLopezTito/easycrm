@@ -68,19 +68,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="horario_id">Imagen del Dni Frontal</label>
-                            <label for="dniFront" style="margin-top: 10px;">Foto del DNI (Parte Frontal)</label>
-                            <input type="file" name="dniFront" id="dniFront" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                            <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior)</label>
-                            <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                            <label for="vaucher" style="margin-top: 10px;">Foto del Comprobante de Pago</label>
-                            <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-bold btn-pure btn-primary">Actualizar Matricula</button>

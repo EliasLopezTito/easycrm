@@ -62,7 +62,8 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response.success) {
                         $("#nombres").val(response.data.nombres);
-                        $("#apellidos").val(response.data.apellido_paterno + " " + response.data.apellido_materno);
+                        $("#apellido_paterno").val(response.data.apellido_paterno);
+                        $("#apellido_materno").val(response.data.apellido_materno);
                         let fechaNacimiento = new Date(response.data.fecha_nacimiento);
                         let fechaFormateada = fechaNacimiento.toISOString().split("T")[0]; 
                         $("#fecha_nacimiento").val(fechaFormateada);
@@ -81,11 +82,11 @@ $(document).ready(function() {
                             $('#distrito_id').val(valorSeleccionado).change();
                         }, 500); 
                         $("#direccion").val(response.data.direccion_completa);
-                        $("#apellidoPaterno").val(response.data.apellido_paterno);
-                        $("#apellidoMaterno").val(response.data.apellido_materno);
                         //deactivate
                         $("#nombres").attr("readonly", true);
                         $("#apellidos").attr("readonly", true);
+                        $("#apellido_paterno").attr("readonly", true);
+                        $("#apellido_materno").attr("readonly", true);
                         $("#fecha_nacimiento").attr("readonly", true);
                         let textoSeleccionado = $("#provincia_id option:selected").text();
                         //Actualizar el name superior
@@ -99,6 +100,8 @@ $(document).ready(function() {
                             formData.append("id", $("#id").val());
                             formData.append("nombres", $("#nombres").val());
                             formData.append("apellidos", $("#apellidos").val());
+                            formData.append("apellido_paterno", $("#apellido_paterno").val());
+                            formData.append("apellido_materno", $("#apellido_materno").val());
                             formData.append("fecha_nacimiento", $("#fecha_nacimiento").val());
                             formData.append("dni", $("#dni").val());
                             formData.append("celular", $('#celular').val());
@@ -107,8 +110,6 @@ $(document).ready(function() {
                             formData.append("provincia_id", $('#provincia_id').val());
                             formData.append("distrito_id", $('#distrito_id').val());
                             formData.append("direccion", $('#direccion').val());
-                            formData.append("apellidoPaterno", $("#apellidoPaterno").val());
-                            formData.append("apellidoMaterno", $("#apellidoMaterno").val());
                             actionAjax("/cliente/updateDatosCliente", formData, "POST", function (data) {
                                 $form.find("span[data-valmsg-for]").text("");
                                 if (data.Success) {
@@ -129,10 +130,9 @@ $(document).ready(function() {
                         }, 1000);
                     }else{
                         $("#nombres").val("");
-                        $("#apellidos").val("")
+                        $("#apellido_paterno").val("");
+                        $("#apellido_materno").val("");
                         $("#fecha_nacimiento").val("");
-                        $("#apellidoPaterno").val("");
-                        $("#apellidoMaterno").val("");
                         $("#nombres").attr("readonly", false);
                         $("#apellidos").attr("readonly", false);
                         $("#fecha_nacimiento").attr("readonly", false);
@@ -180,7 +180,8 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     $("#nombres").val(response.data.nombres);
-                    $("#apellidos").val(response.data.apellido_paterno + " " + response.data.apellido_materno);
+                    $("#apellido_paterno").val(response.data.apellido_paterno);
+                    $("#apellido_materno").val(response.data.apellido_materno);
                     let fechaNacimiento = new Date(response.data.fecha_nacimiento);
                     let fechaFormateada = fechaNacimiento.toISOString().split("T")[0]; 
                     $("#fecha_nacimiento").val(fechaFormateada);
@@ -199,18 +200,18 @@ $(document).ready(function() {
                         $('#distrito_id').val(valorSeleccionado).change();
                     }, 500); 
                     $("#direccion").val(response.data.direccion_completa);
-                    $("#apellidoPaterno").val(response.data.apellido_paterno);
-                    $("#apellidoMaterno").val(response.data.apellido_materno);
                     //deactivate
                     $("#nombres").attr("readonly", true);
-                    $("#apellidos").attr("readonly", true);
+                    $("#apellido_paterno").attr("readonly", true);
+                    $("#apellido_materno").attr("readonly", true);
                     $("#fecha_nacimiento").attr("readonly", true);
                     //Actualizar el name superior
                     $(".name-client").text(response.data.nombres + " " + response.data.apellido_paterno + " " + response.data.apellido_materno);
                     //
                 }else{
                     $("#nombres").val("");
-                    $("#apellidos").val("")
+                    $("#apellido_paterno").val("");
+                    $("#apellido_materno").val("");
                     $("#fecha_nacimiento").val("");
                     $("#nombres").attr("readonly", false);
                     $("#apellidos").attr("readonly", false);

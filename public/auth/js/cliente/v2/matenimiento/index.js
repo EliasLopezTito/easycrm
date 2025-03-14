@@ -87,6 +87,10 @@ $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
         $carreraSelect.append(new Option(c.nombre, c.id));
     });
 
+    $("#validationIdentidad").change(function() {
+        $(".name, .paternal-surname, .maternal-surname, .date").prop("readonly", false).val("");
+    });
+
     $(".searchDni").off("input").on("input", function () {
         let validationIdentidad = $('#validationIdentidad').val();
         if(validationIdentidad == 1){
@@ -99,15 +103,16 @@ $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
                     success: function (response) {
                         if (response.success) {
                             $(".name").val(response.data.nombres);
-                            $(".last-name").val(response.data.apellido_paterno + " " + response.data.apellido_materno);
+                            $(".paternal-surname").val(response.data.apellido_paterno);
+                            $(".maternal-surname").val(response.data.apellido_materno);
                             let fechaNacimiento = new Date(response.data.fecha_nacimiento);
                             let fechaFormateada = fechaNacimiento.toISOString().split("T")[0];
                             $(".date").val(fechaFormateada);
                             $(".direccion").val(response.data.direccion_completa);
-                            $(".name, .last-name, .date").attr("readonly", true);
+                            $(".name, .paternal-surname, .maternal-surname, .date").attr("readonly", true);
                         } else {
-                            $(".name, .last-name, .date").attr("readonly", false);
-                            $(".name, .last-name, .date").val("");
+                            $(".name, .paternal-surname, .maternal-surname, .date").attr("readonly", false);
+                            $(".name, .paternal-surname, .maternal-surname, .date").val("");
                         }
                     },
                     error: function () {

@@ -1,7 +1,7 @@
 <div id="modalMantenimientoCliente" class="modal modal-fill fade" data-backdrop="false" tabindex="-1">
     <div class="modal-dialog">
         <form enctype="multipart/form-data" action="{{ route('user.client.store') }}" id="registroCliente" method="POST"
-              data-ajax="true" data-close-modal="true" data-ajax-loading="#loading" data-ajax-success="OnSuccessRegistroCliente" data-ajax-failure="OnFailureRegistroCliente">
+            data-ajax="true" data-close-modal="true" data-ajax-loading="#loading" data-ajax-success="OnSuccessRegistroCliente" data-ajax-failure="OnFailureRegistroCliente">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Registrar Lead</h5>
@@ -14,14 +14,19 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
+                                <label for="paternalSurname">Apellido Paterno</label>
+                                <input type="text" class="form-input paternal-surname" name="apellido_paterno" id="paternalSurname" required>
+                                <span data-valmsg-for="paternalSurname"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="maternalSurname">Apellido Materno</label>
+                                <input type="text" class="form-input maternal-surname" name="apellido_materno" id="maternalSurname" required>
+                                <span data-valmsg-for="maternalSurname"></span>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="nombres">Nombres</label>
                                 <input type="text" class="form-input name" name="nombres" id="nombres" required>
                                 <span data-valmsg-for="nombres"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="apellidos">Apellidos</label>
-                                <input type="text" class="form-input last-name" name="apellidos" id="apellidos" required>
-                                <span data-valmsg-for="apellidos"></span>
                             </div>
                             <div class="col-md-4">
                                 <label for="email">Email</label>

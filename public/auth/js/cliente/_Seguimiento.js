@@ -5,7 +5,7 @@ $(function(){
     $provincia_id = $("#provincia_id"), $distrito_id = $("#distrito_id"),  $direccion = $("#direccion"), $horario_id = $("#horario_id"), $userInfo = $(".user-info"), $sede_id = $("#sede_id"), $local_id = $("#local_id"),$sede_adicional_id = $("#sede_adicional_id"),$local_adicional_id = $("#local_adicional_id"),
     $estado_id = $("#estado_id"),  $estado_detalle_id = $("#estado_detalle_id"), $information = $(".information");
 
-    const $nombres = $("#nombres"), $apellidos = $("#apellidos"), $id = $("#id"), $dni = $("#dni"), $fecha_nacimiento = $("#fecha_nacimiento"),
+    const $nombres = $("#nombres"), $id = $("#id"), $dni = $("#dni"), $fecha_nacimiento = $("#fecha_nacimiento"),
     $celular = $("#celular"), $whatsapp = $("#whatsapp"), $email = $("#email");
 
     $("input.decimal").inputmask("decimal",
@@ -192,7 +192,8 @@ $(function(){
         formData.append("_token", $("input[name=_token]").val());
         formData.append("id", $id.val());
         formData.append("nombres", $nombres.val());
-        formData.append("apellidos", $apellidos.val());
+        formData.append("apellido_paterno", $("#apellido_paterno").val());
+        formData.append("apellido_materno", $("#apellido_materno").val());
         formData.append("fecha_nacimiento", $fecha_nacimiento.val());
         formData.append("dni", $dni.val());
         formData.append("celular", $celular.val());
@@ -205,8 +206,6 @@ $(function(){
         formData.append("direccion", $direccion.val());
         formData.append("estado_id", $estado_id.val());
         formData.append("estado_detalle_id", $estado_detalle_id.val());
-        formData.append("apellidoPaterno", $('#apellidoPaterno').val());
-        formData.append("apellidoMaterno", $('#apellidoMaterno').val());
 
         $("#carrera_hidden_id").val($carrera_id.val());
 
@@ -287,6 +286,12 @@ $(function(){
                         }
                         if (data.imgData.vaucher) {
                             imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.vaucher}" target="_blank">Ver Voucher</a></p>`;
+                        }
+                        if(data.imgData.school_name){
+                            imgLinks += `<p>Colegio: <b>${data.imgData.school_name}</b></p>`;
+                        }
+                        if(data.imgData.completion_date){
+                            imgLinks += `<p>Fecha: <b>${data.imgData.completion_date}</b></p>`;
                         }
                     }
                     let imgLinksHtml = (i === 0) ? imgLinks : "";
