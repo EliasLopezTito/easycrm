@@ -213,7 +213,7 @@
                                         <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
                                         <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
                                         
-                                        <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE o IZY PAY</label>
+                                        <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE, PLIN o IZY PAY</label>
                                         <input type="file" name="izyPay" id="izyPay" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
                                         <label for="vaucher" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
