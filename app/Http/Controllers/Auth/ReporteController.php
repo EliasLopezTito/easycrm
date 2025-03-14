@@ -697,9 +697,12 @@ class ReporteController extends Controller
     public function storeEditClientUnit(Request $request)
     {
         $userLogin = Auth::user();
+        $lastName = $request->paternalSurname . " " . $request->maternalSurname;
         $clientData = Cliente::where('id', $request->idClient)->update([
             'nombres' => $request->name,
-            'apellidos' => $request->lastName,
+            'apellidos' => $lastName,
+            'apellido_paterno' => $request->paternalSurname,
+            'apellido_materno' => $request->maternalSurname,
             'email' => $request->email,
             'dni' => $request->dni,
             'celular' => $request->celular,

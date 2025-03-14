@@ -25,8 +25,12 @@
                 <input type="text" class="form-control" id="name" name="name" value="{{ $clientData->nombres }}">
             </div>
             <div class="form-group">
-                <label for="lastName">Apellidos:</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" value="{{ $clientData->apellidos }}">
+                <label for="paternalSurname">Apellido Paterno:</label>
+                <input type="text" class="form-control" id="paternalSurname" name="paternalSurname" value="{{ $clientData->apellido_paterno }}">
+            </div>
+            <div class="form-group">
+                <label for="maternalSurname">Apellidos:</label>
+                <input type="text" class="form-control" id="maternalSurname" name="maternalSurname" value="{{ $clientData->apellido_materno }}">
             </div>
             <div class="form-group">
                 <label for="dni">DNI:</label>
