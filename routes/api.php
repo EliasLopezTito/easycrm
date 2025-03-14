@@ -29,3 +29,4 @@ Route::post('/add-customer-events', 'App\HomeController@addCustomerEvents')->nam
 Route::get('/get-customer-events', 'App\HomeController@getCustomerEvents')->name('get-customer-events');
 Route::post('/get-client-registered', 'App\HomeController@getClientRegistered')->name('get-client-registered');
 Route::post('/get-client-follow-up', 'App\HomeController@getClientFollowUp')->name('get-client-follow-up');
+Route::get('/get-apellidos', 'App\HomeController@getApellidos')->name('get-apellidos');

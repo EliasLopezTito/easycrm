@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Exception;
 
 class HomeController extends Controller
 {
@@ -871,5 +872,41 @@ class HomeController extends Controller
         return response()->json([
             'data' => $clientImgData
         ]);
+    }
+
+    public function getApellidos()
+    {
+        try {
+            DB::table('clientes')
+                ->whereNull('apellido_paterno')
+                ->whereNull('apellido_materno')
+                ->where('estado_detalle_id', 8)
+                ->whereBetween('created_at', ['2025-03-03 00:00:00', '2025-03-14 23:59:59'])
+                //->whereBetween('created_at', ['2024-03-18 00:00:00', '2024-03-18 23:59:59'])
+                ->whereNull('deleted_at')
+                ->orderBy('id') // Agregar orden para evitar el error
+                ->chunk(100, function ($clientes) {
+                    foreach ($clientes as $cliente) {
+                        if (!empty(trim($cliente->apellidos))) {
+                            $nombres = explode(' ', trim($cliente->apellidos));
+
+                            $apellido_paterno = $nombres[0] ?? null;
+                            $apellido_materno = $nombres[1] ?? null;
+
+                            DB::table('clientes')
+                                ->where('id', $cliente->id)
+                                ->update([
+                                    'apellido_paterno' => $apellido_paterno,
+                                    'apellido_materno' => $apellido_materno,
+                                    'updated_at' => now()
+                                ]);
+                        }
+                    }
+                });
+
+            return response()->json(['message' => 'Proceso completado correctamente'], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
