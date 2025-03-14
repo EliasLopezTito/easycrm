@@ -877,6 +877,8 @@ class HomeController extends Controller
     public function getApellidos()
     {
         try {
+            $updatedIds = [];
+
             DB::table('clientes')
                 ->whereNull('apellido_paterno')
                 ->whereNull('apellido_materno')
@@ -885,7 +887,7 @@ class HomeController extends Controller
                 //->whereBetween('created_at', ['2024-03-18 00:00:00', '2024-03-18 23:59:59'])
                 ->whereNull('deleted_at')
                 ->orderBy('id') // Agregar orden para evitar el error
-                ->chunk(100, function ($clientes) {
+                ->chunk(100, function ($clientes) use (&$updatedIds) {
                     foreach ($clientes as $cliente) {
                         if (!empty(trim($cliente->apellidos))) {
                             $nombres = explode(' ', trim($cliente->apellidos));
@@ -900,11 +902,13 @@ class HomeController extends Controller
                                     'apellido_materno' => $apellido_materno,
                                     'updated_at' => now()
                                 ]);
+
+                            $updatedIds[] = $cliente->id;
                         }
                     }
                 });
 
-            return response()->json(['message' => 'Proceso completado correctamente'], 200);
+            return response()->json(['message' => 'Proceso completado correctamente', 'updated_ids' => $updatedIds], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
