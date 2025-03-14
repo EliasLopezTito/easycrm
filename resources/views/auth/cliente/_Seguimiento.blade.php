@@ -222,7 +222,7 @@
                                         <label for="schoolName" style="margin-top: 10px;">Nombre del Colegio</label>
                                         <input type="text" name="schoolName" id="schoolName" class="form-input">
 
-                                        <label for="completionDate" style="margin-top: 10px;">Fecha de Expiración</label>
+                                        <label for="completionDate" style="margin-top: 10px;">Fecha de Termino</label>
                                         <input type="date" name="completionDate" id="completionDate" class="form-input">
                                     </div>
                     
@@ -513,7 +513,7 @@
                             <label for="schoolNameUpdate" style="margin-top: 10px;">Nombre del Colegio</label>
                             <input type="text" name="schoolNameUpdate" id="schoolNameUpdate" class="form-input">
 
-                            <label for="completionDateUpdate" style="margin-top: 10px;">Fecha de Expiración</label>
+                            <label for="completionDateUpdate" style="margin-top: 10px;">Fecha de Termino</label>
                             <input type="date" name="completionDateUpdate" id="completionDateUpdate" class="form-input">
                             <br>
                             <button type="button" id="increaseImgs" class="btn btn-secondary">Guardar</button>
