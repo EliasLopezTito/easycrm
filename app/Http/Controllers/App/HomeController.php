@@ -826,6 +826,8 @@ class HomeController extends Controller
             ->join('turnos', 'clientes.turno_id', '=', 'turnos.id')
             ->join('sedes', 'clientes.sede_id', '=', 'sedes.id')
             ->join('users', 'clientes.user_id', '=', 'users.id')
+            ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
+            ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
             ->select(
                 'clientes.id as idUnico',
                 'tipo_operacions.name as nameOperation',
@@ -853,7 +855,9 @@ class HomeController extends Controller
                 WHEN clientes.modalidad_pago = 2 THEN "Virtual" 
                 ELSE "Desconocido" 
                 END as modalidadPago'),
-                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor')
+                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
             )
             ->where('clientes.estado_id', 4)
             ->where('clientes.estado_detalle_id', 8)
@@ -920,4 +924,7 @@ class HomeController extends Controller
             'data' => $advisorsData
         ]);
     }
+    /*public function sendingRegistrations(Request $request)
+    {
+    }*/
 }

@@ -31,3 +31,4 @@ Route::post('/get-client-registered', 'App\HomeController@getClientRegistered')-
 Route::post('/get-client-follow-up', 'App\HomeController@getClientFollowUp')->name('get-client-follow-up');
 Route::get('/get-apellidos', 'App\HomeController@getApellidos')->name('get-apellidos');
 Route::get('/get-active-advisors', 'App\HomeController@getActiveAdvisors')->name('get-active-advisors');
+Route::post('/sending-registrations', 'App\HomeController@sendingRegistrations')->name('sending-registrations');
