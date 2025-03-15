@@ -933,8 +933,8 @@ class HomeController extends Controller
                 $clientData = DB::table('clientes')
                     ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
                     ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->join('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
+                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
                     ->select(
                         'clientes.id as idUnico',
                         'clientes.ultimo_contacto as endContact',
@@ -962,8 +962,8 @@ class HomeController extends Controller
                 $clientData = DB::table('clientes')
                     ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
                     ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->join('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
+                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
                     ->select(
                         'clientes.id as idUnico',
                         'clientes.ultimo_contacto as endContact',
@@ -994,8 +994,8 @@ class HomeController extends Controller
                 $clientData = DB::table('clientes')
                     ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
                     ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->join('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
+                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
                     ->select(
                         'clientes.id as idUnico',
                         'clientes.ultimo_contacto as endContact',
@@ -1021,8 +1021,8 @@ class HomeController extends Controller
                 $clientData = DB::table('clientes')
                     ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
                     ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->join('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
+                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
                     ->select(
                         'clientes.id as idUnico',
                         'clientes.ultimo_contacto as endContact',
