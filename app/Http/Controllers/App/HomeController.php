@@ -924,7 +924,49 @@ class HomeController extends Controller
             'data' => $advisorsData
         ]);
     }
-    /*public function sendingRegistrations(Request $request)
+    public function sendingRegistrations(Request $request)
     {
-    }*/
+        $startDateComplete = $request->startDate . " 00:00:00";
+        $endDateComplete = $request->endDate . " 23:59:59";
+
+        $query = DB::table('clientes')
+            ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
+            ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
+            ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+            ->join('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
+            ->select(
+                'clientes.id as idUnico',
+                'clientes.ultimo_contacto as endContact',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'distritos.name as districtClient',
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
+                'cliente_seguimientos.comentario as comentario'
+            )
+            ->where('clientes.estado_id', 4)
+            ->where('clientes.estado_detalle_id', 8)
+            ->where('cliente_seguimientos.estado_id', 4)
+            ->where('cliente_seguimientos.estado_detalle_id', 8)
+            ->whereNull('clientes.deleted_at')
+            ->whereBetween('clientes.updated_at', [$startDateComplete, $endDateComplete]);
+
+        // Si el asesor no es "all", filtrar por user_id
+        if ($request->advisor !== "all") {
+            $query->where('clientes.user_id', $request->advisor);
+        }
+
+        // Si hay datos en $request->dataClient, agregar la búsqueda por nombre, apellido o DNI
+        if (!empty($request->dataClient)) {
+            $query->where(function ($q) use ($request) {
+                $q->orWhere('clientes.nombres', $request->dataClient)
+                    ->orWhere('clientes.apellidos', $request->dataClient)
+                    ->orWhere('clientes.dni', $request->dataClient);
+            });
+        }
+
+        $clientData = $query->orderBy('clientes.updated_at', 'asc')->get();
+
+        return response()->json($clientData);
+    }
 }
