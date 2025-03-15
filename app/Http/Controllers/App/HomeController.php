@@ -1044,5 +1044,8 @@ class HomeController extends Controller
                     ->get();
             }
         }
+        return response()->json([
+            'data' => $clientData
+        ]);
     }
 }
