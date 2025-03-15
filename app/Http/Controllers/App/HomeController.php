@@ -913,4 +913,11 @@ class HomeController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function getActiveAdvisors()
+    {
+        $advisorsData = DB::table('users')->where('profile_id', 2)->where('activo', 1)->whereNull('deleted_at')->get();
+        return response()->json([
+            'data' => $advisorsData
+        ]);
+    }
 }

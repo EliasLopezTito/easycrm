@@ -30,3 +30,4 @@ Route::get('/get-customer-events', 'App\HomeController@getCustomerEvents')->name
 Route::post('/get-client-registered', 'App\HomeController@getClientRegistered')->name('get-client-registered');
 Route::post('/get-client-follow-up', 'App\HomeController@getClientFollowUp')->name('get-client-follow-up');
 Route::get('/get-apellidos', 'App\HomeController@getApellidos')->name('get-apellidos');
+Route::get('/get-active-advisors', 'App\HomeController@getActiveAdvisors')->name('get-active-advisors');
