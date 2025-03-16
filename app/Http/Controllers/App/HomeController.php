@@ -891,7 +891,7 @@ class HomeController extends Controller
                 //->whereBetween('created_at', ['2024-03-18 00:00:00', '2024-03-18 23:59:59'])
                 ->whereNull('deleted_at')
                 ->orderBy('id') // Agregar orden para evitar el error
-                ->chunk(100, function ($clientes) use (&$updatedIds) {
+                ->chunk(300, function ($clientes) use (&$updatedIds) {
                     foreach ($clientes as $cliente) {
                         if (!empty(trim($cliente->apellidos))) {
                             $nombres = explode(' ', trim($cliente->apellidos));
