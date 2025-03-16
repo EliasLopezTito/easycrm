@@ -1009,6 +1009,7 @@ class HomeController extends Controller
                 'client_registration_images.school_name as schoolName',
                 'client_registration_images.completion_date as completionDate',
                 DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
+                'users.id as idAdvisor',
             )
             ->where('clientes.estado_id', 4)
             ->where('clientes.estado_detalle_id', 8)
