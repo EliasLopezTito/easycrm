@@ -887,7 +887,7 @@ class HomeController extends Controller
                 ->whereNull('apellido_paterno')
                 ->whereNull('apellido_materno')
                 ->where('estado_detalle_id', 8)
-                ->whereBetween('created_at', ['2025-01-01 00:00:00', '2025-03-14 23:59:59'])
+                ->whereBetween('ultimo_contacto', ['2025-01-01 00:00:00', '2025-03-14 23:59:59'])
                 //->whereBetween('created_at', ['2024-03-18 00:00:00', '2024-03-18 23:59:59'])
                 ->whereNull('deleted_at')
                 ->orderBy('id') // Agregar orden para evitar el error
