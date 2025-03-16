@@ -1001,7 +1001,7 @@ class HomeController extends Controller
                 'clientes.direccion as addressClient',
                 'provincias.name as nameProvincia',
                 'distritos.name as nameDistrito',
-                'clientes.phone as phoneClient',
+                'clientes.celular as phoneClient',
                 'client_registration_images.dni_front as dniFront',
                 'client_registration_images.dni_rear as dniRear',
                 'client_registration_images.izy_pay as izyPay',
