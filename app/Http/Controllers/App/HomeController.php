@@ -985,4 +985,36 @@ class HomeController extends Controller
             'data' => $clientData
         ]);
     }
+    public function registeredCustomerData(Request $request)
+    {
+        $clientData = DB::table('clientes')
+            ->join('users', 'clientes.user_id', '=', 'users.id')
+            ->join('provincias', 'clientes.provincia_id', '=', 'provincias.id')
+            ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
+            ->join('client_registration_images', 'clientes.id', '=', 'client_registration_images.id_client')
+            ->select(
+                'clientes.id as idUnico',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'clientes.fecha_nacimiento as dateOfBirth',
+                'clientes.email as emailClient',
+                'clientes.direccion as addressClient',
+                'provincias.name as nameProvincia',
+                'distritos.name as nameDistrito',
+                'client_registration_images.dni_front as dniFront',
+                'client_registration_images.dni_rear as dniRear',
+                'client_registration_images.izy_pay as izyPay',
+                'client_registration_images.vaucher as vaucher',
+                'client_registration_images.school_name as schoolName',
+                'client_registration_images.completion_date as completionDate',
+            )
+            ->where('clientes.estado_id', 4)
+            ->where('clientes.estado_detalle_id', 8)
+            ->whereNull('clientes.deleted_at')
+            ->where('clientes.id', $request->idClient)
+            ->first();
+        return response()->json([
+            'data' => $clientData
+        ]);
+    }
 }
