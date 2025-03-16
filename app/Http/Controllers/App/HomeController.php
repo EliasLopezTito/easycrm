@@ -976,7 +976,7 @@ class HomeController extends Controller
 
         // Filtro por asesor
         if ($request->advisor !== "all") {
-            $query->where('clientes.id_user', $request->advisor);
+            $query->where('clientes.user_id', $request->advisor);
         }
 
         $clientData = $query->orderBy('clientes.updated_at', 'asc')->get();
