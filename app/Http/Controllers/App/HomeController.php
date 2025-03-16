@@ -991,7 +991,7 @@ class HomeController extends Controller
             ->join('users', 'clientes.user_id', '=', 'users.id')
             ->join('provincias', 'clientes.provincia_id', '=', 'provincias.id')
             ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
-            ->join('client_registration_images', 'clientes.id', '=', 'client_registration_images.id_client')
+            ->leftJoin('client_registration_images', 'clientes.id', '=', 'client_registration_images.id_client')
             ->select(
                 'clientes.id as idUnico',
                 'clientes.dni as dniClient',
