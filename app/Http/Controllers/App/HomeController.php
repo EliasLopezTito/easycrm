@@ -928,122 +928,59 @@ class HomeController extends Controller
     {
         $startDateComplete = $request->startDate . " 00:00:00";
         $endDateComplete = $request->endDate . " 23:59:59";
-        if ($request->dataClient != null || $request->dataClient != "") {
-            if ($request->advisor == "all") {
-                $clientData = DB::table('clientes')
-                    ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
-                    ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
-                    ->select(
-                        'clientes.id as idUnico',
-                        'clientes.ultimo_contacto as endContact',
-                        'clientes.dni as dniClient',
-                        DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
-                        'distritos.name as districtClient',
-                        'modalidads.name as nameModalidad',
-                        'carreras.name as nameCarrera',
-                        'cliente_seguimientos.comentario as comentario'
-                    )
-                    ->where('clientes.estado_id', 4)
-                    ->where('clientes.estado_detalle_id', 8)
-                    ->where('cliente_seguimientos.estado_id', 4)
-                    ->where('cliente_seguimientos.estado_detalle_id', 8)
-                    ->whereNull('clientes.deleted_at')
-                    ->whereBetween('clientes.updated_at', [$startDateComplete, $endDateComplete])
-                    ->where(function ($query) use ($request) {
-                        $query->where('clientes.nombres', $request->dataClient)
-                            ->orWhere('clientes.apellidos', $request->dataClient)
-                            ->orWhere('clientes.dni', $request->dataClient);
-                    })
-                    ->orderBy('clientes.updated_at', 'asc')
-                    ->get();
-            } else {
-                $clientData = DB::table('clientes')
-                    ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
-                    ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
-                    ->select(
-                        'clientes.id as idUnico',
-                        'clientes.ultimo_contacto as endContact',
-                        'clientes.dni as dniClient',
-                        DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
-                        'distritos.name as districtClient',
-                        'modalidads.name as nameModalidad',
-                        'carreras.name as nameCarrera',
-                        'cliente_seguimientos.comentario as comentario'
-                    )
-                    ->where('clientes.estado_id', 4)
-                    ->where('clientes.estado_detalle_id', 8)
-                    ->where('cliente_seguimientos.estado_id', 4)
-                    ->where('cliente_seguimientos.estado_detalle_id', 8)
-                    ->where('clientes.user_id', $request->advisor)
-                    ->whereNull('clientes.deleted_at')
-                    ->whereBetween('clientes.updated_at', [$startDateComplete, $endDateComplete])
-                    ->where(function ($query) use ($request) {
-                        $query->where('clientes.nombres', $request->dataClient)
-                            ->orWhere('clientes.apellidos', $request->dataClient)
-                            ->orWhere('clientes.dni', $request->dataClient);
-                    })
-                    ->orderBy('clientes.updated_at', 'asc')
-                    ->get();
-            }
-        } else {
-            if ($request->advisor == "all") {
-                $clientData = DB::table('clientes')
-                    ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
-                    ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
-                    ->select(
-                        'clientes.id as idUnico',
-                        'clientes.ultimo_contacto as endContact',
-                        'clientes.dni as dniClient',
-                        DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
-                        'distritos.name as districtClient',
-                        'modalidads.name as nameModalidad',
-                        'carreras.name as nameCarrera',
-                        'cliente_seguimientos.comentario as comentario'
-                    )
-                    ->where('clientes.estado_id', 4)
-                    ->where('clientes.estado_detalle_id', 8)
-                    ->where('cliente_seguimientos.estado_id', 4)
-                    ->where('cliente_seguimientos.estado_detalle_id', 8)
-                    ->whereOr('clientes.nombres', $request->dataClient)
-                    ->whereOr('clientes.apellidos', $request->dataClient)
-                    ->whereOr('clientes.dni ', 8)
-                    ->whereNull('clientes.deleted_at')
-                    ->whereBetween('clientes.updated_at', [$startDateComplete, $endDateComplete])
-                    ->orderBy('clientes.updated_at', 'asc')
-                    ->get();
-            } else {
-                $clientData = DB::table('clientes')
-                    ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
-                    ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
-                    ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
-                    ->leftJoin('cliente_seguimientos', 'clientes.id', '=', 'cliente_seguimientos.cliente_id')
-                    ->select(
-                        'clientes.id as idUnico',
-                        'clientes.ultimo_contacto as endContact',
-                        'clientes.dni as dniClient',
-                        DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
-                        'distritos.name as districtClient',
-                        'modalidads.name as nameModalidad',
-                        'carreras.name as nameCarrera',
-                        'cliente_seguimientos.comentario as comentario'
-                    )
-                    ->where('clientes.estado_id', 4)
-                    ->where('clientes.estado_detalle_id', 8)
-                    ->where('cliente_seguimientos.estado_id', 4)
-                    ->where('cliente_seguimientos.estado_detalle_id', 8)
-                    ->where('clientes.user_id', $request->advisor)
-                    ->whereNull('clientes.deleted_at')
-                    ->whereBetween('clientes.updated_at', [$startDateComplete, $endDateComplete])
-                    ->orderBy('clientes.updated_at', 'asc')
-                    ->get();
-            }
+
+        // Subquery para obtener el último seguimiento válido
+        $latestSeguimiento = DB::table('cliente_seguimientos as cs1')
+            ->select('cs1.cliente_id', 'cs1.comentario')
+            ->where('cs1.estado_id', 4)
+            ->where('cs1.estado_detalle_id', 8)
+            ->whereNull('cs1.deleted_at')
+            ->whereRaw('cs1.id = (
+        SELECT cs2.id FROM cliente_seguimientos cs2
+        WHERE cs2.cliente_id = cs1.cliente_id
+        AND cs2.estado_id = 4
+        AND cs2.estado_detalle_id = 8
+        ORDER BY cs2.created_at DESC LIMIT 1
+    )');
+
+        // Consulta principal
+        $query = DB::table('clientes')
+            ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
+            ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
+            ->leftJoin('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+            ->joinSub($latestSeguimiento, 'ultimo_seguimiento', function ($join) {
+                $join->on('clientes.id', '=', 'ultimo_seguimiento.cliente_id');
+            })
+            ->select(
+                'clientes.id as idUnico',
+                'clientes.ultimo_contacto as endContact',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'distritos.name as districtClient',
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
+                'ultimo_seguimiento.comentario as comentario'
+            )
+            ->where('clientes.estado_id', 4)
+            ->where('clientes.estado_detalle_id', 8)
+            ->whereNull('clientes.deleted_at')
+            ->whereBetween('clientes.ultimo_contacto', [$startDateComplete, $endDateComplete]);
+        // Filtro por cliente
+        if (!empty($request->dataClient)) {
+            $query->where(function ($q) use ($request) {
+                $q->where('clientes.nombres', $request->dataClient)
+                    ->orWhere('clientes.apellidos', $request->dataClient)
+                    ->orWhere('clientes.dni', $request->dataClient);
+            });
         }
+
+        // Filtro por asesor
+        if ($request->advisor !== "all") {
+            $query->where('clientes.id_user', $request->advisor);
+        }
+
+        $clientData = $query->orderBy('clientes.updated_at', 'asc')->get();
+
         return response()->json([
             'data' => $clientData
         ]);
