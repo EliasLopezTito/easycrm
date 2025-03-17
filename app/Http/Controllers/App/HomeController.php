@@ -858,12 +858,13 @@ class HomeController extends Controller
                 DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
                 'modalidads.name as nameModalidad',
                 'carreras.name as nameCarrera',
+                'clientes.ultimo_contacto as ultimoContacto'
             )
             ->where('clientes.estado_id', 4)
             ->where('clientes.estado_detalle_id', 8)
             ->whereNull('clientes.deleted_at')
-            ->whereBetween('clientes.updated_at', [$startDate, $endDate])
-            ->orderBy('clientes.updated_at', 'asc')
+            ->whereBetween('clientes.ultimo_contacto', [$startDate, $endDate])
+            ->orderBy('clientes.ultimo_contacto', 'asc')
             ->get();
         return response()->json([
             'count' => $clientData->count(),
@@ -936,12 +937,12 @@ class HomeController extends Controller
             ->where('cs1.estado_detalle_id', 8)
             ->whereNull('cs1.deleted_at')
             ->whereRaw('cs1.id = (
-        SELECT cs2.id FROM cliente_seguimientos cs2
-        WHERE cs2.cliente_id = cs1.cliente_id
-        AND cs2.estado_id = 4
-        AND cs2.estado_detalle_id = 8
-        ORDER BY cs2.created_at DESC LIMIT 1
-    )');
+            SELECT cs2.id FROM cliente_seguimientos cs2
+            WHERE cs2.cliente_id = cs1.cliente_id
+            AND cs2.estado_id = 4
+            AND cs2.estado_detalle_id = 8
+            ORDER BY cs2.created_at DESC LIMIT 1
+        )');
 
         // Consulta principal
         $query = DB::table('clientes')
