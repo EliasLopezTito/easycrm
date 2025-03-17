@@ -1034,16 +1034,16 @@ class HomeController extends Controller
             if ($seguimientoData) {
                 DB::table('notifications')
                     ->where('cliente_id', $request->id_lead)
-                    ->where('estado', 1)
+                    ->where('estado', 0)
                     ->whereNull('deleted_at')
                     ->update([
-                        'estado' => 0,
+                        'estado' => 1,
                         'updated_at' => Carbon::now()
                     ]);
                 DB::table('notifications')->insert([
                     'cliente_id' => $request->id_lead,
                     'cliente_seguimiento_id' => $seguimientoData->idSeguimiento,
-                    'estado' => 1,
+                    'estado' => 0,
                     'created_at' => Carbon::now(),
                     'user_id' => $request->idAdvisor,
                     'box_tracking' => 1,
