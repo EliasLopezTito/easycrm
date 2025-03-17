@@ -1056,10 +1056,9 @@ class HomeController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error al registrar notificación: ' . $e->getMessage());
             return response()->json([
                 'state' => 500,
-                'message' => 'Ocurrió un error al guardar la notificación. Por favor, intenta nuevamente.',
+                'message' => $e->getMessage(),
             ]);
         }
     }
