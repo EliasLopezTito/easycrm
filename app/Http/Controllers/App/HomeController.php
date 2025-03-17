@@ -1020,4 +1020,47 @@ class HomeController extends Controller
             'data' => $clientData
         ]);
     }
+    public function sendCashierNotification(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $seguimientoData = DB::table('cliente_seguimientos')
+                ->select('cliente_seguimientos.id as idSeguimiento')
+                ->where('cliente_id', $request->id_lead)
+                ->where('estado_id', 4)
+                ->where('estado_detalle_id', 8)
+                ->whereNull('deleted_at')
+                ->first();
+            if ($seguimientoData) {
+                DB::table('notifications')
+                    ->where('cliente_id', $request->id_lead)
+                    ->where('estado', 1)
+                    ->whereNull('deleted_at')
+                    ->update([
+                        'estado' => 0,
+                        'updated_at' => Carbon::now()
+                    ]);
+                DB::table('notifications')->insert([
+                    'cliente_id' => $request->id_lead,
+                    'cliente_seguimiento_id' => $seguimientoData->idSeguimiento,
+                    'estado' => 1,
+                    'created_at' => Carbon::now(),
+                    'user_id' => $request->idAdvisor,
+                    'box_tracking' => 1,
+                ]);
+            }
+            DB::commit();
+            return response()->json([
+                'state' => 200,
+                'message' => 'Notificación registrada correctamente.',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al registrar notificación: ' . $e->getMessage());
+            return response()->json([
+                'state' => 500,
+                'message' => 'Ocurrió un error al guardar la notificación. Por favor, intenta nuevamente.',
+            ]);
+        }
+    }
 }
