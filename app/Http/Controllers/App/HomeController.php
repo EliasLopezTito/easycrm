@@ -984,7 +984,7 @@ class HomeController extends Controller
             $query->where('clientes.user_id', $request->advisor);
         }
 
-        $clientData = $query->orderBy('clientes.updated_at', 'asc')->get();
+        $clientData = $query->orderBy('clientes.ultimo_contacto', 'asc')->get();
 
         return response()->json([
             'data' => $clientData
