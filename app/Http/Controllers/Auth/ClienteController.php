@@ -1383,38 +1383,6 @@ class ClienteController extends Controller
                     ], $updateImgData));
                 }
             }
-            // API para actualizar seguimiento
-            $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking";
-            $data = [
-                'cliente_id' => $request->idClient,
-            ];
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/x-www-form-urlencoded'
-            ]);
-            $response = curl_exec($ch);
-            sleep(1);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $error = curl_error($ch);
-            curl_close($ch);
-            if ($response === false) {
-                DB::rollBack();
-                return redirect()
-                    ->back()
-                    ->withErrors(['Error en la solicitud cURL' => $error])
-                    ->withInput();
-            }
-            $responseData = json_decode($response, true);
-            if ($httpCode !== 200 || $responseData === null) {
-                DB::rollBack();
-                return redirect()
-                    ->back()
-                    ->withErrors(['Error en la API de seguimiento' => $responseData ?? 'Respuesta no válida'])
-                    ->withInput();
-            }
             // Actualizar notificaciones
             $updated = DB::table('notifications')
                 ->where('cliente_id', $request->idClient)
@@ -1441,6 +1409,38 @@ class ClienteController extends Controller
             return redirect()
                 ->back()
                 ->withErrors(['Error inesperado' => $e->getMessage()])
+                ->withInput();
+        }
+        // API para actualizar seguimiento
+        $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking";
+        $data = [
+            'cliente_id' => $request->idClient,
+        ];
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/x-www-form-urlencoded'
+        ]);
+        $response = curl_exec($ch);
+        sleep(1);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+        if ($response === false) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->withErrors(['Error en la solicitud cURL' => $error])
+                ->withInput();
+        }
+        $responseData = json_decode($response, true);
+        if ($httpCode !== 200 || $responseData === null) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->withErrors(['Error en la API de seguimiento' => $responseData ?? 'Respuesta no válida'])
                 ->withInput();
         }
     }
