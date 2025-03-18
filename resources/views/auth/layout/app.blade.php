@@ -38,7 +38,7 @@
                 </a>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        @if (Auth::user()->id == 10175)
+                        @if (Auth::user()->id == 10175 || Auth::user()->id == 1)
                             <li id="notificationsFollowUp" class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="mdi mdi-bell faa-ring animated text-danger"></i>
@@ -201,7 +201,7 @@
 <script type="text/javascript" src="{{ asset('auth/plugins/sweetalert/sweetalert.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/plugins/toastr/js/toastr.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/js/_Layout.min.js') }}"></script>
-@if (Auth::user()->id == 10175)
+@if (Auth::user()->id == 10175 || Auth::user()->id == 1)
     <script>
         const urlBringNotifications = "{{ route('user.client.notifications-tracking') }}";
         const urlSeeObservation = "{{ route('user.client.see-observation', ':id') }}";
