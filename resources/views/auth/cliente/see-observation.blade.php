@@ -140,7 +140,7 @@
                 </div>
             @endif
             <div class="from-group text-center">
-                <button type="submit" id="increaseImgs" class="btn btn-secondary">Guardar</button>
+                <button type="submit" class="btn btn-secondary">Guardar</button>
             </div>
         </form>
     </section>
@@ -154,11 +154,4 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script>
-        const routeSpanish = "{{ asset('auth/js/datatable/languaje/spanish.json') }}";
-        const token = "{{ csrf_token() }}";
-        const routeAjax = "{{ route('user.store-search-client') }}";
-        var routeEditClient = "{{ route('user.edit-client-unit', ['id' => ':id']) }}";
-    </script>
-    <script src="{{ asset('auth/js/datatable/dom.js') }}"></script>
 @endsection
