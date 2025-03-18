@@ -1435,7 +1435,7 @@ class ClienteController extends Controller
             DB::commit();
             return redirect()
                 ->back()
-                ->with('success', '¡Imágenes subidas correctamente!');
+                ->with('success', '¡Imágenes subidas correctamente!' . $responseData['message']);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
