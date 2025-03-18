@@ -1054,7 +1054,7 @@ class HomeController extends Controller
                     'estado' => 0,
                     'created_at' => Carbon::now(),
                     'user_id' => $request->idAdvisor,
-                    'box_tracking' => 1,
+                    'box_tracking' => $request->typeNotification,
                 ]);
             }
             DB::commit();

@@ -25,6 +25,9 @@ Route::group(['middleware' => 'auth:web'], function () {
                 Route::get('/partialViewExport', 'Auth\ClienteController@partialViewExport')->name('user.client.partialViewExport');
                 Route::get('/exportExcel/{fechaInicio}/{fechaFinal}/{estado}/{vendedor}/{modalidad}/{carrera}/{turno}', 'Auth\ClienteController@exportExcel')->name('user.client.exportExcel');
                 Route::get('/notifications', 'Auth\ClienteController@notifications')->name('user.client.notifications');
+                Route::get('/notifications-tracking', 'Auth\ClienteController@notificationsTracking')->name('user.client.notifications-tracking');
+                Route::get('/see-observation/{id}', 'Auth\ClienteController@seeObservation')->name('user.client.see-observation');
+                Route::post('/store-see-observation', 'Auth\ClienteController@storeSeeObservation')->name('user.client.store-see-observation');
             });
         });
     });

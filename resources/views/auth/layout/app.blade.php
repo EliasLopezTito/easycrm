@@ -27,10 +27,10 @@
     <header class="main-header">
         <div class="inside-header">
             <a href="/" class="logo">
-               <span class="logo-lg">
-                  <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="light-logo">
-                  <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="dark-logo">
-              </span>
+                <span class="logo-lg">
+                    <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="light-logo">
+                    <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="dark-logo">
+                </span>
             </a>
             <nav class="navbar navbar-static-top">
                 <a href="#" class="sidebar-toggle d-block d-lg-none" data-toggle="push-menu" role="button">
@@ -38,6 +38,19 @@
                 </a>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
+                        @if (Auth::user()->id == 10175)
+                            <li id="notificationsFollowUp" class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="mdi mdi-bell faa-ring animated text-danger"></i>
+                                </a>
+                                <ul class="dropdown-menu scale-up">
+                                    <li class="header">Tienes <span id="counNotificacion"></span> notificaciones caja</li>
+                                    <li>
+                                        <ul class="menu inner-content-div"></ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
                         <li id="notifications" class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="mdi mdi-bell faa-ring animated"></i>
@@ -188,11 +201,19 @@
 <script type="text/javascript" src="{{ asset('auth/plugins/sweetalert/sweetalert.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/plugins/toastr/js/toastr.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/js/_Layout.min.js') }}"></script>
+@if (Auth::user()->id == 10175)
+    <script>
+        const urlBringNotifications = "{{ route('user.client.notifications-tracking') }}";
+        const urlSeeObservation = "{{ route('user.client.see-observation', ':id') }}";
+        const roleProfile = "{{ Auth::check() ? Auth::user()->profile_id : '' }}";
+    </script>
+    <script type="text/javascript" src="{{ asset('auth/js/followUp.js') }}"></script>
+@endif
 <script type="text/javascript">
     const usuarioLoggin = {
         user_id: {{ \Illuminate\Support\Facades\Auth::guard('web')->user()->id  }},
         profile_id: {{ \Illuminate\Support\Facades\Auth::guard('web')->user()->profile_id  }}
-    }
+    };
 </script>
 
 @yield('scripts')

@@ -44,7 +44,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
-
 class ClienteController extends Controller
 {
     use Consultas;
@@ -1226,5 +1225,208 @@ class ClienteController extends Controller
             'success' => true,
             'data' => $imgData
         ], 200);
+    }
+    public function notificationsTracking()
+    {
+        $userLogin = Auth::user();
+
+        if (!$userLogin) {
+            return response()->json(['error' => 'No autenticado'], 401);
+        }
+        $query = DB::table('notifications')
+            ->join('users', 'notifications.user_id', '=', 'users.id')
+            ->join('clientes', 'notifications.cliente_id', '=', 'clientes.id')
+            ->select(
+                'notifications.cliente_id as idNotification',
+                'clientes.dni as dniClient',
+                'users.name as nameAdvisor',
+                'users.last_name as lastNameAdvisor',
+                'users.id as idAdvisor',
+                'notifications.box_tracking as boxTracking'
+            )
+            ->whereNotNull('notifications.box_tracking')
+            ->where('notifications.estado', false);
+        if ($userLogin->profile_id == 2) {
+            $query->where('notifications.user_id', $userLogin->id);
+        }
+        $notificationsData = $query->get();
+        return response()->json([
+            'data' => $notificationsData
+        ]);
+    }
+    public function seeObservation($id)
+    {
+        // API para actualizar seguimiento
+        $userLogin = Auth::user();
+        if ($userLogin->profile_id == 2) {
+            $url = "https://seguimiento.ialmarketing.edu.pe/api/advisor-reviewed";
+            $data = [
+                'cliente_id' => $id,
+            ];
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded'
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            $responseData = json_decode($response, true);
+        }
+        // Llamada al API externa
+        $url = "https://seguimiento.ialmarketing.edu.pe/api/bring-follow-up";
+        $data = [
+            'cliente_id' => $id,
+        ];
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/x-www-form-urlencoded'
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $responseData = json_decode($response, true);
+        $responseData['imgData'] = DB::table('clientes')
+            ->join('users', 'clientes.user_id', '=', 'users.id')
+            ->leftJoin('client_registration_images', 'clientes.id', '=', 'client_registration_images.id_client')
+            ->select(
+                'clientes.id as idUnico',
+                'clientes.dni as dniClient',
+                'clientes.apellido_paterno as apellidoPaternoClient',
+                'clientes.apellido_materno as apellidoMaternoClient',
+                'clientes.nombres as nombresClient',
+                'clientes.fecha_nacimiento as dateOfBirth',
+                'clientes.email as emailClient',
+                'clientes.direccion as addressClient',
+                'clientes.celular as phoneClient',
+                'client_registration_images.school_name as schoolName',
+                'client_registration_images.completion_date as completionDate',
+                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
+                'users.id as idAdvisor',
+            )
+            ->where('clientes.estado_id', 4)
+            ->where('clientes.estado_detalle_id', 8)
+            ->whereNull('clientes.deleted_at')
+            ->where('clientes.id', $id)
+            ->first();
+        //dd($responseData);
+        return view('auth.cliente.see-observation')->with('responseData', $responseData);
+    }
+    public function storeSeeObservation(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $userLogin = Auth::user();
+            $lastName = trim($request->paternalSurname . " " . $request->maternalSurname);
+            $updateData = array_filter([
+                'nombres' => $request->name,
+                'apellidos' => $lastName,
+                'apellido_paterno' => $request->paternalSurname,
+                'apellido_materno' => $request->maternalSurname,
+                'email' => $request->email,
+                'dni' => $request->dni,
+                'celular' => $request->celular,
+                'whatsapp' => $request->celular,
+                'fecha_nacimiento' => $request->date,
+                'direccion' => $request->direction,
+                'updated_at' => Carbon::now(),
+                'updated_modified_by' => $userLogin->id,
+            ], function ($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($updateData)) {
+                Cliente::where('id', $request->idClient)->update($updateData);
+            }
+            $imgData = DB::table('client_registration_images')
+                ->where('id_client', $request->idClient)
+                ->first();
+            $basePath = public_path('assets/img-matriculado');
+            $clientFolder = $basePath . '/' . $request->idClient;
+            if (!File::exists($clientFolder)) {
+                File::makeDirectory($clientFolder, 0777, true, true);
+            }
+            $updateImgData = [];
+            $fileFields = [
+                'dniFrontUpdate' => 'dni_front',
+                'dniRearUpdate' => 'dni_rear',
+                'izyPayUpdate' => 'izy_pay',
+                'vaucherUpdate' => 'vaucher'
+            ];
+            foreach ($fileFields as $requestKey => $dbColumn) {
+                if ($request->hasFile($requestKey)) {
+                    $file = $request->file($requestKey);
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = "{$dbColumn}-{$request->idClient}.{$extension}";
+                    $file->move($clientFolder, $filename);
+                    $updateImgData[$dbColumn] = $filename;
+                }
+            }
+            if (!empty($updateImgData)) {
+                if ($imgData) {
+                    DB::table('client_registration_images')
+                        ->where('id_client', $request->idClient)
+                        ->update(array_merge((array) $imgData, $updateImgData, [
+                            'school_name' => $request->schoolNameUpdate,
+                            'completion_date' => $request->completionDateUpdate,
+                            'updated_at' => Carbon::now(),
+                        ]));
+                } else {
+                    DB::table('client_registration_images')->insert(array_merge([
+                        'id_client' => $request->idClient,
+                        'school_name' => $request->schoolNameUpdate,
+                        'completion_date' => $request->completionDateUpdate,
+                        'created_at' => Carbon::now(),
+                    ], $updateImgData));
+                }
+            }
+            // API para actualizar seguimiento
+            $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking";
+            $data = [
+                'cliente_id' => $request->idClient,
+            ];
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded'
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            $responseData = json_decode($response, true);
+            if ($httpCode == 200 && isset($responseData['success']) && $responseData['success'] === true) {
+                DB::table('notifications')
+                    ->where('cliente_id', $request->idClient)
+                    ->where('estado', 0)
+                    ->whereNull('deleted_at')
+                    ->update([
+                        'estado' => 1,
+                        'updated_at' => Carbon::now()
+                    ]);
+                DB::commit();
+                return redirect()
+                    ->back()
+                    ->with('success', '¡Imágenes subidas correctamente!');
+            } else {
+                DB::rollBack();
+                $errorMessage = isset($responseData['message']) ? $responseData['message'] : 'Ocurrió un error al actualizar el seguimiento.';
+                return redirect()
+                    ->back()
+                    ->withErrors(['update-tracking' => $errorMessage])
+                    ->withInput();
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+            return redirect()
+                ->back()
+                ->withErrors(['upload-error' => 'Ocurrió un error al subir las imágenes: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 }
