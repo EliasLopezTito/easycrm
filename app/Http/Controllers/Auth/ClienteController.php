@@ -1396,10 +1396,10 @@ class ClienteController extends Controller
                 'Content-Type: application/x-www-form-urlencoded'
             ]);
             $response = curl_exec($ch);
+            sleep(1);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $error = curl_error($ch);
             curl_close($ch);
-            dd($response);
             if ($response === false) {
                 DB::rollBack();
                 return redirect()
