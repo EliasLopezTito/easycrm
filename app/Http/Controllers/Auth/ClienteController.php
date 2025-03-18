@@ -1399,6 +1399,7 @@ class ClienteController extends Controller
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $error = curl_error($ch);
             curl_close($ch);
+            dd($response);
             if ($response === false) {
                 DB::rollBack();
                 return redirect()
