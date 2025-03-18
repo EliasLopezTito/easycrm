@@ -130,6 +130,14 @@
                 <label for="completionDateUpdate" style="margin-top: 10px;">Fecha de Termino</label>
                 <input type="date" name="completionDateUpdate" id="completionDateUpdate" class="form-input" value="{{ $responseData['imgData']->completionDate }}">
             </div>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             @if ($errors->any())
                 <div class="alert alert-danger p-2">
                     <ul class="list-unstyled">
