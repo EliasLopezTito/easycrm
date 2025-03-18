@@ -878,7 +878,6 @@ class HomeController extends Controller
             'data' => $clientImgData
         ]);
     }
-
     public function getApellidos()
     {
         try {
@@ -960,7 +959,12 @@ class HomeController extends Controller
                 'distritos.name as districtClient',
                 'modalidads.name as nameModalidad',
                 'carreras.name as nameCarrera',
-                'ultimo_seguimiento.comentario as comentario'
+                'ultimo_seguimiento.comentario as comentario',
+                DB::raw('CASE 
+                    WHEN clientes.modalidad_pago = 1 THEN "Presencial" 
+                    WHEN clientes.modalidad_pago = 2 THEN "Virtual" 
+                    ELSE "Desconocido" 
+                    END as modalidadPago'),
             )
             ->where('clientes.estado_id', 4)
             ->where('clientes.estado_detalle_id', 8)
@@ -970,7 +974,7 @@ class HomeController extends Controller
         if (!empty($request->dataClient)) {
             $query->where(function ($q) use ($request) {
                 $q->where('clientes.nombres', $request->dataClient)
-                    ->orWhere('clientes.apellidos', $request->dataClient)
+                    ->orWhere('clientes.apellidos', 'LIKE', '%' . $request->dataClient . '%')
                     ->orWhere('clientes.dni', $request->dataClient);
             });
         }
@@ -993,6 +997,7 @@ class HomeController extends Controller
             ->join('provincias', 'clientes.provincia_id', '=', 'provincias.id')
             ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
             ->leftJoin('client_registration_images', 'clientes.id', '=', 'client_registration_images.id_client')
+            ->join('tipo_operacions', 'clientes.tipo_operacion_id', '=', 'tipo_operacions.id')
             ->select(
                 'clientes.id as idUnico',
                 'clientes.dni as dniClient',
@@ -1011,6 +1016,8 @@ class HomeController extends Controller
                 'client_registration_images.completion_date as completionDate',
                 DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
                 'users.id as idAdvisor',
+                'tipo_operacions.name as nameOperation',
+                DB::raw('CASE WHEN clientes.mayor = 1 THEN "Sí" ELSE "No" END as mayor'),
             )
             ->where('clientes.estado_id', 4)
             ->where('clientes.estado_detalle_id', 8)
