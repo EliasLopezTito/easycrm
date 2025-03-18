@@ -1397,35 +1397,49 @@ class ClienteController extends Controller
             ]);
             $response = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
             curl_close($ch);
-            $responseData = json_decode($response, true);
-            if ($responseData['success'] === true) {
-                DB::table('notifications')
-                    ->where('cliente_id', $request->idClient)
-                    ->where('estado', 0)
-                    ->whereNull('deleted_at')
-                    ->update([
-                        'estado' => 1,
-                        'updated_at' => Carbon::now()
-                    ]);
-                DB::commit();
-                return redirect()
-                    ->back()
-                    ->with('success', '¡Imágenes subidas correctamente!');
-            } else {
+            if ($response === false) {
                 DB::rollBack();
-                $errorMessage = isset($responseData['message']) ? $responseData['message'] : 'Ocurrió un error al actualizar el seguimiento.';
                 return redirect()
                     ->back()
-                    ->withErrors(['update-tracking' => $errorMessage])
+                    ->withErrors(['Error en la solicitud cURL' => $error])
                     ->withInput();
             }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            dd($e->getMessage());
+            $responseData = json_decode($response, true);
+            if ($httpCode !== 200 || $responseData === null) {
+                DB::rollBack();
+                return redirect()
+                    ->back()
+                    ->withErrors(['Error en la API de seguimiento' => $responseData ?? 'Respuesta no válida'])
+                    ->withInput();
+            }
+            // Actualizar notificaciones
+            $updated = DB::table('notifications')
+                ->where('cliente_id', $request->idClient)
+                ->where('estado', 0)
+                ->whereNull('deleted_at')
+                ->update([
+                    'estado' => 1,
+                    'updated_at' => Carbon::now()
+                ]);
+            if ($updated === 0) {
+                // Si no se actualizó ninguna fila, hacer rollback y mostrar mensaje
+                DB::rollBack();
+                return redirect()
+                    ->back()
+                    ->withErrors(['No se encontraron notificaciones pendientes para actualizar.'])
+                    ->withInput();
+            }
+            DB::commit();
             return redirect()
                 ->back()
-                ->withErrors(['upload-error' => 'Ocurrió un error al subir las imágenes: ' . $e->getMessage()])
+                ->with('success', '¡Imágenes subidas correctamente!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->withErrors(['Error inesperado' => $e->getMessage()])
                 ->withInput();
         }
     }
