@@ -1399,8 +1399,7 @@ class ClienteController extends Controller
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
             $responseData = json_decode($response, true);
-            dd($responseData);
-            if ($httpCode == 200 && isset($responseData['success']) && $responseData['success'] === true) {
+            if ($responseData['success'] === true) {
                 DB::table('notifications')
                     ->where('cliente_id', $request->idClient)
                     ->where('estado', 0)
