@@ -1436,7 +1436,7 @@ class ClienteController extends Controller
 
     private function actualizarSeguimientoAPI($clienteId)
     {
-        $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking";
+        $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking-two";
         $data = [
             'cliente_id' => $clienteId,
         ];
