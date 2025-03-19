@@ -207,18 +207,19 @@ class ClienteController extends Controller
             }
 
             $apellidos = trim($request->apellidos);
-            if (empty($request->apellido_paterno) || empty($request->apellido_materno)) {
-                $partes = explode(' ', $apellidos);
-                if (count($partes) == 1) {
+            if ($apellidos !== null && $apellidos !== "") {
+                if (empty($request->apellido_paterno) || empty($request->apellido_materno)) {
+                    $partes = explode(' ', $apellidos);
                     $apellidoPaterno = $partes[0];
-                    $apellidoMaterno = $partes[0];
+                    $apellidoMaterno = count($partes) > 1 ? implode(' ', array_slice($partes, 1)) : '';
                 } else {
-                    $apellidoPaterno = $partes[0];
-                    $apellidoMaterno = implode(' ', array_slice($partes, 1));
+                    $apellidoPaterno = $request->apellido_paterno;
+                    $apellidoMaterno = $request->apellido_materno;
                 }
             } else {
-                $apellidoPaterno = $request->apellido_paterno;
-                $apellidoMaterno = $request->apellido_materno;
+                $apellidoPaterno = $request->apellido_paterno ?? '';
+                $apellidoMaterno = $request->apellido_materno ?? '';
+                $apellidos = trim($apellidoPaterno . " " . $apellidoMaterno);
             }
             $request->merge([
                 'user_id' =>  $userTurnId,
