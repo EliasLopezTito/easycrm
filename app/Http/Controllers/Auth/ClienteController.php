@@ -1320,7 +1320,7 @@ class ClienteController extends Controller
     {
         try {
             DB::beginTransaction();
-
+            dd($request->all());
             $userLogin = Auth::user();
             $lastName = trim($request->paternalSurname . ' ' . $request->maternalSurname);
 
