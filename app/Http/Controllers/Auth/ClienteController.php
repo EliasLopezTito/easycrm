@@ -1258,23 +1258,6 @@ class ClienteController extends Controller
     {
         // API para actualizar seguimiento
         $userLogin = Auth::user();
-        if ($userLogin->profile_id == 2) {
-            /*$url1 = "https://seguimiento.ialmarketing.edu.pe/api/advisor-reviewed";
-            $data1 = [
-                'cliente_id' => $id,
-            ];
-            $ch1 = curl_init($url1);
-            curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch1, CURLOPT_POST, true);
-            curl_setopt($ch1, CURLOPT_POSTFIELDS, http_build_query($data1));
-            curl_setopt($ch1, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/x-www-form-urlencoded'
-            ]);
-            $response1 = curl_exec($ch1);
-            $httpCode = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
-            curl_close($ch1);
-            $responseData1 = json_decode($response1, true);*/
-        }
         // Llamada al API externa
         $url = "https://seguimiento.ialmarketing.edu.pe/api/bring-follow-up";
         $data = [
@@ -1290,6 +1273,23 @@ class ClienteController extends Controller
         $response = curl_exec($ch);
         curl_close($ch);
         $responseData = json_decode($response, true);
+        if ($userLogin->profile_id == 2 && $responseData['followUpData']['state_adviser'] == 1) {
+            $url1 = "https://seguimiento.ialmarketing.edu.pe/api/advisor-reviewed";
+            $data1 = [
+                'cliente_id' => $id,
+            ];
+            $ch1 = curl_init($url1);
+            curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch1, CURLOPT_POST, true);
+            curl_setopt($ch1, CURLOPT_POSTFIELDS, http_build_query($data1));
+            curl_setopt($ch1, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded'
+            ]);
+            $response1 = curl_exec($ch1);
+            $httpCode = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
+            curl_close($ch1);
+            $responseData1 = json_decode($response1, true);
+        }
         $responseData['imgData'] = DB::table('clientes')
             ->join('users', 'clientes.user_id', '=', 'users.id')
             ->leftJoin('client_registration_images', 'clientes.id', '=', 'client_registration_images.id_client')
@@ -1417,7 +1417,7 @@ class ClienteController extends Controller
                 DB::commit();
                 return redirect()
                     ->back()
-                    ->with('success', '¡Imágenes subidas y seguimiento actualizado correctamente!' . json_encode($responseApi));
+                    ->with('success', '¡Imágenes subidas y seguimiento actualizado correctamente!');
             } else {
                 DB::rollBack();
                 return redirect()
