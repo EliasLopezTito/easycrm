@@ -1320,35 +1320,40 @@ class ClienteController extends Controller
     {
         try {
             DB::beginTransaction();
+
             $userLogin = Auth::user();
-            $lastName = trim($request->paternalSurname . " " . $request->maternalSurname);
-            $updateData = array_filter([
-                'nombres' => $request->name,
+            $lastName = trim($request->input('paternalSurname') . ' ' . $request->input('maternalSurname'));
+
+            // Actualizar datos del cliente
+            $updateData = [
+                'nombres' => $request->input('name'),
                 'apellidos' => $lastName,
-                'apellido_paterno' => $request->paternalSurname,
-                'apellido_materno' => $request->maternalSurname,
-                'email' => $request->email,
-                'dni' => $request->dni,
-                'celular' => $request->celular,
-                'whatsapp' => $request->celular,
-                'fecha_nacimiento' => $request->date,
-                'direccion' => $request->direction,
+                'apellido_paterno' => $request->input('paternalSurname'),
+                'apellido_materno' => $request->input('maternalSurname'),
+                'email' => $request->input('email'),
+                'dni' => $request->input('dni'),
+                'celular' => $request->input('celular'),
+                'whatsapp' => $request->input('celular'),
+                'fecha_nacimiento' => $request->input('date'),
+                'direccion' => $request->input('direction'),
                 'updated_at' => Carbon::now(),
                 'updated_modified_by' => $userLogin->id,
-            ], function ($value) {
-                return !is_null($value) && $value !== '';
-            });
-            if (!empty($updateData)) {
-                Cliente::where('id', $request->idClient)->update($updateData);
-            }
+            ];
+
+            Cliente::where('id', $request->input('idClient'))->update($updateData);
+
+            // Subida de imágenes
             $imgData = DB::table('client_registration_images')
-                ->where('id_client', $request->idClient)
+                ->where('id_client', $request->input('idClient'))
                 ->first();
+
             $basePath = public_path('assets/img-matriculado');
-            $clientFolder = $basePath . '/' . $request->idClient;
+            $clientFolder = $basePath . '/' . $request->input('idClient');
+
             if (!File::exists($clientFolder)) {
                 File::makeDirectory($clientFolder, 0777, true, true);
             }
+
             $updateImgData = [];
             $fileFields = [
                 'dniFrontUpdate' => 'dni_front',
@@ -1356,54 +1361,71 @@ class ClienteController extends Controller
                 'izyPayUpdate' => 'izy_pay',
                 'vaucherUpdate' => 'vaucher'
             ];
+
             foreach ($fileFields as $requestKey => $dbColumn) {
                 if ($request->hasFile($requestKey)) {
                     $file = $request->file($requestKey);
                     $extension = $file->getClientOriginalExtension();
-                    $filename = "{$dbColumn}-{$request->idClient}.{$extension}";
+                    $filename = $dbColumn . '-' . $request->input('idClient') . '.' . $extension;
                     $file->move($clientFolder, $filename);
                     $updateImgData[$dbColumn] = $filename;
                 }
             }
-            if (!empty($updateImgData)) {
+
+            $schoolName = $request->input('schoolNameUpdate');
+            $completionDate = $request->input('completionDateUpdate');
+
+            if (!empty($updateImgData) || $schoolName || $completionDate) {
+                $commonData = [
+                    'school_name' => $schoolName,
+                    'completion_date' => $completionDate,
+                    'updated_at' => Carbon::now(),
+                ];
+
                 if ($imgData) {
                     DB::table('client_registration_images')
-                        ->where('id_client', $request->idClient)
-                        ->update(array_merge((array) $imgData, $updateImgData, [
-                            'school_name' => $request->schoolNameUpdate,
-                            'completion_date' => $request->completionDateUpdate,
-                            'updated_at' => Carbon::now(),
-                        ]));
+                        ->where('id_client', $request->input('idClient'))
+                        ->update(array_merge((array) $imgData, $updateImgData, $commonData));
                 } else {
                     DB::table('client_registration_images')->insert(array_merge([
-                        'id_client' => $request->idClient,
-                        'school_name' => $request->schoolNameUpdate,
-                        'completion_date' => $request->completionDateUpdate,
+                        'id_client' => $request->input('idClient'),
                         'created_at' => Carbon::now(),
-                    ], $updateImgData));
+                    ], $updateImgData, $commonData));
                 }
             }
-            // Actualizar notificaciones
-            $updated = DB::table('notifications')
-                ->where('cliente_id', $request->idClient)
-                ->where('estado', 0)
-                ->whereNull('deleted_at')
-                ->update([
-                    'estado' => 1,
-                    'updated_at' => Carbon::now()
-                ]);
-            if ($updated === 0) {
-                // Si no se actualizó ninguna fila, hacer rollback y mostrar mensaje
+
+            // Llamar API de seguimiento
+            $responseApi = $this->actualizarSeguimientoAPI($request->input('idClient'));
+
+            if ($responseApi['success'] === true) {
+                $updated = DB::table('notifications')
+                    ->where('cliente_id', $request->input('idClient'))
+                    ->where('estado', 0)
+                    ->whereNull('deleted_at')
+                    ->update([
+                        'estado' => 1,
+                        'updated_at' => Carbon::now()
+                    ]);
+
+                if ($updated === 0) {
+                    DB::rollBack();
+                    return redirect()
+                        ->back()
+                        ->withErrors(['No se encontraron notificaciones pendientes para actualizar.'])
+                        ->withInput();
+                }
+
+                DB::commit();
+                return redirect()
+                    ->back()
+                    ->with('success', '¡Imágenes subidas y seguimiento actualizado correctamente!');
+            } else {
                 DB::rollBack();
                 return redirect()
                     ->back()
-                    ->withErrors(['No se encontraron notificaciones pendientes para actualizar.'])
+                    ->withErrors([$responseApi['message'] => $responseApi['error']])
                     ->withInput();
             }
-            DB::commit();
-            return redirect()
-                ->back()
-                ->with('success', '¡Imágenes subidas correctamente!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -1411,11 +1433,15 @@ class ClienteController extends Controller
                 ->withErrors(['Error inesperado' => $e->getMessage()])
                 ->withInput();
         }
-        // API para actualizar seguimiento
+    }
+
+    private function actualizarSeguimientoAPI($clienteId)
+    {
         $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking";
         $data = [
-            'cliente_id' => $request->idClient,
+            'cliente_id' => $clienteId,
         ];
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -1423,25 +1449,34 @@ class ClienteController extends Controller
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/x-www-form-urlencoded'
         ]);
+
         $response = curl_exec($ch);
         sleep(1);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
+
         if ($response === false) {
-            DB::rollBack();
-            return redirect()
-                ->back()
-                ->withErrors(['Error en la solicitud cURL' => $error])
-                ->withInput();
+            return [
+                'success' => false,
+                'message' => 'Error en la solicitud cURL',
+                'error' => $error
+            ];
         }
+
         $responseData = json_decode($response, true);
+
         if ($httpCode !== 200 || $responseData === null) {
-            DB::rollBack();
-            return redirect()
-                ->back()
-                ->withErrors(['Error en la API de seguimiento' => $responseData ?? 'Respuesta no válida'])
-                ->withInput();
+            return [
+                'success' => false,
+                'message' => 'Error en la API de seguimiento',
+                'error' => $responseData ?? 'Respuesta no válida'
+            ];
         }
+
+        return [
+            'success' => true,
+            'data' => $responseData
+        ];
     }
 }
