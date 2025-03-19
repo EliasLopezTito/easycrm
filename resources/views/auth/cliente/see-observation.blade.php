@@ -72,31 +72,31 @@
             </div>
             <div class="form-group">
                 <label for="paternalSurname">Apellido Paterno:</label>
-                <input type="text" class="form-control" id="paternalSurname" name="paternalSurname" value="{{ $responseData['imgData']->apellidoPaternoClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="text" class="form-control" id="paternalSurname" name="paternalSurname" value="{{ $responseData['imgData']->apellidoPaternoClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             <div class="form-group">
                 <label for="maternalSurname">Apellido Materno:</label>
-                <input type="text" class="form-control" id="maternalSurname" name="maternalSurname" value="{{ $responseData['imgData']->apellidoMaternoClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="text" class="form-control" id="maternalSurname" name="maternalSurname" value="{{ $responseData['imgData']->apellidoMaternoClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             <div class="form-group">
                 <label for="dni">DNI:</label>
-                <input type="text" class="form-control" id="dni" name="dni" value="{{ $responseData['imgData']->dniClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="text" class="form-control" id="dni" name="dni" value="{{ $responseData['imgData']->dniClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             <div class="form-group">
                 <label for="celular">Celular:</label>
-                <input type="text" class="form-control" id="celular" name="celular" value="{{ $responseData['imgData']->phoneClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="text" class="form-control" id="celular" name="celular" value="{{ $responseData['imgData']->phoneClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ $responseData['imgData']->emailClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="email" class="form-control" id="email" name="email" value="{{ $responseData['imgData']->emailClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             <div class="form-group">
                 <label for="direction">Dirreción:</label>
-                <input type="text" class="form-control" id="direction" name="direction" value="{{ $responseData['imgData']->addressClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="text" class="form-control" id="direction" name="direction" value="{{ $responseData['imgData']->addressClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             <div class="form-group">
                 <label for="date">Fecha de Nacimiento:</label>
-                <input type="date" class="form-control" id="date" name="date" value="{{ $responseData['imgData']->dateOfBirth }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="date" class="form-control" id="date" name="date" value="{{ $responseData['imgData']->dateOfBirth }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             @if ($responseData['followUpData']['dni_front_observation'] != null)
                 <div class="form-group">
