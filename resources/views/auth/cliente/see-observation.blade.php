@@ -68,7 +68,7 @@
             <input type="hidden" name="idClient" value="{{ $responseData['imgData']->idUnico }}">
             <div class="form-group">
                 <label for="name">Nombres Completos:</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ $responseData['imgData']->nombresClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) disabled @endif>
+                <input type="text" class="form-control" id="name" name="name" value="{{ $responseData['imgData']->nombresClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
             </div>
             <div class="form-group">
                 <label for="paternalSurname">Apellido Paterno:</label>
