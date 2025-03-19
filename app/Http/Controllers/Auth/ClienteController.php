@@ -1417,7 +1417,7 @@ class ClienteController extends Controller
                 DB::commit();
                 return redirect()
                     ->back()
-                    ->with('success', '¡Imágenes subidas y seguimiento actualizado correctamente!' . $responseApi);
+                    ->with('success', '¡Imágenes subidas y seguimiento actualizado correctamente!' . json_encode($responseApi));
             } else {
                 DB::rollBack();
                 return redirect()
