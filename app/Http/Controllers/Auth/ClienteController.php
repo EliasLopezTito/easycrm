@@ -1322,33 +1322,33 @@ class ClienteController extends Controller
             DB::beginTransaction();
 
             $userLogin = Auth::user();
-            $lastName = trim($request->input('paternalSurname') . ' ' . $request->input('maternalSurname'));
+            $lastName = trim($request->paternalSurname . ' ' . $request->maternalSurname);
 
             // Actualizar datos del cliente
             $updateData = [
-                'nombres' => $request->input('name'),
+                'nombres' => $request->name,
                 'apellidos' => $lastName,
-                'apellido_paterno' => $request->input('paternalSurname'),
-                'apellido_materno' => $request->input('maternalSurname'),
-                'email' => $request->input('email'),
-                'dni' => $request->input('dni'),
-                'celular' => $request->input('celular'),
-                'whatsapp' => $request->input('celular'),
-                'fecha_nacimiento' => $request->input('date'),
-                'direccion' => $request->input('direction'),
+                'apellido_paterno' => $request->paternalSurname,
+                'apellido_materno' => $request->maternalSurname,
+                'email' => $request->email,
+                'dni' => $request->dni,
+                'celular' => $request->celular,
+                'whatsapp' => $request->celular,
+                'fecha_nacimiento' => $request->date,
+                'direccion' => $request->direction,
                 'updated_at' => Carbon::now(),
                 'updated_modified_by' => $userLogin->id,
             ];
 
-            Cliente::where('id', $request->input('idClient'))->update($updateData);
+            Cliente::where('id', $request->idClient)->update($updateData);
 
             // Subida de imágenes
             $imgData = DB::table('client_registration_images')
-                ->where('id_client', $request->input('idClient'))
+                ->where('id_client', $request->idClient)
                 ->first();
 
             $basePath = public_path('assets/img-matriculado');
-            $clientFolder = $basePath . '/' . $request->input('idClient');
+            $clientFolder = $basePath . '/' . $request->idClient;
 
             if (!File::exists($clientFolder)) {
                 File::makeDirectory($clientFolder, 0777, true, true);
@@ -1366,14 +1366,14 @@ class ClienteController extends Controller
                 if ($request->hasFile($requestKey)) {
                     $file = $request->file($requestKey);
                     $extension = $file->getClientOriginalExtension();
-                    $filename = $dbColumn . '-' . $request->input('idClient') . '.' . $extension;
+                    $filename = $dbColumn . '-' . $request->idClient . '.' . $extension;
                     $file->move($clientFolder, $filename);
                     $updateImgData[$dbColumn] = $filename;
                 }
             }
 
-            $schoolName = $request->input('schoolNameUpdate');
-            $completionDate = $request->input('completionDateUpdate');
+            $schoolName = $request->schoolNameUpdate;
+            $completionDate = $request->completionDateUpdate;
 
             if (!empty($updateImgData) || $schoolName || $completionDate) {
                 $commonData = [
@@ -1384,22 +1384,22 @@ class ClienteController extends Controller
 
                 if ($imgData) {
                     DB::table('client_registration_images')
-                        ->where('id_client', $request->input('idClient'))
+                        ->where('id_client', $request->idClient)
                         ->update(array_merge((array) $imgData, $updateImgData, $commonData));
                 } else {
                     DB::table('client_registration_images')->insert(array_merge([
-                        'id_client' => $request->input('idClient'),
+                        'id_client' => $request->idClient,
                         'created_at' => Carbon::now(),
                     ], $updateImgData, $commonData));
                 }
             }
 
             // Llamar API de seguimiento
-            $responseApi = $this->actualizarSeguimientoAPI($request->input('idClient'));
+            $responseApi = $this->actualizarSeguimientoAPI($request->idClient);
 
             if ($responseApi['success'] === true) {
                 $updated = DB::table('notifications')
-                    ->where('cliente_id', $request->input('idClient'))
+                    ->where('cliente_id', $request->idClient)
                     ->where('estado', 0)
                     ->whereNull('deleted_at')
                     ->update([
