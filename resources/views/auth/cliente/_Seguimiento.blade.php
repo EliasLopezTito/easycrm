@@ -71,16 +71,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="apellido_paterno">Apellido Paterno: </label></td>
-                        <td><input type="text" class="form-input" id="apellido_paterno" name="apellido_paterno" value="{{ $Cliente->apellido_paterno }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
-                            <span data-valmsg-for="apellido_paterno"></span>
+                        <td><label for="apellidos">Apellidos: </label></td>
+                        <td><input type="text" class="form-input" id="apellidos" name="apellidos" value="{{ $Cliente->apellidos }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
+                            <span data-valmsg-for="apellidos"></span>
                         </td>
-                    </tr>
-                    <tr>
-                        <td><label for="apellido_materno">Apellido Materno: </label></td>
-                        <td><input type="text" class="form-input" id="apellido_materno" name="apellido_materno" value="{{ $Cliente->apellido_materno }}" autocomplete="off" required @if ($Cliente->estado_detalle_id == 8 || strlen($Cliente->dni) == 8) readonly @endif>
-                            <span data-valmsg-for="apellido_materno"></span>
-                        </td>
+                        <input type="hidden" name="apellido_paterno" id="apellidoPaterno">
+                        <input type="hidden" name="apellido_materno" id="apellidoMaterno">
                     </tr>
                     <tr>
                         <td><label for="fecha_nacimiento">Fecha Nacimiento: </label></td>

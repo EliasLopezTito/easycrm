@@ -103,16 +103,17 @@ $(document).on("shown.bs.modal", "#modalMantenimientoCliente", function () {
                     success: function (response) {
                         if (response.success) {
                             $(".name").val(response.data.nombres);
-                            $(".paternal-surname").val(response.data.apellido_paterno);
+                            $(".last-name").val(response.data.apellido_paterno + " " + response.data.apellido_materno);
                             $(".maternal-surname").val(response.data.apellido_materno);
+                            $(".paternal-surname").val(response.data.apellido_paterno);
                             let fechaNacimiento = new Date(response.data.fecha_nacimiento);
                             let fechaFormateada = fechaNacimiento.toISOString().split("T")[0];
                             $(".date").val(fechaFormateada);
                             $(".direccion").val(response.data.direccion_completa);
-                            $(".name, .paternal-surname, .maternal-surname, .date").attr("readonly", true);
+                            $(".name, .last-name, .date, .maternal-surname, .paternal-surname").attr("readonly", true);
                         } else {
-                            $(".name, .paternal-surname, .maternal-surname, .date").attr("readonly", false);
-                            $(".name, .paternal-surname, .maternal-surname, .date").val("");
+                            $(".name, .last-name, .date, .maternal-surname, .paternal-surname").attr("readonly", false);
+                            $(".name, .last-name, .date, .maternal-surname, .paternal-surname").val("");
                         }
                     },
                     error: function () {

@@ -192,8 +192,9 @@ $(function(){
         formData.append("_token", $("input[name=_token]").val());
         formData.append("id", $id.val());
         formData.append("nombres", $nombres.val());
-        formData.append("apellido_paterno", $("#apellido_paterno").val());
-        formData.append("apellido_materno", $("#apellido_materno").val());
+        formData.append("apellido_paterno", $("#apellidoPaterno").val());
+        formData.append("apellido_materno", $("#apellidoMaterno").val());
+        formData.append("apellidos", $("#apellidos").val());
         formData.append("fecha_nacimiento", $fecha_nacimiento.val());
         formData.append("dni", $dni.val());
         formData.append("celular", $celular.val());
@@ -511,8 +512,8 @@ function buscarDNI()
                     $('#nombres').val('')
                     $('#apellidos').val('')
                 }else{
-                    $("#nombres").val(respuesta.nombres)
-                    $("#apellidos").val(respuesta.apellidoPaterno+' '+respuesta.apellidoMaterno)
+                    $("#nombres").val(respuesta.nombres);
+                    $("#apellidos").val(respuesta.apellido_paterno+' '+respuesta.apellido_materno);
                     $("#alerta-cierre").prop('hidden',true);
                     $(".user.content-card #carrera_id, .information #distrito_id").change()
                 }

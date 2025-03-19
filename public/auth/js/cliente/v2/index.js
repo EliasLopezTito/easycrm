@@ -62,8 +62,9 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response.success) {
                         $("#nombres").val(response.data.nombres);
-                        $("#apellido_paterno").val(response.data.apellido_paterno);
-                        $("#apellido_materno").val(response.data.apellido_materno);
+                        $("#apellidos").val(response.data.apellido_paterno+" "+ response.data.apellido_materno);
+                        $("#apellidoPaterno").val(response.data.apellido_paterno);
+                        $("#apellidoMaterno").val(response.data.apellido_materno);
                         let fechaNacimiento = new Date(response.data.fecha_nacimiento);
                         let fechaFormateada = fechaNacimiento.toISOString().split("T")[0]; 
                         $("#fecha_nacimiento").val(fechaFormateada);
@@ -85,8 +86,8 @@ $(document).ready(function() {
                         //deactivate
                         $("#nombres").attr("readonly", true);
                         $("#apellidos").attr("readonly", true);
-                        $("#apellido_paterno").attr("readonly", true);
-                        $("#apellido_materno").attr("readonly", true);
+                        $("#apellidoPaterno").attr("readonly", true);
+                        $("#apellidoMaterno").attr("readonly", true);
                         $("#fecha_nacimiento").attr("readonly", true);
                         let textoSeleccionado = $("#provincia_id option:selected").text();
                         //Actualizar el name superior
@@ -100,8 +101,8 @@ $(document).ready(function() {
                             formData.append("id", $("#id").val());
                             formData.append("nombres", $("#nombres").val());
                             formData.append("apellidos", $("#apellidos").val());
-                            formData.append("apellido_paterno", $("#apellido_paterno").val());
-                            formData.append("apellido_materno", $("#apellido_materno").val());
+                            formData.append("apellido_paterno", $("#apellidoPaterno").val());
+                            formData.append("apellido_materno", $("#apellidoMaterno").val());
                             formData.append("fecha_nacimiento", $("#fecha_nacimiento").val());
                             formData.append("dni", $("#dni").val());
                             formData.append("celular", $('#celular').val());
@@ -180,8 +181,9 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     $("#nombres").val(response.data.nombres);
-                    $("#apellido_paterno").val(response.data.apellido_paterno);
-                    $("#apellido_materno").val(response.data.apellido_materno);
+                    $("#apellidoPaterno").val(response.data.apellido_paterno);
+                    $("#apellidos").val(response.data.apellido_paterno+" "+response.data.apellido_materno);
+                    $("#apellidoMaterno").val(response.data.apellido_materno);
                     let fechaNacimiento = new Date(response.data.fecha_nacimiento);
                     let fechaFormateada = fechaNacimiento.toISOString().split("T")[0]; 
                     $("#fecha_nacimiento").val(fechaFormateada);
@@ -202,16 +204,18 @@ $(document).ready(function() {
                     $("#direccion").val(response.data.direccion_completa);
                     //deactivate
                     $("#nombres").attr("readonly", true);
-                    $("#apellido_paterno").attr("readonly", true);
-                    $("#apellido_materno").attr("readonly", true);
+                    $("#apellidos").attr("readonly", true);
+                    $("#apellidoPaterno").attr("readonly", true);
+                    $("#apellidoMaterno").attr("readonly", true);
                     $("#fecha_nacimiento").attr("readonly", true);
                     //Actualizar el name superior
                     $(".name-client").text(response.data.nombres + " " + response.data.apellido_paterno + " " + response.data.apellido_materno);
                     //
                 }else{
                     $("#nombres").val("");
-                    $("#apellido_paterno").val("");
-                    $("#apellido_materno").val("");
+                    $("#apellidos").val("");
+                    $("#apellidoPaterno").val("");
+                    $("#apellidoMaterno").val("");
                     $("#fecha_nacimiento").val("");
                     $("#nombres").attr("readonly", false);
                     $("#apellidos").attr("readonly", false);

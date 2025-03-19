@@ -206,13 +206,25 @@ class ClienteController extends Controller
                 $register = true;
             }
 
-            $lastName = $request->apellido_paterno . " " . $request->apellido_materno;
-
+            $apellidos = trim($request->apellidos);
+            if (empty($request->apellido_paterno) || empty($request->apellido_materno)) {
+                $partes = explode(' ', $apellidos);
+                if (count($partes) == 1) {
+                    $apellidoPaterno = $partes[0];
+                    $apellidoMaterno = $partes[0];
+                } else {
+                    $apellidoPaterno = $partes[0];
+                    $apellidoMaterno = implode(' ', array_slice($partes, 1));
+                }
+            } else {
+                $apellidoPaterno = $request->apellido_paterno;
+                $apellidoMaterno = $request->apellido_materno;
+            }
             $request->merge([
                 'user_id' =>  $userTurnId,
-                'apellido_paterno' =>  $request->apellido_paterno,
-                'apellido_materno' =>  $request->apellido_materno,
-                'apellidos' =>  $lastName,
+                'apellido_paterno' =>  $apellidoPaterno,
+                'apellido_materno' =>  $apellidoMaterno,
+                'apellidos' =>  $apellidos,
                 'estado_id' => App::$ESTADO_NUEVO,
                 'estado_detalle_id' => App::$ESTADO_DETALLE_NUEVO,
                 'proviene_id' => App::$LLAMADA,
@@ -459,19 +471,12 @@ class ClienteController extends Controller
 
     public function updateDatosContacto(Request $request)
     {
-
         $Exist = false;
         $Status = false;
         $Title = "Error";
         $Message = "Algo salio mal, verifique los campos ingresados.";
 
         $Cliente = Cliente::find($request->id);
-
-        $lastName = $request->apellido_paterno . " " . $request->apellido_materno;
-
-        $request->merge([
-            'apellidos' =>  $lastName,
-        ]);
 
         if (in_array($Cliente->estado_detalle_id, [App::$ESTADO_DETALLE_MATRICULADO, App::$ESTADO_DETALLE_TRASLADO])) {
             $validator = Validator::make($request->all(), [
@@ -583,12 +588,6 @@ class ClienteController extends Controller
 
         $Cliente = Cliente::find($request->id);
 
-        $lastName = $request->apellido_paterno . " " . $request->apellido_materno;
-
-        $request->merge([
-            'apellidos' =>  $lastName,
-        ]);
-
         if (in_array($Cliente->estado_detalle_id, [App::$ESTADO_DETALLE_MATRICULADO, App::$ESTADO_DETALLE_TRASLADO])) {
             $validator = Validator::make($request->all(), [
                 'nombres' => 'required',
@@ -650,14 +649,13 @@ class ClienteController extends Controller
         if (!$Exist && !$validator->fails()) {
             $Cliente->nombres = $request->nombres;
             $Cliente->apellidos = $request->apellidos;
+            $Cliente->apellido_paterno = $request->apellido_paterno;
+            $Cliente->apellido_materno = $request->apellido_materno;
             $Cliente->dni = $request->dni;
             $Cliente->celular = $request->celular;
             $Cliente->whatsapp = $request->whatsapp;
             $Cliente->email = $request->email;
             $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
-
-            $Cliente->apellido_paterno = $request->apellido_paterno ?: null;
-            $Cliente->apellido_materno = $request->apellido_materno ?: null;
 
             $Cliente->provincia_id = $request->provincia_id;
             $Cliente->distrito_id = $request->distrito_id;

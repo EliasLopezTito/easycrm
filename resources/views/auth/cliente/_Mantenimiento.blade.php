@@ -14,14 +14,11 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="paternalSurname">Apellido Paterno</label>
-                                <input type="text" class="form-input paternal-surname" name="apellido_paterno" id="paternalSurname" required>
-                                <span data-valmsg-for="paternalSurname"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="maternalSurname">Apellido Materno</label>
-                                <input type="text" class="form-input maternal-surname" name="apellido_materno" id="maternalSurname" required>
-                                <span data-valmsg-for="maternalSurname"></span>
+                                <label for="apellidos">Apellidos</label>
+                                <input type="text" class="form-input last-name" name="apellidos" id="apellidos" required>
+                                <span data-valmsg-for="apellidos"></span>
+                                <input type="hidden" name="apellido_paterno" class="paternal-surname">
+                                <input type="hidden" name="apellido_materno" class="maternal-surname">
                             </div>
                             <div class="col-md-4">
                                 <label for="nombres">Nombres</label>
