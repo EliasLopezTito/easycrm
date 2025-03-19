@@ -1259,7 +1259,7 @@ class ClienteController extends Controller
         // API para actualizar seguimiento
         $userLogin = Auth::user();
         if ($userLogin->profile_id == 2) {
-            $url1 = "https://seguimiento.ialmarketing.edu.pe/api/advisor-reviewed";
+            /*$url1 = "https://seguimiento.ialmarketing.edu.pe/api/advisor-reviewed";
             $data1 = [
                 'cliente_id' => $id,
             ];
@@ -1273,7 +1273,7 @@ class ClienteController extends Controller
             $response1 = curl_exec($ch1);
             $httpCode = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
             curl_close($ch1);
-            $responseData1 = json_decode($response1, true);
+            $responseData1 = json_decode($response1, true);*/
         }
         // Llamada al API externa
         $url = "https://seguimiento.ialmarketing.edu.pe/api/bring-follow-up";
