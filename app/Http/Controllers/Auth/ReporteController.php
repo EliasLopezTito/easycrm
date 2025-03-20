@@ -54,7 +54,6 @@ class ReporteController extends Controller
         $totalClientes = $this->obtenerTotalClientesCreadosPorFecha($userProfile, $request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
         if ($userLogin->id == 1) {
             $totalClientes = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
-            dd($totalClientes->where('estado_id', 4)->count());
         }
         $totalClientesMatriculas = $this->obtenerTotalClienteMatriculasCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
         $totalClientesSeguimientos = $this->obtenerTotalClienteSeguimientosCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
@@ -377,6 +376,10 @@ class ReporteController extends Controller
             usort($arregloFilterUsuarios, $this->OrdernarArreglo('count', 'DESC'));
         }
 
+
+        if ($userLogin->id) {
+            dd($totalClientes->where('estado_id', 4)->count());
+        }
 
         if ($request->action_full == "true") {
 
