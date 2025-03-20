@@ -376,11 +376,6 @@ class ReporteController extends Controller
             usort($arregloFilterUsuarios, $this->OrdernarArreglo('count', 'DESC'));
         }
 
-
-        if ($userLogin->id) {
-            dd($totalClientes->where('estado_id', 4)->count());
-        }
-
         if ($request->action_full == "true") {
 
             return response()->json([
