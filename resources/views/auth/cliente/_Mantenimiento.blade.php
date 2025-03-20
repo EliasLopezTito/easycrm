@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="apellidos">Apellidos</label>
-                                <input type="text" class="form-input last-name" name="apellidos" id="apellidos">
+                                <input type="text" class="form-input last-name" name="apellidos" id="apellidos" required>
                                 <span data-valmsg-for="apellidos"></span>
                                 <input type="hidden" name="apellido_paterno" class="paternal-surname">
                                 <input type="hidden" name="apellido_materno" class="maternal-surname">
