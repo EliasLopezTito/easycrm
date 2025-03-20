@@ -374,9 +374,8 @@ class ReporteController extends Controller
         }
 
         if ($userLogin->id == 1) {
-            $two = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
-            $two->where("estado_id", 4)->count();
-            dd($arregloFilterEstados, $two);
+            $totalClientes->where("estado_id", 4)->count();
+            dd($arregloFilterEstados, $totalClientes);
         }
 
         if ($request->action_full == "true") {
