@@ -57,9 +57,7 @@ class ReporteController extends Controller
 
         if ($userLogin->id == 1) {
             $totalClientes = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
-            $totalClientesMatriculas = $this->obtenerTotalClienteMatriculasCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
             $countRonald = $totalClientes->where("estado_id", 4)->count();
-            $countRonaldMatricula = $totalClientesMatriculas->where("estado_id", 4)->count();
         }
 
         $count_clientes = COUNT($totalClientes);
@@ -381,7 +379,7 @@ class ReporteController extends Controller
         }
 
         if ($userLogin->id == 1) {
-            dd($arregloFilterEstados, $countRonald, $countRonaldMatricula);
+            dd($arregloFilterEstados, $countRonald);
         }
 
         if ($request->action_full == "true") {
