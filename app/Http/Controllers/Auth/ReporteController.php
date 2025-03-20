@@ -39,7 +39,7 @@ class ReporteController extends Controller
     public function filtro(Request $request)
     {
         $userProfile = Auth::guard('web')->user()->profile_id;
-
+        $userLogin = Auth::user();
         //consultas globales
         $Acciones = $this->obtenerAcciones();
         $Provincias = $this->obtenerProvincias();
@@ -52,6 +52,10 @@ class ReporteController extends Controller
         $Usuarios = $this->obtenerAsesores();
         $Fuentes = $this->obtenerFuentes();
         $totalClientes = $this->obtenerTotalClientesCreadosPorFecha($userProfile, $request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
+        if ($userLogin->id == 1) {
+            $totalClientes = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
+            dd($totalClientes->where('estado_id', 4)->count());
+        }
         $totalClientesMatriculas = $this->obtenerTotalClienteMatriculasCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
         $totalClientesSeguimientos = $this->obtenerTotalClienteSeguimientosCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
 
