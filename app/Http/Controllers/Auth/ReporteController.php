@@ -55,10 +55,29 @@ class ReporteController extends Controller
         $totalClientesMatriculas = $this->obtenerTotalClienteMatriculasCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
         $totalClientesSeguimientos = $this->obtenerTotalClienteSeguimientosCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
 
-        /*if ($userLogin->id == 1) {
-            $totalClientes = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
-            $countRonald = $totalClientes->where("estado_id", 4)->count();
-        }*/
+        if ($userLogin->id == 1) {
+            $EstadosRonald = $this->obtenerEstados();
+            $count_clientesRonald = COUNT($totalClientes);
+            $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
+            $arregloFilterEstadosGlobalRonald = [];
+            $arregloFilterEstadosRonald = [];
+            foreach ($EstadosRonald as $q) {
+                $Cantidad = $this->obtenerDatosPorFiltro($totalClientesRonald, array(['columna' => 'estado_id', 'valor' => $q->id]), 'cantidad');
+                /*if (in_array($q->id, [App::$ESTADO_CIERRE, App::$ESTADO_REINGRESO])) {
+                    if (in_array($userProfile, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
+                        $Cantidad += (int) $this->obtenerDatosPorFiltro($totalClientesMatriculas, array(['columna' => 'user_id', 'valor' => Auth::guard('web')->user()->id]), 'cantidad');
+                    } else {
+                        $Cantidad += (int) $this->obtenerDatosPorFiltro($totalClientesMatriculas, array(), 'cantidad');
+                    }
+                }*/
+
+                array_push($arregloFilterEstadosGlobalRonald, [$q->name, $Cantidad, $q->background, $q->id]);
+                array_push($arregloFilterEstados, [
+                    'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
+                ]);
+            }
+            dd($EstadosRonald, $count_clientesRonald, $totalClientesRonald, $arregloFilterEstadosGlobalRonald);
+        }
 
         $count_clientes = COUNT($totalClientes);
 
