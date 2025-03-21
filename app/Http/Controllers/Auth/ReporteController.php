@@ -77,7 +77,23 @@ class ReporteController extends Controller
                     'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
                 ]);
             }
-            dd($EstadosRonald, $count_clientesRonald, $arregloFilterEstadosGlobalRonald, $arregloFilterEstadosRonald, $totalClientesMatriculasRonald->count());
+            $arregloFilterEstadosGlobalRonaldMatricula = [];
+            $arregloFilterEstadosRonaldMatricula = [];
+            foreach ($EstadosRonald as $q) {
+                $Cantidad = $this->obtenerDatosPorFiltro($totalClientesRonald, array(['columna' => 'estado_id', 'valor' => $q->id]), 'cantidad');
+                if (in_array($q->id, [App::$ESTADO_CIERRE, App::$ESTADO_REINGRESO])) {
+                    if (in_array($userProfile, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
+                        $Cantidad += (int) $this->obtenerDatosPorFiltro($totalClientesMatriculasRonald, array(['columna' => 'user_id', 'valor' => Auth::guard('web')->user()->id]), 'cantidad');
+                    } else {
+                        $Cantidad += (int) $this->obtenerDatosPorFiltro($totalClientesMatriculasRonald, array(), 'cantidad');
+                    }
+                }
+                array_push($arregloFilterEstadosGlobalRonaldMatricula, [$q->name, $Cantidad, $q->background, $q->id]);
+                array_push($arregloFilterEstadosRonaldMatricula, [
+                    'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
+                ]);
+            }
+            dd($EstadosRonald, $count_clientesRonald, $arregloFilterEstadosGlobalRonald, $arregloFilterEstadosGlobalRonaldMatricula, $totalClientesMatriculasRonald->count());
         }
 
         $count_clientes = COUNT($totalClientes);
