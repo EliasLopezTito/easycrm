@@ -63,7 +63,7 @@ class ReporteController extends Controller
             $totalClientesMatriculasRonald =
                 $this->obtenerTotalClienteMatriculasCreadosPorFecha2("2025-02-17", "2025-02-17", "created_at_last_contact");
             //
-            dd($totalClientes, $totalClientesRonald, $totalClientesMatriculas, $totalClientesMatriculasRonald);
+            dd($totalClientesRonald, $totalClientesMatriculasRonald);
             $EstadosRonald = $this->obtenerEstados();
             $count_clientesRonald = COUNT($totalClientesRonald);
             $arregloFilterEstadosGlobalRonald = [];
