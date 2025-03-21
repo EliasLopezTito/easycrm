@@ -56,9 +56,9 @@ class ReporteController extends Controller
         $totalClientesSeguimientos = $this->obtenerTotalClienteSeguimientosCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
 
         if ($userLogin->id == 1) {
-            $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-02", "2025-03-02", "created_at_last_contact");
+            $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-03", "2025-03-03", "created_at_last_contact");
             $totalClientesMatriculasRonald =
-                $this->obtenerTotalClienteMatriculasCreadosPorFecha2("2025-03-02", "2025-03-02", "created_at_last_contact");
+                $this->obtenerTotalClienteMatriculasCreadosPorFecha2("2025-03-03", "2025-03-03", "created_at_last_contact");
             //
             $EstadosRonald = $this->obtenerEstados();
             $count_clientesRonald = COUNT($totalClientesRonald);
