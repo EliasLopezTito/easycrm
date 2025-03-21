@@ -70,10 +70,6 @@ trait Consultas
             )
             ->join('clientes', 'clientes.id', '=', 'cliente_matriculas.cliente_id')
             ->whereNull('cliente_matriculas.deleted_at');
-        $userLogin = Auth::user();
-        if ($userLogin->id == 1) {
-            dd($fecha_inicio, $fecha_final);
-        }
         if ($fecha_inicio && $fecha_final) {
             $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContact($query, $fecha_inicio, $fecha_final, $filter_lead_report);
         }
