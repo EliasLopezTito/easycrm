@@ -70,9 +70,8 @@ class ReporteController extends Controller
                         $Cantidad += (int) $this->obtenerDatosPorFiltro($totalClientesMatriculas, array(), 'cantidad');
                     }
                 }*/
-
                 array_push($arregloFilterEstadosGlobalRonald, [$q->name, $Cantidad, $q->background, $q->id]);
-                array_push($arregloFilterEstados, [
+                array_push($arregloFilterEstadosRonald, [
                     'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
                 ]);
             }
