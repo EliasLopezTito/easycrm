@@ -77,7 +77,7 @@ class ReporteController extends Controller
                     'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
                 ]);
             }
-            dd($EstadosRonald, $totalClientesRonald->count(), $arregloFilterEstadosGlobalRonald, $arregloFilterEstadosRonald, $totalClientesMatriculasRonald->count());
+            dd($EstadosRonald, $count_clientesRonald, $arregloFilterEstadosGlobalRonald, $arregloFilterEstadosRonald, $totalClientesMatriculasRonald->count());
         }
 
         $count_clientes = COUNT($totalClientes);
