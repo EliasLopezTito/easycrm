@@ -47,6 +47,29 @@ trait Consultas
             )
             ->join('clientes', 'clientes.id', '=', 'cliente_matriculas.cliente_id')
             ->whereNull('cliente_matriculas.deleted_at');
+        if ($fecha_inicio && $fecha_final) {
+            $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContact($query, $fecha_inicio, $fecha_final, $filter_lead_report);
+        }
+
+        return $query->get();
+    }
+
+    public function obtenerTotalClienteMatriculasCreadosPorFecha2($fecha_inicio, $fecha_final, $filter_lead_report)
+    {
+        $query = DB::table('cliente_matriculas')
+            ->select(
+                'cliente_matriculas.id',
+                'cliente_matriculas.carrera_adicional_id',
+                'cliente_matriculas.modalidad_adicional_id',
+                'cliente_matriculas.turno_adicional_id',
+                'clientes.provincia_id',
+                'clientes.user_id',
+                'clientes.fuente_id',
+                'clientes.enterado_id',
+                'clientes.turno_id'
+            )
+            ->join('clientes', 'clientes.id', '=', 'cliente_matriculas.cliente_id')
+            ->whereNull('cliente_matriculas.deleted_at');
         $userLogin = Auth::user();
         if ($userLogin->id == 1) {
             dd($fecha_inicio, $fecha_final);
