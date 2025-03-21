@@ -55,7 +55,7 @@ class ReporteController extends Controller
         $totalClientesMatriculas = $this->obtenerTotalClienteMatriculasCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
         $totalClientesSeguimientos = $this->obtenerTotalClienteSeguimientosCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
 
-        if ($userLogin->id == 1) {
+        /*if ($userLogin->id == 1) {
             $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-02-17", "2025-02-17", "created_at_last_contact");
             //
             $totalClientesRonaldCierre = $totalClientesRonald->where('estado_id', 4)->count();
@@ -63,21 +63,23 @@ class ReporteController extends Controller
             $totalClientesMatriculasRonald =
                 $this->obtenerTotalClienteMatriculasCreadosPorFecha2("2025-02-17", "2025-02-17", "created_at_last_contact");
             //
+            $totalClientesSeguimientosRonald = $this->obtenerTotalClienteSeguimientosCreadosPorFecha("2025-02-17", "2025-02-17", "created_at_last_contact");
+            //
             dd($totalClientesRonaldCierre, $totalClientesMatriculasRonald);
             $EstadosRonald = $this->obtenerEstados();
             $count_clientesRonald = COUNT($totalClientesRonald);
             $arregloFilterEstadosGlobalRonald = [];
             $arregloFilterEstadosRonald = [];
             foreach ($EstadosRonald as $q) {
-                $Cantidad = $this->obtenerDatosPorFiltro($totalClientesRonald, array(['columna' => 'estado_id', 'valor' => $q->id]), 'cantidad');
-                /*if (in_array($q->id, [App::$ESTADO_CIERRE, App::$ESTADO_REINGRESO])) {
+                $Cantidad = $this->obtenerDatosPorFiltro($totalClientesRonald, array(['columna' => 'estado_id', 'valor' => $q->id]), 'cantidad');*/
+        /*if (in_array($q->id, [App::$ESTADO_CIERRE, App::$ESTADO_REINGRESO])) {
                     if (in_array($userProfile, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
                         $Cantidad += (int) $this->obtenerDatosPorFiltro($totalClientesMatriculasRonald, array(['columna' => 'user_id', 'valor' => Auth::guard('web')->user()->id]), 'cantidad');
                     } else {
                         $Cantidad += (int) $this->obtenerDatosPorFiltro($totalClientesMatriculasRonald, array(), 'cantidad');
                     }
                 }*/
-                array_push($arregloFilterEstadosGlobalRonald, [$q->name, $Cantidad, $q->background, $q->id]);
+        /*array_push($arregloFilterEstadosGlobalRonald, [$q->name, $Cantidad, $q->background, $q->id]);
                 array_push($arregloFilterEstadosRonald, [
                     'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
                 ]);
@@ -99,7 +101,7 @@ class ReporteController extends Controller
                 ]);
             }
             dd();
-        }
+        }*/
 
         $count_clientes = COUNT($totalClientes);
 
