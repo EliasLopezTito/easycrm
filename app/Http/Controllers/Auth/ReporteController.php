@@ -58,7 +58,7 @@ class ReporteController extends Controller
         if ($userLogin->id == 1) {
             $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-03", "2025-03-03", "created_at_last_contact");
             //
-            $totalClientesRonaldCierre = $totalClientesRonald->where('4')->count();
+            $totalClientesRonaldCierre = $totalClientesRonald->where('estado_id', 4)->count();
             //
             $totalClientesMatriculasRonald =
                 $this->obtenerTotalClienteMatriculasCreadosPorFecha2("2025-03-03", "2025-03-03", "created_at_last_contact");
