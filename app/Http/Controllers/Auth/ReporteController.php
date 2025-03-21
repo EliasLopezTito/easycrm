@@ -57,11 +57,11 @@ class ReporteController extends Controller
 
         if ($userLogin->id == 1) {
             $EstadosRonald = $this->obtenerEstados();
-            $count_clientesRonald = COUNT($totalClientes);
+            /*$count_clientesRonald = COUNT($totalClientes);
             $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
             $arregloFilterEstadosGlobalRonald = [];
-            $arregloFilterEstadosRonald = [];
-            foreach ($EstadosRonald as $q) {
+            $arregloFilterEstadosRonald = [];*/
+            /*foreach ($EstadosRonald as $q) {
                 $Cantidad = $this->obtenerDatosPorFiltro($totalClientesRonald, array(['columna' => 'estado_id', 'valor' => $q->id]), 'cantidad');
                 /*if (in_array($q->id, [App::$ESTADO_CIERRE, App::$ESTADO_REINGRESO])) {
                     if (in_array($userProfile, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
@@ -71,12 +71,12 @@ class ReporteController extends Controller
                     }
                 }*/
 
-                array_push($arregloFilterEstadosGlobalRonald, [$q->name, $Cantidad, $q->background, $q->id]);
+            /*array_push($arregloFilterEstadosGlobalRonald, [$q->name, $Cantidad, $q->background, $q->id]);
                 array_push($arregloFilterEstados, [
                     'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
                 ]);
-            }
-            dd($EstadosRonald, $count_clientesRonald, $totalClientesRonald, $arregloFilterEstadosGlobalRonald);
+            }*/
+            dd($EstadosRonald);
         }
 
         $count_clientes = COUNT($totalClientes);
