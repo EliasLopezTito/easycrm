@@ -57,7 +57,6 @@ class ReporteController extends Controller
 
         if ($userLogin->id == 1) {
             $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-02", "2025-03-02", "created_at_last_contact");
-            dd("Llego aqui");
             $totalClientesMatriculasRonald =
                 $this->obtenerTotalClienteMatriculasCreadosPorFecha2($userProfile, "2025-03-02", "2025-03-02", "created_at_last_contact");
             //
