@@ -56,9 +56,10 @@ class ReporteController extends Controller
         $totalClientesSeguimientos = $this->obtenerTotalClienteSeguimientosCreadosPorFecha($request->fecha_inicio, $request->fecha_final, $request->filter_lead_report);
 
         if ($userLogin->id == 1) {
-            $EstadosRonald = $this->obtenerEstados();
-            /*$count_clientesRonald = COUNT($totalClientes);
             $totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
+            $EstadosRonald = $this->obtenerEstados();
+            $count_clientesRonald = COUNT($totalClientesRonald);
+            /*$totalClientesRonald = $this->obtenerTotalClientesCreadosPorFecha($userProfile, "2025-03-19", "2025-03-19", "created_at_last_contact");
             $arregloFilterEstadosGlobalRonald = [];
             $arregloFilterEstadosRonald = [];*/
             /*foreach ($EstadosRonald as $q) {
@@ -76,7 +77,7 @@ class ReporteController extends Controller
                     'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
                 ]);
             }*/
-            dd($EstadosRonald);
+            dd($EstadosRonald, $count_clientesRonald);
         }
 
         $count_clientes = COUNT($totalClientes);
