@@ -63,6 +63,7 @@ class ReporteController extends Controller
             $totalClientesMatriculasRonald =
                 $this->obtenerTotalClienteMatriculasCreadosPorFecha2("2025-03-03", "2025-03-03", "created_at_last_contact");
             //
+            dd($totalClientes, $totalClientesRonald, $totalClientesMatriculas, $totalClientesMatriculasRonald);
             $EstadosRonald = $this->obtenerEstados();
             $count_clientesRonald = COUNT($totalClientesRonald);
             $arregloFilterEstadosGlobalRonald = [];
@@ -97,7 +98,7 @@ class ReporteController extends Controller
                     'color' => $q->background, 'name' => $q->name, 'y' => ($Cantidad > 0 && $count_clientesRonald > 0 ? ($Cantidad / $count_clientesRonald) * 100 : 0), 'count' => $Cantidad, 'drilldown' => null
                 ]);
             }
-            dd($EstadosRonald, $totalClientesRonaldCierre, $count_clientesRonald, $arregloFilterEstadosGlobalRonald, $arregloFilterEstadosGlobalRonaldMatricula, $totalClientesMatriculasRonald->count());
+            dd();
         }
 
         $count_clientes = COUNT($totalClientes);
