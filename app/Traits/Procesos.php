@@ -59,4 +59,13 @@ trait Procesos
 
         return $query;
     }
+    public function obtenerFiltroLeadPorCreatedAtAndLastContactPrueba($query, $fecha_inicio, $fecha_final, $filter_lead_report)
+    {
+        $query->whereBetween('cliente_matriculas.created_at', [
+            Carbon::parse($fecha_inicio)->startOfDay(),
+            Carbon::parse($fecha_final)->endOfDay()
+        ]);
+
+        return $query;
+    }
 }
