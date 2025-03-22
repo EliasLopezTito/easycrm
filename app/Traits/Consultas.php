@@ -49,7 +49,7 @@ trait Consultas
             ->whereNull('cliente_matriculas.deleted_at');
         if ($fecha_inicio && $fecha_final) {
             $userLogin = Auth::user();
-            if ($userLogin->id == 1) {
+            if ($userLogin->profile_id == 1) {
                 $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContactPrueba($query, $fecha_inicio, $fecha_final, $filter_lead_report);
             } else {
                 $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContact($query, $fecha_inicio, $fecha_final, $filter_lead_report);
