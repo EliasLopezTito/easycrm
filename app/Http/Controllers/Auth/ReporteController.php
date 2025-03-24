@@ -222,6 +222,11 @@ class ReporteController extends Controller
                     array(['columna' => 'modalidad_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'modalidad_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
                 $Cantidad += (int) $this->obtenerDatosPorFiltro(
                     $totalClientesMatriculas,
                     array(['columna' => 'modalidad_adicional_id', 'valor' => $q->id]),
