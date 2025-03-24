@@ -130,6 +130,11 @@ class ReporteController extends Controller
                     array(['columna' => 'provincia_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'provincia_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
                 $Cantidad += (int) $this->obtenerDatosPorFiltro(
                     $totalClientesMatriculas,
                     array(['columna' => 'provincia_id', 'valor' => $q->id]),
@@ -139,6 +144,11 @@ class ReporteController extends Controller
                 $Cantidad = $this->obtenerDatosPorFiltro(
                     $totalClientes,
                     array(['columna' => 'provincia_id', 'valor' => $q->id]),
+                    'cantidad'
+                );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'provincia_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
             }
@@ -160,6 +170,11 @@ class ReporteController extends Controller
                     array(['columna' => 'carrera_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'carrera_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
                 $Cantidad += (int) $this->obtenerDatosPorFiltro(
                     $totalClientesMatriculas,
                     array(['columna' => 'carrera_adicional_id', 'valor' => $q->id]),
@@ -169,6 +184,11 @@ class ReporteController extends Controller
                 $Cantidad = $this->obtenerDatosPorFiltro(
                     $totalClientes,
                     array(['columna' => 'carrera_id', 'valor' => $q->id]),
+                    'cantidad'
+                );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'carrera_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
             }
@@ -192,6 +212,11 @@ class ReporteController extends Controller
                     array(['columna' => 'carrera_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'carrera_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
                 $Cantidad += (int) $this->obtenerDatosPorFiltro(
                     $totalClientesMatriculas,
                     array(['columna' => 'carrera_adicional_id', 'valor' => $q->id]),
@@ -201,6 +226,11 @@ class ReporteController extends Controller
                 $Cantidad = $this->obtenerDatosPorFiltro(
                     $totalClientes,
                     array(['columna' => 'carrera_id', 'valor' => $q->id]),
+                    'cantidad'
+                );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'carrera_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
             }
@@ -238,6 +268,11 @@ class ReporteController extends Controller
                     array(['columna' => 'modalidad_id', 'valor' => $q->id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'modalidad_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
             }
 
             if ($Cantidad > 0) {
@@ -253,6 +288,11 @@ class ReporteController extends Controller
                     array(['columna' => 'fuente_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'fuente_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
                 $Cantidad += (int) $this->obtenerDatosPorFiltro(
                     $totalClientesMatriculas,
                     array(['columna' => 'fuente_id', 'valor' => $q->id]),
@@ -262,6 +302,11 @@ class ReporteController extends Controller
                 $Cantidad = $this->obtenerDatosPorFiltro(
                     $totalClientes,
                     array(['columna' => 'fuente_id', 'valor' => $q->id]),
+                    'cantidad'
+                );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'fuente_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
             }
@@ -283,6 +328,11 @@ class ReporteController extends Controller
                     array(['columna' => 'enterado_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'enterado_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
                 $Cantidad += (int) $this->obtenerDatosPorFiltro(
                     $totalClientesMatriculas,
                     array(['columna' => 'enterado_id', 'valor' => $q->id]),
@@ -292,6 +342,11 @@ class ReporteController extends Controller
                 $Cantidad = $this->obtenerDatosPorFiltro(
                     $totalClientes,
                     array(['columna' => 'enterado_id', 'valor' => $q->id]),
+                    'cantidad'
+                );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'enterado_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
             }
@@ -313,6 +368,11 @@ class ReporteController extends Controller
                     array(['columna' => 'turno_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'turno_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                    'cantidad'
+                );
                 $Cantidad += (int) $this->obtenerDatosPorFiltro(
                     $totalClientesMatriculas,
                     array(['columna' => 'turno_adicional_id', 'valor' => $q->id]),
@@ -322,6 +382,11 @@ class ReporteController extends Controller
                 $Cantidad = $this->obtenerDatosPorFiltro(
                     $totalClientes,
                     array(['columna' => 'turno_id', 'valor' => $q->id]),
+                    'cantidad'
+                );
+                $Cantidad += $this->obtenerDatosPorFiltro(
+                    $totalClientesCierre,
+                    array(['columna' => 'turno_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                     'cantidad'
                 );
             }
@@ -336,6 +401,11 @@ class ReporteController extends Controller
                         array(['columna' => 'turno_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                         'cantidad'
                     );
+                    $Cantidad += $this->obtenerDatosPorFiltro(
+                        $totalClientesCierre,
+                        array(['columna' => 'turno_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                        'cantidad'
+                    );
                     $Cantidad += (int) $this->obtenerDatosPorFiltro(
                         $totalClientesMatriculas,
                         array(['columna' => 'turno_adicional_id', 'valor' => $q->id]),
@@ -345,6 +415,11 @@ class ReporteController extends Controller
                     $Cantidad = $this->obtenerDatosPorFiltro(
                         $totalClientes,
                         array(['columna' => 'turno_id', 'valor' => $q->id]),
+                        'cantidad'
+                    );
+                    $Cantidad += $this->obtenerDatosPorFiltro(
+                        $totalClientesCierre,
+                        array(['columna' => 'turno_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                         'cantidad'
                     );
                 }
@@ -359,6 +434,11 @@ class ReporteController extends Controller
                         array(['columna' => 'user_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                         'cantidad'
                     );
+                    $Cantidad += $this->obtenerDatosPorFiltro(
+                        $totalClientesCierre,
+                        array(['columna' => 'user_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
+                        'cantidad'
+                    );
                     $Cantidad += (int) $this->obtenerDatosPorFiltro(
                         $totalClientesMatriculas,
                         array(['columna' => 'user_id', 'valor' => $q->id]),
@@ -368,6 +448,11 @@ class ReporteController extends Controller
                     $Cantidad = $this->obtenerDatosPorFiltro(
                         $totalClientes,
                         array(['columna' => 'user_id', 'valor' => $q->id]),
+                        'cantidad'
+                    );
+                    $Cantidad += $this->obtenerDatosPorFiltro(
+                        $totalClientesCierre,
+                        array(['columna' => 'user_id', 'valor' => $q->id], ['columna' => 'estado_id', 'valor' => $request->estado_id]),
                         'cantidad'
                     );
                 }
