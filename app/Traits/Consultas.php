@@ -18,7 +18,7 @@ trait Consultas
             ->select('clientes.*')
             ->join('users', 'users.id', '=', 'clientes.user_id')
             ->whereNull('clientes.deleted_at')
-            //->whereIn('clientes.estado_id', [1, 2, 3, 5, 6, 13, 14, 16, 17])
+            ->whereIn('clientes.estado_id', [1, 2, 3, 5, 6, 13, 14, 16, 17])
             ->whereIn('users.profile_id', [App::$PERFIL_VENDEDOR, App::$PERFIL_PROVINCIA]);
 
         if (in_array($userProfile, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
