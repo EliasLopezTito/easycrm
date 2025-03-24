@@ -18,7 +18,8 @@ trait Consultas
             ->select('clientes.*')
             ->join('users', 'users.id', '=', 'clientes.user_id')
             ->whereNull('clientes.deleted_at')
-            ->whereIn('users.profile_id', [App::$PERFIL_VENDEDOR, App::$PERFIL_PROVINCIA]);
+            ->whereIn('users.profile_id', [App::$PERFIL_VENDEDOR, App::$PERFIL_PROVINCIA])
+            ->whereIn('clientes.estado_id', [1, 2, 3, 5, 6, 13, 14, 16, 17]);
 
         if (in_array($userProfile, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
             $query->where('clientes.user_id', Auth::guard('web')->user()->id);
@@ -26,6 +27,26 @@ trait Consultas
 
         if ($fecha_inicio && $fecha_final) {
             $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContact($query, $fecha_inicio, $fecha_final, $filter_lead_report);
+        }
+
+        return $query->get();
+    }
+
+    public function obtenerCierreClientesCreadosPorFecha($userProfile, $fecha_inicio, $fecha_final, $filter_lead_report)
+    {
+        $query = DB::table('clientes')
+            ->select('clientes.*')
+            ->join('users', 'users.id', '=', 'clientes.user_id')
+            ->whereNull('clientes.deleted_at')
+            ->whereIn('users.profile_id', [App::$PERFIL_VENDEDOR, App::$PERFIL_PROVINCIA])
+            ->where('clientes.estado_id', 4);
+
+        if (in_array($userProfile, [App::$PERFIL_VENDEDOR, App::$PERFIL_RESTRINGIDO, App::$PERFIL_PROVINCIA])) {
+            $query->where('clientes.user_id', Auth::guard('web')->user()->id);
+        }
+
+        if ($fecha_inicio && $fecha_final) {
+            $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContactCierre($query, $fecha_inicio, $fecha_final, $filter_lead_report);
         }
 
         return $query->get();
@@ -47,37 +68,7 @@ trait Consultas
             )
             ->join('clientes', 'clientes.id', '=', 'cliente_matriculas.cliente_id')
             ->whereNull('cliente_matriculas.deleted_at');
-        if ($fecha_inicio && $fecha_final) {
-            $userLogin = Auth::user();
-            if ($userLogin->profile_id == 1) {
-                $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContactPrueba($query, $fecha_inicio, $fecha_final, $filter_lead_report);
-            } else {
-                $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContact($query, $fecha_inicio, $fecha_final, $filter_lead_report);
-            }
-        }
-
-        return $query->get();
-    }
-
-    public function obtenerTotalClienteMatriculasCreadosPorFecha2($fecha_inicio, $fecha_final, $filter_lead_report)
-    {
-        $query = DB::table('cliente_matriculas')
-            ->select(
-                'cliente_matriculas.id',
-                'cliente_matriculas.carrera_adicional_id',
-                'cliente_matriculas.modalidad_adicional_id',
-                'cliente_matriculas.turno_adicional_id',
-                'clientes.provincia_id',
-                'clientes.user_id',
-                'clientes.fuente_id',
-                'clientes.enterado_id',
-                'clientes.turno_id'
-            )
-            ->join('clientes', 'clientes.id', '=', 'cliente_matriculas.cliente_id')
-            ->whereNull('cliente_matriculas.deleted_at');
-        if ($fecha_inicio && $fecha_final) {
-            $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContact($query, $fecha_inicio, $fecha_final, $filter_lead_report);
-        }
+        $query = $this->obtenerFiltroLeadPorCreatedAtAndLastContactMatriculado($query, $fecha_inicio, $fecha_final, $filter_lead_report);
 
         return $query->get();
     }
