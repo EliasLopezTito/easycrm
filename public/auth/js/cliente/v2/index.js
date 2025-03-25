@@ -16,6 +16,7 @@ $(document).ready(function() {
         if (valor == "8") {
             $("#mainContainer").fadeIn();
             $(".containerModalidad").fadeIn();
+            buscarDni(dni);
         } else {
             $(".containerModalidad").fadeOut();
             $("#mainContainer").fadeOut();
