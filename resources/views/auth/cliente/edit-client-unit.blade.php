@@ -29,7 +29,7 @@
                 <input type="text" class="form-control" id="paternalSurname" name="paternalSurname" value="{{ $clientData->apellido_paterno }}">
             </div>
             <div class="form-group">
-                <label for="maternalSurname">Apellidos:</label>
+                <label for="maternalSurname">Apellido Materno:</label>
                 <input type="text" class="form-control" id="maternalSurname" name="maternalSurname" value="{{ $clientData->apellido_materno }}">
             </div>
             <div class="form-group">
