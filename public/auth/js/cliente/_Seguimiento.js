@@ -114,7 +114,7 @@ $(function(){
     $(document).on("change", "#sede_adicional_id", function(){
         $local_adicional_id.html("").append(`<option value="">-- Local
 
-         --</option>`);
+        --</option>`);
         if($(this).val() != 0 && $sede_adicional_id.val() != ""){
             actionAjax("/local/filtroLocal/"+$sede_adicional_id.val(), null, "GET", function(data){
                 $.each(data, function (i, e) {
@@ -282,6 +282,9 @@ $(function(){
                         if (data.imgData.dni_rear) {
                             imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.dni_rear}" target="_blank">Ver DNI Detrás</a></p>`;
                         }
+                        if (data.imgData.code_waiver) {
+                            imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.code_waiver}" target="_blank">Ver Renuncia Código</a></p>`;
+                        }
                         if (data.imgData.izy_pay) {
                             imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.izy_pay}" target="_blank">Ver IZYPAY</a></p>`;
                         }
@@ -348,7 +351,7 @@ $(function(){
                 $("#nombres").attr("readonly", true);
                 $("#apellidos").attr("readonly", true);
                 $("#fecha_nacimiento").attr("readonly", true);
-                $("#celular").attr("readonly", true);
+                $("#celular").attr("readonly", false);
                 $("#provincia_id").attr("desabilied", true);
                 $("#distrito_id").attr("desabilied", true);
                 $("#seacrhReniec").prop("desabilied", true);

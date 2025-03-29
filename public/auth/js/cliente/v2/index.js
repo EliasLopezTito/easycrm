@@ -17,6 +17,7 @@ $(document).ready(function() {
             $("#mainContainer").fadeIn();
             $(".containerModalidad").fadeIn();
             buscarDni(dni);
+            $("#tipo_do option[value='3']").remove();
         } else {
             $(".containerModalidad").fadeOut();
             $("#mainContainer").fadeOut();
@@ -31,7 +32,14 @@ $(document).ready(function() {
             containerImg.fadeOut();
         }
     });
-
+    $("#tipo_do").change(function() {
+        var seleccionado = $(this).val();
+        if (seleccionado == "3") {
+            $("#nombres").attr("readonly", false);
+            $("#apellidos").attr("readonly", false);
+            $("#fecha_nacimiento").attr("readonly", false);
+    }
+    });
     $("body").append(`
         <div id="loadingScreen" style="
             display: none;

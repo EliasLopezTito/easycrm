@@ -47,6 +47,7 @@
                             <select name="" id="tipo_do" class="documento" style="width:100px;">
                                 <option id="tipo_do_val1" value="1">DNI</option>
                                 <option id="tipo_do_val2" value="2">CARNÉT DE EXTRANJERIA</option>
+                                <option id="tipo_do_val3" value="3">OTROS</option>
                             </select>
                         </td>
                         <div class="alert alert-success alert-dismissible fade show" role="alert" id="alerta-cierre" hidden>
@@ -86,7 +87,7 @@
                     </tr>
                     <tr>
                         <td><label for="celular">Celular: </label></td>
-                        <td><input type="text" class="form-input" name="celular" id="celular" minlength="9" maxlength="15" value="{{ $Cliente->celular }}" autocomplete="off" onkeypress="return isNumberKey(event)" required @if ($Cliente->estado_detalle_id == 8) readonly @endif>
+                        <td><input type="text" class="form-input" name="celular" id="celular" minlength="9" maxlength="15" value="{{ $Cliente->celular }}" autocomplete="off" onkeypress="return isNumberKey(event)" required data-statu="{{ $Cliente->estado_detalle_id }}" @if ($Cliente->estado_detalle_id == 8) readonly @endif>
                             <span data-valmsg-for="celular"></span>
                         </td>
                     </tr>
@@ -208,6 +209,9 @@
                                         
                                         <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
                                         <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
+
+                                        <label for="codeWaiver" style="margin-top: 10px;">Foto de la Renuncia Código - Opcional</label>
+                                        <input type="file" name="codeWaiver" id="codeWaiver" class="form-input" accept="image/png, image/jpeg, image/jpg">
                                         
                                         <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE, PLIN o IZY PAY</label>
                                         <input type="file" name="izyPay" id="izyPay" class="form-input" accept="image/png, image/jpeg, image/jpg">
@@ -491,7 +495,7 @@
                     <p>No existe historial registrada actualmente.</p>
                 </div>
                 <div class="text-center">
-                    @if ($Cliente->estado_detalle_id == 8 || Auth::user()->email == "useraul@gmail.com" || Auth::user()->profile_id == 2)
+                    @if ($Cliente->estado_detalle_id == 8 && Auth::user()->email == "useraul@gmail.com" || Auth::user()->profile_id == 2)
                         <button type="button" class="btn btn-primary" id="seeFromImng">Editar</button>
                         <div id="formInpuImg" style="display: none" class="mb-5">
                             <label for="dniFrontUpdate" style="margin-top: 10px;">Foto del DNI (Parte Frontal)</label>

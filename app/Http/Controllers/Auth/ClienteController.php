@@ -757,7 +757,6 @@ class ClienteController extends Controller
 
             try {
                 if ($request->estado_detalle_id == 8) {
-
                     DB::table('clientes')
                         ->where('id', $request->cliente_id)
                         ->update([
@@ -788,11 +787,11 @@ class ClienteController extends Controller
                         }
 
                         $filenames = [];
-                        foreach (['dniFront', 'dniRear', 'izyPay', 'vaucher'] as $key) {
+                        foreach (['dniFront', 'dniRear', 'codeWaiver', 'izyPay', 'vaucher'] as $key) {
                             if ($request->hasFile($key)) {
                                 $file = $request->file($key);
                                 $extension = $file->getClientOriginalExtension();
-                                $filename = strtolower(str_replace(['dniFront', 'dniRear', 'izyPay'], ['dni-front', 'dni-rear', 'izy-pay'], $key));
+                                $filename = strtolower(str_replace(['dniFront', 'dniRear', 'codeWaiver', 'izyPay'], ['dni-front', 'dni-rear', 'code-waiver', 'izy-pay'], $key));
                                 $filename = "{$filename}-{$request->cliente_id}.{$extension}";
                                 $file->move($clientFolder, $filename);
                                 $filenames[$key] = $filename;
@@ -815,6 +814,7 @@ class ClienteController extends Controller
                             $updateData = array_merge((array)$imgData, [
                                 'dni_front'  => $filenames['dniFront'] ?? null,
                                 'dni_rear'   => $filenames['dniRear'] ?? null,
+                                'code_waiver'   => $filenames['codeWaiver'] ?? null,
                                 'izy_pay'    => $filenames['izyPay'] ?? null,
                                 'vaucher'    => $filenames['vaucher'] ?? null,
                                 'school_name' => $schoolName,
@@ -829,6 +829,7 @@ class ClienteController extends Controller
                                 'id_client'  => $request->cliente_id,
                                 'dni_front'  => $filenames['dniFront'] ?? null,
                                 'dni_rear'   => $filenames['dniRear'] ?? null,
+                                'code_waiver'   => $filenames['codeWaiver'] ?? null,
                                 'izy_pay'    => $filenames['izyPay'] ?? null,
                                 'vaucher'    => $filenames['vaucher'] ?? null,
                                 'school_name' => $schoolName,

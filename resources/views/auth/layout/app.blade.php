@@ -38,19 +38,17 @@
                 </a>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        @if (Auth::user()->id == 10175 || Auth::user()->id == 1)
-                            <li id="notificationsFollowUp" class="dropdown notifications-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="mdi mdi-bell faa-ring animated text-danger"></i>
-                                </a>
-                                <ul class="dropdown-menu scale-up">
-                                    <li class="header">Tienes <span id="counNotificacion"></span> notificaciones caja</li>
-                                    <li>
-                                        <ul class="menu inner-content-div"></ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
+                        <li id="notificationsFollowUp" class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="mdi mdi-bell faa-ring animated text-danger"></i>
+                            </a>
+                            <ul class="dropdown-menu scale-up">
+                                <li class="header">Tienes <span id="counNotificacion"></span> notificaciones caja</li>
+                                <li>
+                                    <ul class="menu inner-content-div"></ul>
+                                </li>
+                            </ul>
+                        </li>
                         <li id="notifications" class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="mdi mdi-bell faa-ring animated"></i>
