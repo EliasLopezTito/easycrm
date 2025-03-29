@@ -786,7 +786,8 @@ class ReporteController extends Controller
     public function editClientUnit($id)
     {
         $clientData = Cliente::where('id', $id)->first();
-        return view('auth.cliente.edit-client-unit')->with('clientData', $clientData);
+        $provincesData = Provincia::whereNull('deleted_at')->get();
+        return view('auth.cliente.edit-client-unit')->with('clientData', $clientData)->with('provincesData', $provincesData);
     }
     public function storeEditClientUnit(Request $request)
     {
@@ -802,6 +803,8 @@ class ReporteController extends Controller
             'celular' => $request->celular,
             'whatsapp' => $request->whatsapp,
             'fecha_nacimiento' => $request->date,
+            'provincia_id' => $request->provincia_id,
+            'distrito_id' => $request->distrito_id,
             'direccion' => $request->direction,
             'updated_at' => Carbon::now(),
             'updated_modified_by' => $userLogin->id,

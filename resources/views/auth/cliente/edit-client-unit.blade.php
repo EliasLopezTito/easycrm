@@ -57,6 +57,27 @@
                 <input type="date" class="form-control" id="date" name="date" value="{{ $clientData->fecha_nacimiento }}">
             </div>
             <div class="form-group">
+                <label for="provinces">Provincias:</label>
+                <select name="provincia_id" id="provinces" class="form-control">
+                    @foreach ($provincesData as $province)
+                        <option value="{{ $province->id }}" {{ $province->id == $clientData->provincia_id ? 'selected' : '' }}>
+                            {{ $province->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="districts">Distritos:</label>
+                <select name="distrito_id" id="districts" class="form-control">
+                    <option value="">Seleccionar</option>
+                </select>
+            </div>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <div class="form-group">
                 <button type="submit" class="btn btn-primary">Editar</button>
             </div>
         </form>
@@ -72,4 +93,9 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script>
+        let routeFiltro = "{{ route('user.filtroDistrito', ':id') }}";
+        let idDistrito = "{{ $clientData->distrito_id ?? '' }}";
+    </script>
+    <script src="{{ asset('auth/js/cliente/v2/editClient.js') }}"></script>
 @endsection
