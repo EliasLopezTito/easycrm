@@ -34,3 +34,6 @@ Route::get('/get-active-advisors', 'App\HomeController@getActiveAdvisors')->name
 Route::post('/sending-registrations', 'App\HomeController@sendingRegistrations')->name('sending-registrations');
 Route::post('/registered-customer-data', 'App\HomeController@registeredCustomerData')->name('registered-customer-data');
 Route::post('/send-cashier-notification', 'App\HomeController@sendCashierNotification')->name('send-cashier-notification');
+//Prueba Alisson
+Route::get('/enrolled-current-year', 'App\HomeController@enrolledCurrentYear')->name('enrolled-current-year');
+//

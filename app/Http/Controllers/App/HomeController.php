@@ -1070,4 +1070,106 @@ class HomeController extends Controller
             ]);
         }
     }
+    //Prueba Alisson
+    public function enrolledCurrentYear()
+    {
+        $year = Carbon::now()->year;
+        $startDate = Carbon::parse($year . "01-01")->startOfDay();
+        $endDate = Carbon::parse($year . "12-31")->endOfDay();
+        $clientData = DB::table('clientes')
+            ->join('tipo_operacions', 'clientes.tipo_operacion_id', '=', 'tipo_operacions.id')
+            ->join('turnos', 'clientes.turno_id', '=', 'turnos.id')
+            ->join('sedes', 'clientes.sede_id', '=', 'sedes.id')
+            ->join('users', 'clientes.user_id', '=', 'users.id')
+            ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
+            ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+            ->select(
+                'clientes.id as idUnico',
+                'tipo_operacions.name as nameOperation',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'clientes.nombres as nameClient',
+                'clientes.apellido_paterno as paternalSurname',
+                'clientes.apellido_materno as maternalSurname',
+                'clientes.fecha_nacimiento as dateOfBirth',
+                'clientes.celular as phoneClient',
+                'clientes.whatsapp as whatsappClient',
+                'clientes.email as emailClient',
+                'clientes.direccion as addressClient',
+                'turnos.name as shiftClient',
+                'sedes.name as sedeClient',
+                'clientes.nro_operacion as nrOperationClient',
+                'clientes.monto as montoClient',
+                'clientes.nombre_titular as nameTitularClient',
+                'clientes.codigo_alumno as codeAlumnClient',
+                'clientes.created_at as createdAtClient',
+                'clientes.updated_at as updatedAtClient',
+                DB::raw('CASE WHEN clientes.mayor = 1 THEN "Sí" ELSE "No" END as mayor'),
+                DB::raw('CASE 
+                WHEN clientes.modalidad_pago = 1 THEN "Presencial" 
+                WHEN clientes.modalidad_pago = 2 THEN "Virtual" 
+                ELSE "Desconocido" 
+                END as modalidadPago'),
+                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
+                'clientes.ultimo_contacto as ultimoContacto'
+            )
+            ->where('clientes.estado_id', 4)
+            ->where('clientes.estado_detalle_id', 8)
+            ->whereNull('clientes.deleted_at')
+            ->whereBetween('clientes.ultimo_contacto', [$startDate, $endDate])
+            ->orderBy('clientes.ultimo_contacto', 'asc')
+            ->get();
+        $clientTuitionData = DB::table('cliente_matriculas')
+            ->join('clientes', 'cliente_matriculas.cliente_id', '=', 'clientes.id')
+            ->join('tipo_operacions', 'clientes.tipo_operacion_id', '=', 'tipo_operacions.id')
+            ->join('turnos', 'clientes.turno_id', '=', 'turnos.id')
+            ->join('sedes', 'clientes.sede_id', '=', 'sedes.id')
+            ->join('users', 'clientes.user_id', '=', 'users.id')
+            ->leftJoin('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
+            ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+            ->select(
+                'clientes.id as idUnico',
+                'tipo_operacions.name as nameOperation',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'clientes.nombres as nameClient',
+                'clientes.apellido_paterno as paternalSurname',
+                'clientes.apellido_materno as maternalSurname',
+                'clientes.fecha_nacimiento as dateOfBirth',
+                'clientes.celular as phoneClient',
+                'clientes.whatsapp as whatsappClient',
+                'clientes.email as emailClient',
+                'clientes.direccion as addressClient',
+                'turnos.name as shiftClient',
+                'sedes.name as sedeClient',
+                'clientes.nro_operacion as nrOperationClient',
+                'clientes.monto as montoClient',
+                'clientes.nombre_titular as nameTitularClient',
+                'clientes.codigo_alumno as codeAlumnClient',
+                'clientes.created_at as createdAtClient',
+                'clientes.updated_at as updatedAtClient',
+                DB::raw('CASE WHEN clientes.mayor = 1 THEN "Sí" ELSE "No" END as mayor'),
+                DB::raw('CASE 
+            WHEN clientes.modalidad_pago = 1 THEN "Presencial" 
+            WHEN clientes.modalidad_pago = 2 THEN "Virtual" 
+            ELSE "Desconocido" 
+            END as modalidadPago'),
+                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
+                'clientes.ultimo_contacto as ultimoContacto'
+            )
+            ->whereNull('cliente_matriculas.deleted_at')
+            ->whereBetween('cliente_matriculas.created_at', [$startDate, $endDate])
+            ->orderBy('cliente_matriculas.created_at', 'asc')
+            ->get();
+        $clientData = $clientData->merge($clientTuitionData);
+        return response()->json([
+            'count' => $clientData->count(),
+            'data' => $clientData
+        ]);
+    }
+    //
 }

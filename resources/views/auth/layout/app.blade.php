@@ -33,7 +33,7 @@
                 </span>
             </a>
             <nav class="navbar navbar-static-top">
-                <a href="#" class="sidebar-toggle d-block d-lg-none" data-toggle="push-menu" role="button">
+                <a href="#" class="sidebar-toggle d-block d-lg-none bg-primary" data-toggle="push-menu" role="button" style="border-radius: 10px;padding: 10px;width: 35px;text-align: center">
                     <span class="sr-only">Toggle navigation</span>
                 </a>
                 <div class="navbar-custom-menu">
