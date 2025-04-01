@@ -130,10 +130,10 @@
                 <label for="completionDateUpdate" style="margin-top: 10px;">Fecha de Termino</label>
                 <input type="date" name="completionDateUpdate" id="completionDateUpdate" class="form-input" value="{{ $responseData['imgData']->completionDate }}">
             </div>
-            {{-- <div class="form-group">
+            <div class="form-group">
                 <label for="nameHolder" style="margin-top: 10px;">Nombre del Titular</label>
-                <input type="text" name="nameHolder" id="nameHolder" class="form-input" value="{{ $responseData['nameTitular']->completionDate }}">
-            </div> --}}
+                <input type="text" name="nameHolder" id="nameHolder" class="form-input" value="{{ $responseData['imgData']->nameTitular }}">
+            </div>
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
