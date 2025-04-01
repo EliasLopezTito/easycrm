@@ -1017,6 +1017,7 @@ class HomeController extends Controller
                 'modalidads.name as nameModalidad',
                 'turnos.name as nameTurno',
                 'locals.name as nameLocal',
+                'clientes.nombre_titular as nameTitular',
                 'client_registration_images.dni_front as dniFront',
                 'client_registration_images.dni_rear as dniRear',
                 'client_registration_images.izy_pay as izyPay',
