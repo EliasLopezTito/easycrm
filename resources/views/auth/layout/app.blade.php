@@ -199,14 +199,12 @@
 <script type="text/javascript" src="{{ asset('auth/plugins/sweetalert/sweetalert.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/plugins/toastr/js/toastr.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/js/_Layout.min.js') }}"></script>
-@if (Auth::user()->id == 10175 || Auth::user()->id == 1)
-    <script>
+<script>
         const urlBringNotifications = "{{ route('user.client.notifications-tracking') }}";
         const urlSeeObservation = "{{ route('user.client.see-observation', ':id') }}";
         const roleProfile = "{{ Auth::check() ? Auth::user()->profile_id : '' }}";
     </script>
-    <script type="text/javascript" src="{{ asset('auth/js/followUp.js') }}"></script>
-@endif
+<script type="text/javascript" src="{{ asset('auth/js/followUp.js') }}"></script>
 <script type="text/javascript">
     const usuarioLoggin = {
         user_id: {{ \Illuminate\Support\Facades\Auth::guard('web')->user()->id  }},
