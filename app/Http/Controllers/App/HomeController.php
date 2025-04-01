@@ -998,6 +998,9 @@ class HomeController extends Controller
             ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
             ->leftJoin('client_registration_images', 'clientes.id', '=', 'client_registration_images.id_client')
             ->join('tipo_operacions', 'clientes.tipo_operacion_id', '=', 'tipo_operacions.id')
+            ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+            ->join('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
+            ->join('turnos', 'clientes.turno_id', '=', 'turnos.id')
             ->select(
                 'clientes.id as idUnico',
                 'clientes.dni as dniClient',
@@ -1008,6 +1011,10 @@ class HomeController extends Controller
                 'provincias.name as nameProvincia',
                 'distritos.name as nameDistrito',
                 'clientes.celular as phoneClient',
+                'carreras.name as nameCarreras',
+                'clientes.codigo_alumno as codigoAlumno',
+                'modalidads.name as nameModalidad',
+                'turnos.name as nameTurno',
                 'client_registration_images.dni_front as dniFront',
                 'client_registration_images.dni_rear as dniRear',
                 'client_registration_images.izy_pay as izyPay',
