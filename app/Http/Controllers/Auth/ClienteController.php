@@ -1303,6 +1303,7 @@ class ClienteController extends Controller
                 'clientes.email as emailClient',
                 'clientes.direccion as addressClient',
                 'clientes.celular as phoneClient',
+                'clientes.nombre_titular as nameTitular',
                 'client_registration_images.school_name as schoolName',
                 'client_registration_images.completion_date as completionDate',
                 DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
@@ -1335,6 +1336,7 @@ class ClienteController extends Controller
                 'whatsapp' => $request->celular,
                 'fecha_nacimiento' => $request->date,
                 'direccion' => $request->direction,
+                'nombre_titular' => $request->nameHolder,
                 'updated_at' => Carbon::now(),
                 'updated_modified_by' => $userLogin->id,
             ];
