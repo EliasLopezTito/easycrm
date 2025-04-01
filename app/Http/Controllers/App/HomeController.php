@@ -1001,6 +1001,7 @@ class HomeController extends Controller
             ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
             ->join('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
             ->join('turnos', 'clientes.turno_id', '=', 'turnos.id')
+            ->join('locals', 'clientes.local_id', '=', 'locals.id')
             ->select(
                 'clientes.id as idUnico',
                 'clientes.dni as dniClient',
@@ -1015,6 +1016,7 @@ class HomeController extends Controller
                 'clientes.codigo_alumno as codigoAlumno',
                 'modalidads.name as nameModalidad',
                 'turnos.name as nameTurno',
+                'locals.name as nameLocal',
                 'client_registration_images.dni_front as dniFront',
                 'client_registration_images.dni_rear as dniRear',
                 'client_registration_images.izy_pay as izyPay',
