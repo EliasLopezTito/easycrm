@@ -4,7 +4,7 @@ $(document).ready(function () {
             if (response.data) {
                 let notifications = response.data;
                 let count = notifications.length;
-                $("#counNotificacion").text(count);
+                $("#counNotificacionCash").text(count);
                 let $list = $(".inner-content-div").empty();
     
                 notifications.forEach(v => {

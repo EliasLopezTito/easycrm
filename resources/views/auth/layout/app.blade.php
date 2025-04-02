@@ -43,7 +43,7 @@
                                 <i class="mdi mdi-bell faa-ring animated text-danger"></i>
                             </a>
                             <ul class="dropdown-menu scale-up">
-                                <li class="header">Tienes <span id="counNotificacion"></span> notificaciones caja</li>
+                                <li class="header">Tienes <span id="counNotificacionCash"></span> notificaciones caja</li>
                                 <li>
                                     <ul class="menu inner-content-div"></ul>
                                 </li>
@@ -198,7 +198,7 @@
 <script type="text/javascript" src="{{ asset('auth/plugins/toggle-sidebar/index.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/plugins/sweetalert/sweetalert.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/plugins/toastr/js/toastr.min.js') }}"></script>
-@if (Auth::user()->email == "useraul@gmail.com" || Auth::user()->email == "asesorprueba@gmail.com" || Auth::user()->email == "ronald@gmail.com")
+@if (Auth::user()->email == "useraul@gmail.com" || Auth::user()->email == "asesorprueba@gmail.com" || Auth::user()->email == "ronald@gmail.com" || Auth::user()->email == "ARICOL663@GMAIL.COM")
     <script type="text/javascript" src="{{ asset('auth/js/_LayoutV2.min.js') }}"></script>
 @else
     <script type="text/javascript" src="{{ asset('auth/js/_Layout.min.js') }}"></script>
