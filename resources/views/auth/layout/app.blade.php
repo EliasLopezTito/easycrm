@@ -199,7 +199,7 @@
 <script type="text/javascript" src="{{ asset('auth/plugins/sweetalert/sweetalert.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('auth/plugins/toastr/js/toastr.min.js') }}"></script>
 @if (Auth::user()->email == "useraul@gmail.com" || Auth::user()->email == "asesorprueba@gmail.com" || Auth::user()->email == "ronald@gmail.com")
-    <script type="text/javascript" src="{{ asset('auth/js/_Layout.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('auth/js/_LayoutV2.min.js') }}"></script>
 @else
     <script type="text/javascript" src="{{ asset('auth/js/_Layout.min.js') }}"></script>
 @endif
