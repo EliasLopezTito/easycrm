@@ -793,7 +793,7 @@ class ReporteController extends Controller
     {
         $userLogin = Auth::user();
         $lastName = $request->paternalSurname . " " . $request->maternalSurname;
-        if ($userLogin->email == "useraul@gmail.com" || $userLogin->email == "ALLISON@ial.edu.pe") {
+        if ($userLogin->email == "useraul@gmail.com" || $userLogin->id == 131) {
             $clientData = Cliente::where('id', $request->idClient)->update([
                 'codigo_alumno' => $request->codeStudent,
                 'nombres' => $request->name,
