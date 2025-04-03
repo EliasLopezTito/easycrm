@@ -141,11 +141,6 @@
     </div>
     <div class="col-md-8">
 
-{{--         <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alerta-cierre" hidden>
-            <img src="https://cdn-icons-png.flaticon.com/512/5623/5623014.png" style="margin-right:10px; margin-bottom:5px;" width="20px" alt="">
-            <strong>Por favor!</strong> Revise y valide el documento de identidad de este lead.
-        </div> --}}
-
         <div class="user-action content-card">
 
             <div class="content-actions-client">
@@ -186,7 +181,7 @@
                             <div class="row">
                                 <div class="col-md-12 mt-3">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-lg-4 col-12">
                                             <div class="containerModalidad">
                                                 <select name="modalidad_pago" class="form-input" id="modalidad_pago">
                                                     <option value="1" selected>Modalidad de pago: <b>Presencial</b></option>
@@ -194,7 +189,15 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-lg-4 col-12">
+                                            <div class="containerModalidad">
+                                                <select name="modalidad_pago" class="form-input" id="modalidad_pago">
+                                                    <option value="1" selected>Modalidad de pago: <b>Presencial</b></option>
+                                                    <option value="2">Modalidad de pago: <b>Virtual</b></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-12">
                                             <div class="containerModalidad">
                                                 <select name="mayor" class="form-input" id="mayor">
                                                     <option value="1" selected>Mayor de edad: <b>Si</b></option>
