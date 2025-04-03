@@ -20,6 +20,12 @@
         <form action="{{ route('user.store-edit-client-unit') }}">
             @csrf
             <input type="hidden" name="idClient" value="{{ $clientData->id }}">
+            @if (Auth::user()->email == "useraul@gmail.com" || Auth::user()->email == "Allison@ial.edu.pe")
+                <div class="form-group">
+                    <label for="codeStudent">Código de Alumno:</label>
+                    <input type="text" class="form-control" id="codeStudent" name="codeStudent" value="{{ $clientData->codigo_alumno }}">
+                </div>
+            @endif
             <div class="form-group">
                 <label for="name">Nombres Completos:</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{ $clientData->nombres }}">

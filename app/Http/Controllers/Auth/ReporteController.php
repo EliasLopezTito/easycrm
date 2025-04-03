@@ -793,22 +793,42 @@ class ReporteController extends Controller
     {
         $userLogin = Auth::user();
         $lastName = $request->paternalSurname . " " . $request->maternalSurname;
-        $clientData = Cliente::where('id', $request->idClient)->update([
-            'nombres' => $request->name,
-            'apellidos' => $lastName,
-            'apellido_paterno' => $request->paternalSurname,
-            'apellido_materno' => $request->maternalSurname,
-            'email' => $request->email,
-            'dni' => $request->dni,
-            'celular' => $request->celular,
-            'whatsapp' => $request->whatsapp,
-            'fecha_nacimiento' => $request->date,
-            'provincia_id' => $request->provincia_id,
-            'distrito_id' => $request->distrito_id,
-            'direccion' => $request->direction,
-            'updated_at' => Carbon::now(),
-            'updated_modified_by' => $userLogin->id,
-        ]);
+        if ($userLogin->email == "useraul@gmail.com" || $userLogin->email == "Allison@ial.edu.pe") {
+            $clientData = Cliente::where('id', $request->idClient)->update([
+                'codigo_alumno' => $request->codeStudent,
+                'nombres' => $request->name,
+                'apellidos' => $lastName,
+                'apellido_paterno' => $request->paternalSurname,
+                'apellido_materno' => $request->maternalSurname,
+                'email' => $request->email,
+                'dni' => $request->dni,
+                'celular' => $request->celular,
+                'whatsapp' => $request->whatsapp,
+                'fecha_nacimiento' => $request->date,
+                'provincia_id' => $request->provincia_id,
+                'distrito_id' => $request->distrito_id,
+                'direccion' => $request->direction,
+                'updated_at' => Carbon::now(),
+                'updated_modified_by' => $userLogin->id,
+            ]);
+        } else {
+            $clientData = Cliente::where('id', $request->idClient)->update([
+                'nombres' => $request->name,
+                'apellidos' => $lastName,
+                'apellido_paterno' => $request->paternalSurname,
+                'apellido_materno' => $request->maternalSurname,
+                'email' => $request->email,
+                'dni' => $request->dni,
+                'celular' => $request->celular,
+                'whatsapp' => $request->whatsapp,
+                'fecha_nacimiento' => $request->date,
+                'provincia_id' => $request->provincia_id,
+                'distrito_id' => $request->distrito_id,
+                'direccion' => $request->direction,
+                'updated_at' => Carbon::now(),
+                'updated_modified_by' => $userLogin->id,
+            ]);
+        }
         return redirect()->back()->with('success', 'Cliente actualizado correctamente.');
     }
 }
