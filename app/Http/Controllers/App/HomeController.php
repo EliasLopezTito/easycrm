@@ -1107,10 +1107,8 @@ class HomeController extends Controller
                     ELSE "Desconocido" 
                     END as modalidadPago'),
             )
-            ->where(function ($query) {
-                $query->whereNull('cliente_matriculas.deleted_at')
-                    ->orWhereNull('clientes.deleted_at');
-            })
+            ->whereNull('cliente_matriculas.deleted_at')
+            ->whereNull('clientes.deleted_at')
             ->whereBetween('cliente_matriculas.created_at', [$startDateComplete, $endDateComplete]);
         // Filtro por cliente
         if (!empty($request->dataClient)) {
