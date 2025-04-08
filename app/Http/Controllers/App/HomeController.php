@@ -1019,10 +1019,12 @@ class HomeController extends Controller
                 'turnos.name as nameTurno',
                 'locals.name as nameLocal',
                 'clientes.nombre_titular as nameTitular',
+                'clientes.completo as pagoCompleto',
                 'client_registration_images.dni_front as dniFront',
                 'client_registration_images.dni_rear as dniRear',
                 'client_registration_images.izy_pay as izyPay',
                 'client_registration_images.vaucher as vaucher',
+                'client_registration_images.additional_voucher as additionalVaucher',
                 'client_registration_images.school_name as schoolName',
                 'client_registration_images.completion_date as completionDate',
                 DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
@@ -1123,6 +1125,53 @@ class HomeController extends Controller
             $query->where('clientes.user_id', $request->advisor);
         }
         $clientData = $query->orderBy('cliente_matriculas.created_at', 'asc')->get();
+        return response()->json([
+            'data' => $clientData
+        ]);
+    }
+    public function registeredCustomerDataAdditional(Request $request)
+    {
+        $clientData = DB::table('cliente_matriculas')
+            ->join('clientes', 'cliente_matriculas.cliente_id', '=', 'clientes.id')
+            ->join('users', 'clientes.user_id', '=', 'users.id')
+            ->join('provincias', 'clientes.provincia_id', '=', 'provincias.id')
+            ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
+            ->leftJoin('client_registration_images_additional', 'cliente_matriculas.id', '=', 'client_registration_images_additional.id_client_additional')
+            ->join('tipo_operacions', 'cliente_matriculas.tipo_operacion_adicional_id', '=', 'tipo_operacions.id')
+            ->join('carreras', 'cliente_matriculas.carrera_adicional_id', '=', 'carreras.id')
+            ->join('modalidads', 'cliente_matriculas.modalidad_adicional_id', '=', 'modalidads.id')
+            ->join('turnos', 'cliente_matriculas.turno_adicional_id', '=', 'turnos.id')
+            ->join('locals', 'cliente_matriculas.local_adicional_id', '=', 'locals.id')
+            ->select(
+                'cliente_matriculas.id as idUnico',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'clientes.fecha_nacimiento as dateOfBirth',
+                'clientes.email as emailClient',
+                'clientes.direccion as addressClient',
+                'provincias.name as nameProvincia',
+                'distritos.name as nameDistrito',
+                'clientes.celular as phoneClient',
+                'carreras.name as nameCarreras',
+                'cliente_matriculas.codigo_alumno_adicional as codigoAlumno',
+                'modalidads.name as nameModalidad',
+                'turnos.name as nameTurno',
+                'locals.name as nameLocal',
+                'cliente_matriculas.nombre_titular_adicional as nameTitular',
+                'client_registration_images_additional.dni_front_additional as dniFront',
+                'client_registration_images_additional.dni_rear_additional as dniRear',
+                'client_registration_images_additional.izy_pay_additional as izyPay',
+                'client_registration_images_additional.vaucher_additional as vaucher',
+                'client_registration_images_additional.school_name_additional as schoolName',
+                'client_registration_images_additional.completion_date_additional as completionDate',
+                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
+                'users.id as idAdvisor',
+                'tipo_operacions.name as nameOperation',
+                DB::raw('CASE WHEN cliente_matriculas.mayor_adicional = 1 THEN "Sí" ELSE "No" END as mayor'),
+            )
+            ->whereNull('cliente_matriculas.deleted_at')
+            ->where('cliente_matriculas.id', $request->idAdditionalRegistration)
+            ->first();
         return response()->json([
             'data' => $clientData
         ]);
