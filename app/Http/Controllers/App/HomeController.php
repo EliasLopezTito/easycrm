@@ -917,6 +917,7 @@ class HomeController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    //System Cash
     public function getActiveAdvisors()
     {
         $advisorsData = DB::table('users')->where('profile_id', 2)->where('activo', 1)->whereNull('deleted_at')->get();
@@ -1080,6 +1081,52 @@ class HomeController extends Controller
             ]);
         }
     }
+    //Adicional
+    public function sendingRegistrationsAdditional(Request $request)
+    {
+        $startDateComplete = $request->startDate . " 00:00:00";
+        $endDateComplete = $request->endDate . " 23:59:59";
+        // Consulta principal
+        $query = DB::table('cliente_matriculas')
+            ->join('clientes', 'cliente_matriculas.cliente_id', '=', 'clientes.id')
+            ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
+            ->leftJoin('modalidads', 'cliente_matriculas.modalidad_adicional_id', '=', 'modalidads.id')
+            ->leftJoin('carreras', 'cliente_matriculas.carrera_adicional_id', '=', 'carreras.id')
+            ->select(
+                'cliente_matriculas.id as idUnico',
+                'cliente_matriculas.created_at as endContact',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'distritos.name as districtClient',
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
+                'cliente_matriculas.observacion_adicional as observacionAdicional',
+                DB::raw('CASE 
+                    WHEN cliente_matriculas.modalidad_pago_adicional = 1 THEN "Presencial" 
+                    WHEN cliente_matriculas.modalidad_pago_adicional = 2 THEN "Virtual" 
+                    ELSE "Desconocido" 
+                    END as modalidadPago'),
+            )
+            ->whereNull('cliente_matriculas.deleted_at')
+            ->whereBetween('cliente_matriculas.created_at', [$startDateComplete, $endDateComplete]);
+        // Filtro por cliente
+        if (!empty($request->dataClient)) {
+            $query->where(function ($q) use ($request) {
+                $q->where('clientes.nombres', $request->dataClient)
+                    ->orWhere('clientes.apellidos', 'LIKE', '%' . $request->dataClient . '%')
+                    ->orWhere('clientes.dni', $request->dataClient);
+            });
+        }
+        // Filtro por asesor
+        if ($request->advisor !== "all") {
+            $query->where('clientes.user_id', $request->advisor);
+        }
+        $clientData = $query->orderBy('cliente_matriculas.created_at', 'asc')->get();
+        return response()->json([
+            'data' => $clientData
+        ]);
+    }
+    //
     //Prueba Alisson
     public function enrolledCurrentYear()
     {
