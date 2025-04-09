@@ -1096,7 +1096,6 @@ class HomeController extends Controller
             ->leftJoin('carreras', 'cliente_matriculas.carrera_adicional_id', '=', 'carreras.id')
             ->select(
                 'cliente_matriculas.id as idUnico',
-                'clientes.id as idClient',
                 'cliente_matriculas.created_at as endContact',
                 'clientes.dni as dniClient',
                 DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
@@ -1145,6 +1144,7 @@ class HomeController extends Controller
             ->join('locals', 'cliente_matriculas.local_adicional_id', '=', 'locals.id')
             ->select(
                 'cliente_matriculas.id as idUnico',
+                'clientes.id as idClient',
                 'clientes.dni as dniClient',
                 DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
                 'clientes.fecha_nacimiento as dateOfBirth',
