@@ -1282,8 +1282,8 @@ class HomeController extends Controller
     }
     public function listOfErrorsInSurnames(Request $request)
     {
-        $startDate = $request->start;
-        $endDate = $request->start;
+        $startDate = Carbon::parse($request->start);
+        $endDate = Carbon::parse($request->end);
 
         Cliente::where('estado_id', 4)
             ->where('estado_detalle_id', 8)
