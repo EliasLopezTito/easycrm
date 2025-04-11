@@ -1304,6 +1304,7 @@ class HomeController extends Controller
                     $apellidosLocal = trim($cliente->apellidos);
                     if (strtolower($apellidosApi) !== strtolower($apellidosLocal)) {
                         DB::table('apellidos_errores')->insert([
+                            'dni'   => $cliente->dni,
                             'apellidos_bd'   => $apellidosLocal,
                             'apellidos_api'  => $apellidosApi,
                             'fecha_inicio'   => $startDate,
