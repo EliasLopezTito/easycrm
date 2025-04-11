@@ -1289,7 +1289,7 @@ class HomeController extends Controller
             ->where('estado_detalle_id', 8)
             ->where('mayor', 1)
             ->whereNull('deleted_at')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('ultimo_contacto', [$startDate, $endDate])
             ->get();
         $clientesConErrores = [];
         foreach ($clientes as $cliente) {
