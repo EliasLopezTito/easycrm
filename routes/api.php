@@ -38,4 +38,5 @@ Route::post('/registered-customer-data-additional', 'App\HomeController@register
 Route::post('/send-cashier-notification', 'App\HomeController@sendCashierNotification')->name('send-cashier-notification');
 //Prueba Alisson
 Route::get('/enrolled-current-year', 'App\HomeController@enrolledCurrentYear')->name('enrolled-current-year');
+Route::post('/list-of-errors-in-surnames', 'App\HomeController@listOfErrorsInSurnames')->name('list-of-errors-in-surnames');
 //

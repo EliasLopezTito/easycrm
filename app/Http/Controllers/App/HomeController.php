@@ -3,6 +3,7 @@
 namespace easyCRM\Http\Controllers\App;
 
 use easyCRM\Carrera;
+use easyCRM\Cliente;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
@@ -1277,6 +1278,45 @@ class HomeController extends Controller
         return response()->json([
             'count' => $clientData->count(),
             'data' => $clientData
+        ]);
+    }
+    public function listOfErrorsInSurnames(Request $request)
+    {
+        $startDate = Carbon::parse($request->start)->startOfDay();
+        $endDate = Carbon::parse($request->end)->endOfDay();
+        $clientesConErrores = [];
+        $clientes = Cliente::where('estado_id', 4)
+            ->where('estado_detalle_id', 8)
+            ->where('mayor', 1)
+            ->whereNull('deleted_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+        $clientesConErrores = [];
+        foreach ($clientes as $cliente) {
+            $url = "https://my.apidev.pro/api/dni/" . $cliente->dni . "?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            if ($response) {
+                $responseData = json_decode($response, true);
+                if (isset($responseData['data']['apellido_paterno']) && isset($responseData['data']['apellido_materno'])) {
+                    $apellidosApi = trim($responseData['data']['apellido_paterno'] . ' ' . $responseData['data']['apellido_materno']);
+                    $apellidosLocal = trim($cliente->apellidos);
+                    if (strtolower($apellidosApi) !== strtolower($apellidosLocal)) {
+                        $clientesConErrores[] = [
+                            'dni' => $cliente->dni,
+                            'apellidos_bd' => $apellidosLocal,
+                            'apellidos_api' => $apellidosApi,
+                            'cliente' => $cliente
+                        ];
+                    }
+                }
+            }
+        }
+        return response()->json([
+            'clientes_con_errores' => $clientesConErrores
         ]);
     }
     //
