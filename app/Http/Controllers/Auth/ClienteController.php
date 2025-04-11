@@ -540,21 +540,21 @@ class ClienteController extends Controller
         }
 
         if (!$Exist && !$validator->fails()) {
-            $Cliente->nombres = $request->nombres;
-            $Cliente->apellidos = $request->apellidos;
-            $Cliente->apellido_paterno = $request->apellido_paterno;
-            $Cliente->apellido_materno = $request->apellido_materno;
+            if ($Cliente->estado_id != 4) {
+                $Cliente->nombres = $request->nombres;
+                $Cliente->apellidos = $request->apellidos;
+                $Cliente->apellido_paterno = $request->apellido_paterno;
+                $Cliente->apellido_materno = $request->apellido_materno;
 
-            $Cliente->dni = $request->dni;
-            $Cliente->celular = $request->celular;
-            $Cliente->whatsapp = $request->whatsapp;
-            $Cliente->email = $request->email;
-            $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
+                $Cliente->dni = $request->dni;
+                $Cliente->celular = $request->celular;
+                $Cliente->whatsapp = $request->whatsapp;
+                $Cliente->email = $request->email;
+                $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
 
-            $Cliente->apellido_paterno = $request->apellido_paterno ?: null;
-            $Cliente->apellido_materno = $request->apellido_materno ?: null;
-
-
+                $Cliente->apellido_paterno = $request->apellido_paterno ?: null;
+                $Cliente->apellido_materno = $request->apellido_materno ?: null;
+            }
             if ($Cliente->estado_detalle_id != App::$ESTADO_DETALLE_MATRICULADO) {
                 $Cliente->carrera_id = $request->carrera_id;
                 $Cliente->modalidad_id = Carrera::find($request->carrera_id)->modalidad_id;
@@ -648,21 +648,23 @@ class ClienteController extends Controller
         }
 
         if (!$Exist && !$validator->fails()) {
-            $Cliente->nombres = $request->nombres;
-            $Cliente->apellidos = $request->apellidos;
-            $Cliente->apellido_paterno = $request->apellido_paterno;
-            $Cliente->apellido_materno = $request->apellido_materno;
-            $Cliente->dni = $request->dni;
-            $Cliente->celular = $request->celular;
-            $Cliente->whatsapp = $request->whatsapp;
-            $Cliente->email = $request->email;
-            $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
+            if ($Cliente->estado_id != 4) {
+                $Cliente->nombres = $request->nombres;
+                $Cliente->apellidos = $request->apellidos;
+                $Cliente->apellido_paterno = $request->apellido_paterno;
+                $Cliente->apellido_materno = $request->apellido_materno;
+                $Cliente->dni = $request->dni;
+                $Cliente->celular = $request->celular;
+                $Cliente->whatsapp = $request->whatsapp;
+                $Cliente->email = $request->email;
+                $Cliente->fecha_nacimiento = $request->fecha_nacimiento;
 
-            $Cliente->provincia_id = $request->provincia_id;
-            $Cliente->distrito_id = $request->distrito_id;
-            $Cliente->direccion = $request->direccion;
-            $Cliente->updated_at = Carbon::now();
-            $Cliente->updated_modified_by = auth()->user()->id;
+                $Cliente->provincia_id = $request->provincia_id;
+                $Cliente->distrito_id = $request->distrito_id;
+                $Cliente->direccion = $request->direccion;
+                $Cliente->updated_at = Carbon::now();
+                $Cliente->updated_modified_by = auth()->user()->id;
+            }
 
             if ($Cliente->save()) {
                 $Status = true;
