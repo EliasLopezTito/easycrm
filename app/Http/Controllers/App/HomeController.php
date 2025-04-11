@@ -1284,36 +1284,43 @@ class HomeController extends Controller
     {
         $startDate = Carbon::parse($request->start)->startOfDay();
         $endDate = Carbon::parse($request->end)->endOfDay();
-        $clientes = Cliente::where('estado_id', 4)
+
+        Cliente::where('estado_id', 4)
             ->where('estado_detalle_id', 8)
             ->where('mayor', 1)
             ->whereNull('deleted_at')
             ->whereBetween('ultimo_contacto', [$startDate, $endDate])
-            ->get();
-        foreach ($clientes as $cliente) {
-            $url = "https://my.apidev.pro/api/dni/" . $cliente->dni . "?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            $response = curl_exec($ch);
-            curl_close($ch);
-            if ($response) {
-                $responseData = json_decode($response, true);
-                if (isset($responseData['data']['apellido_paterno']) && isset($responseData['data']['apellido_materno'])) {
-                    $apellidosApi = trim($responseData['data']['apellido_paterno'] . ' ' . $responseData['data']['apellido_materno']);
-                    $apellidosLocal = trim($cliente->apellidos);
-                    if (strtolower($apellidosApi) !== strtolower($apellidosLocal)) {
-                        DB::table('apellidos_errores')->insert([
-                            'dni'   => $cliente->dni,
-                            'apellidos_bd'   => $apellidosLocal,
-                            'apellidos_api'  => $apellidosApi,
-                            'fecha_inicio'   => $startDate,
-                            'fecha_final'    => $endDate
-                        ]);
+            ->chunk(50, function ($clientes) use ($startDate, $endDate) {
+                foreach ($clientes as $cliente) {
+                    $url = "https://my.apidev.pro/api/dni/" . $cliente->dni . "?api_token=3fcaa8c48f59ff6ee58afff70a360af5fdcc214f512128165cdc050da28ee770";
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+
+                    if ($response) {
+                        $responseData = json_decode($response, true);
+                        if (isset($responseData['data']['apellido_paterno']) && isset($responseData['data']['apellido_materno'])) {
+                            $apellidosApi = trim($responseData['data']['apellido_paterno'] . ' ' . $responseData['data']['apellido_materno']);
+                            $apellidosLocal = trim($cliente->apellidos);
+                            if (strtolower($apellidosApi) !== strtolower($apellidosLocal)) {
+                                DB::table('apellidos_errores')->insert([
+                                    'dni'            => $cliente->dni,
+                                    'apellidos_bd'   => $apellidosLocal,
+                                    'apellidos_api'  => $apellidosApi,
+                                    'fecha_inicio'   => $startDate,
+                                    'fecha_final'    => $endDate
+                                ]);
+                            }
+                        }
                     }
                 }
-            }
-        }
+
+                // Pausa de 1 segundo después de cada bloque
+                sleep(1);
+            });
+
         return response()->json(['message' => 'Proceso finalizado.']);
     }
     //
