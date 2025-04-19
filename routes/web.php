@@ -27,7 +27,9 @@ Route::group(['middleware' => 'auth:web'], function () {
                 Route::get('/notifications', 'Auth\ClienteController@notifications')->name('user.client.notifications');
                 Route::get('/notifications-tracking', 'Auth\ClienteController@notificationsTracking')->name('user.client.notifications-tracking');
                 Route::get('/see-observation/{id}', 'Auth\ClienteController@seeObservation')->name('user.client.see-observation');
+                Route::get('/see-observation-additional/{id}', 'Auth\ClienteController@seeObservationAdditional')->name('user.client.see-observation-additional');
                 Route::post('/store-see-observation', 'Auth\ClienteController@storeSeeObservation')->name('user.client.store-see-observation');
+                Route::post('/store-see-observation-additional', 'Auth\ClienteController@storeSeeObservationAdditional')->name('user.client.store-see-observation-additional');
             });
         });
     });
@@ -44,6 +46,7 @@ Route::group(['middleware' => 'auth:web'], function () {
                 Route::post('/updateDatosContacto', 'Auth\ClienteController@updateDatosContacto')->name('user.client.updateDatosContacto');
                 Route::post('/updateDatosCliente', 'Auth\ClienteController@updateDatosCliente')->name('user.client.updateDatosCliente');
                 Route::post('/uploadBoxImages', 'Auth\ClienteController@uploadBoxImages')->name('user.client.uploadBoxImages');
+                Route::post('/uploadAdditionalBoxImages', 'Auth\ClienteController@uploadAdditionalBoxImages')->name('user.client.uploadAdditionalBoxImages');
                 Route::post('/getDataClient', 'Auth\ClienteController@getDataClient')->name('user.client.getDataClient');
                 Route::post('/storeSeguimiento', 'Auth\ClienteController@storeSeguimiento')->name('user.client.storeSeguimiento');
                 Route::post('/storeSeguimientoAdicional', 'Auth\ClienteController@storeSeguimientoAdicional')->name('user.client.storeSeguimientoAdicional');

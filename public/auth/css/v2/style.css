@@ -1,0 +1,15 @@
+.input-delete-check{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+@media (max-width: 768px) {
+    .input-delete-check {
+        position: static !important;
+        bottom: auto !important;
+        left: auto !important;
+        transform: none !important;
+        text-align: center;
+    }
+}

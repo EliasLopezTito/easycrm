@@ -555,8 +555,6 @@ class ClienteController extends Controller
                 $Cliente->apellido_paterno = $request->apellido_paterno ?: null;
                 $Cliente->apellido_materno = $request->apellido_materno ?: null;
             }
-
-
             if ($Cliente->estado_detalle_id != App::$ESTADO_DETALLE_MATRICULADO) {
                 $Cliente->carrera_id = $request->carrera_id;
                 $Cliente->modalidad_id = Carrera::find($request->carrera_id)->modalidad_id;
@@ -764,9 +762,7 @@ class ClienteController extends Controller
                     DB::table('clientes')
                         ->where('id', $request->cliente_id)
                         ->update([
-                            'code_waiver' => $request->codeWaiverSelect,
                             'mayor' => $request->mayor,
-                            'completo' => $request->fullPayment,
                             'updated_at' => Carbon::now(),
                         ]);
 
@@ -792,114 +788,57 @@ class ClienteController extends Controller
                             File::makeDirectory($clientFolder, 0777, true, true);
                         }
 
-                        if ($request->fullPayment == 0) {
-                            $filenames = [];
-                            foreach (['dniFront', 'dniRear', 'codeWaiver', 'izyPay', 'vaucher', 'additionalVoucher'] as $key) {
-                                if ($request->hasFile($key)) {
-                                    $file = $request->file($key);
-                                    $extension = $file->getClientOriginalExtension();
-                                    $filename = strtolower(str_replace(['dniFront', 'dniRear', 'codeWaiver', 'izyPay', 'additionalVoucher'], ['dni-front', 'dni-rear', 'code-waiver', 'izy-pay', 'additional-voucher'], $key));
-                                    $filename = "{$filename}-{$request->cliente_id}.{$extension}";
-                                    $file->move($clientFolder, $filename);
-                                    $filenames[$key] = $filename;
-                                }
+                        $filenames = [];
+                        foreach (['dniFront', 'dniRear', 'codeWaiver', 'izyPay', 'vaucher'] as $key) {
+                            if ($request->hasFile($key)) {
+                                $file = $request->file($key);
+                                $extension = $file->getClientOriginalExtension();
+                                $filename = strtolower(str_replace(['dniFront', 'dniRear', 'codeWaiver', 'izyPay'], ['dni-front', 'dni-rear', 'code-waiver', 'izy-pay'], $key));
+                                $filename = "{$filename}-{$request->cliente_id}.{$extension}";
+                                $file->move($clientFolder, $filename);
+                                $filenames[$key] = $filename;
                             }
+                        }
 
-                            if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
-                                DB::table('clientes')
-                                    ->where('id', $request->cliente_id)
-                                    ->update([
-                                        'modalidad_pago' => $request->modalidad_pago,
-                                        'updated_at' => Carbon::now(),
-                                    ]);
-                            } else {
-                                dd('Error: Debes seleccionar alguna modalidad de pago.');
-                            }
-                            $schoolName = $request->schoolName ?: null;
-                            $completionDate = $request->completionDate ?: null;
-                            if ($imgData) {
-                                $updateData = array_merge((array)$imgData, [
-                                    'dni_front'  => $filenames['dniFront'] ?? null,
-                                    'dni_rear'   => $filenames['dniRear'] ?? null,
-                                    'code_waiver'   => $filenames['codeWaiver'] ?? null,
-                                    'izy_pay'    => $filenames['izyPay'] ?? null,
-                                    'vaucher'    => $filenames['vaucher'] ?? null,
-                                    'additional_voucher'    => $filenames['additionalVoucher'] ?? null,
-                                    'school_name' => $schoolName,
-                                    'completion_date' => $completionDate,
+                        if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
+                            DB::table('clientes')
+                                ->where('id', $request->cliente_id)
+                                ->update([
+                                    'modalidad_pago' => $request->modalidad_pago,
                                     'updated_at' => Carbon::now(),
                                 ]);
-                                DB::table('client_registration_images')
-                                    ->where('id_client', $request->cliente_id)
-                                    ->update($updateData);
-                            } else {
-                                $updateData = [
-                                    'id_client'  => $request->cliente_id,
-                                    'dni_front'  => $filenames['dniFront'] ?? null,
-                                    'dni_rear'   => $filenames['dniRear'] ?? null,
-                                    'code_waiver'   => $filenames['codeWaiver'] ?? null,
-                                    'izy_pay'    => $filenames['izyPay'] ?? null,
-                                    'vaucher'    => $filenames['vaucher'] ?? null,
-                                    'additional_voucher'    => $filenames['additionalVoucher'] ?? null,
-                                    'school_name' => $schoolName,
-                                    'completion_date' => $completionDate,
-                                    'created_at' => Carbon::now(),
-                                ];
-                                DB::table('client_registration_images')->insert($updateData);
-                            }
                         } else {
-                            $filenames = [];
-                            foreach (['dniFront', 'dniRear', 'codeWaiver', 'izyPay', 'vaucher'] as $key) {
-                                if ($request->hasFile($key)) {
-                                    $file = $request->file($key);
-                                    $extension = $file->getClientOriginalExtension();
-                                    $filename = strtolower(str_replace(['dniFront', 'dniRear', 'codeWaiver', 'izyPay'], ['dni-front', 'dni-rear', 'code-waiver', 'izy-pay'], $key));
-                                    $filename = "{$filename}-{$request->cliente_id}.{$extension}";
-                                    $file->move($clientFolder, $filename);
-                                    $filenames[$key] = $filename;
-                                }
-                            }
-
-                            if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
-                                DB::table('clientes')
-                                    ->where('id', $request->cliente_id)
-                                    ->update([
-                                        'modalidad_pago' => $request->modalidad_pago,
-                                        'updated_at' => Carbon::now(),
-                                    ]);
-                            } else {
-                                dd('Error: Debes seleccionar alguna modalidad de pago.');
-                            }
-                            $schoolName = $request->schoolName ?: null;
-                            $completionDate = $request->completionDate ?: null;
-                            if ($imgData) {
-                                $updateData = array_merge((array)$imgData, [
-                                    'dni_front'  => $filenames['dniFront'] ?? null,
-                                    'dni_rear'   => $filenames['dniRear'] ?? null,
-                                    'code_waiver'   => $filenames['codeWaiver'] ?? null,
-                                    'izy_pay'    => $filenames['izyPay'] ?? null,
-                                    'vaucher'    => $filenames['vaucher'] ?? null,
-                                    'school_name' => $schoolName,
-                                    'completion_date' => $completionDate,
-                                    'updated_at' => Carbon::now(),
-                                ]);
-                                DB::table('client_registration_images')
-                                    ->where('id_client', $request->cliente_id)
-                                    ->update($updateData);
-                            } else {
-                                $updateData = [
-                                    'id_client'  => $request->cliente_id,
-                                    'dni_front'  => $filenames['dniFront'] ?? null,
-                                    'dni_rear'   => $filenames['dniRear'] ?? null,
-                                    'code_waiver'   => $filenames['codeWaiver'] ?? null,
-                                    'izy_pay'    => $filenames['izyPay'] ?? null,
-                                    'vaucher'    => $filenames['vaucher'] ?? null,
-                                    'school_name' => $schoolName,
-                                    'completion_date' => $completionDate,
-                                    'created_at' => Carbon::now(),
-                                ];
-                                DB::table('client_registration_images')->insert($updateData);
-                            }
+                            dd('Error: Debes seleccionar alguna modalidad de pago.');
+                        }
+                        $schoolName = $request->schoolName ?: null;
+                        $completionDate = $request->completionDate ?: null;
+                        if ($imgData) {
+                            $updateData = array_merge((array)$imgData, [
+                                'dni_front'  => $filenames['dniFront'] ?? null,
+                                'dni_rear'   => $filenames['dniRear'] ?? null,
+                                'code_waiver'   => $filenames['codeWaiver'] ?? null,
+                                'izy_pay'    => $filenames['izyPay'] ?? null,
+                                'vaucher'    => $filenames['vaucher'] ?? null,
+                                'school_name' => $schoolName,
+                                'completion_date' => $completionDate,
+                                'updated_at' => Carbon::now(),
+                            ]);
+                            DB::table('client_registration_images')
+                                ->where('id_client', $request->cliente_id)
+                                ->update($updateData);
+                        } else {
+                            $updateData = [
+                                'id_client'  => $request->cliente_id,
+                                'dni_front'  => $filenames['dniFront'] ?? null,
+                                'dni_rear'   => $filenames['dniRear'] ?? null,
+                                'code_waiver'   => $filenames['codeWaiver'] ?? null,
+                                'izy_pay'    => $filenames['izyPay'] ?? null,
+                                'vaucher'    => $filenames['vaucher'] ?? null,
+                                'school_name' => $schoolName,
+                                'completion_date' => $completionDate,
+                                'created_at' => Carbon::now(),
+                            ];
+                            DB::table('client_registration_images')->insert($updateData);
                         }
                     } else {
                         if ($request->modalidad_pago !== null && $request->modalidad_pago !== "") {
@@ -1082,79 +1021,8 @@ class ClienteController extends Controller
                 ) {
                     return response()->json(['Success' => $status, 'Message' => 'Ya se encuentra matriculado en ' . Modalidad::find($request->modalidad_adicional_id)->name . ' de ' . Carrera::find($request->carrera_adicional_id)->name]);
                 }
-                $seguimientoAdicional = ClienteMatricula::create($request->all());
-                $newId = $seguimientoAdicional->id;
-                if ($request->modalidad_pago_adcional == 2) {
-                    try {
-                        $imgData = DB::table('client_registration_images_additional')
-                            ->where('id_client_additional', $newId)
-                            ->first();
 
-                        if (!$imgData && !$request->hasFile('vaucherAdditional')) {
-                            dd('Error: Debe subir la imagen del comprobante de pagos.');
-                        }
-                        if ($request->tipo_operacion_adicional_id == 4 || $request->tipo_operacion_adicional_id == 5 || $request->tipo_operacion_adicional_id == 6) {
-                            if (!$imgData) {
-                                if (!$request->hasFile('vaucherAdditional') || !$request->hasFile('izyPayAdditional')) {
-                                    dd('Error: Debe subir la imagen del comprobante de pago y de IZIPAY.');
-                                }
-                            }
-                        }
-                        $basePath = public_path('assets/img-matriculado-adicional');
-                        $clientFolder = $basePath . '/' . $newId;
-                        if (!File::exists($clientFolder)) {
-                            File::makeDirectory($clientFolder, 0777, true, true);
-                        }
-                        $filenames = [];
-                        foreach (['dniFrontAdditional', 'dniRearAdditional', 'izyPayAdditional', 'vaucherAdditional'] as $key) {
-                            if ($request->hasFile($key)) {
-                                $file = $request->file($key);
-                                $extension = $file->getClientOriginalExtension();
-                                $filename = strtolower(str_replace(['dniFrontAdditional', 'dniRearAdditional', 'izyPayAdditional', 'vaucherAdditional'], ['dni-front', 'dni-rear', 'izy-pay', 'vaucher'], $key));
-                                $filename = "{$filename}-{$newId}.{$extension}";
-                                $file->move($clientFolder, $filename);
-                                $filenames[$key] = $filename;
-                            }
-                        }
-                        if ($request->modalidad_pago_adcional == null && $request->modalidad_pago_adcional == "") {
-                            dd('Error: Debes seleccionar alguna modalidad de pago.');
-                        }
-                        $schoolName = $request->schoolNameAdditional ?: null;
-                        $completionDate = $request->completionDateAdditional ?: null;
-                        if ($imgData) {
-                            $updateData = array_merge((array)$imgData, [
-                                'dni_front_additional'  => $filenames['dniFrontAdditional'] ?? null,
-                                'dni_rear_additional'   => $filenames['dniRearAdditional'] ?? null,
-                                'izy_pay_additional'    => $filenames['izyPayAdditional'] ?? null,
-                                'vaucher_additional'    => $filenames['vaucherAdditional'] ?? null,
-                                'school_name_additional' => $schoolName,
-                                'completion_date_additional' => $completionDate,
-                                'updated_at' => Carbon::now(),
-                            ]);
-                            DB::table('client_registration_images_additional')
-                                ->where('id_client', $newId)
-                                ->update($updateData);
-                        } else {
-                            $updateData = [
-                                'id_client_additional'  => $newId,
-                                'dni_front_additional'  => $filenames['dniFrontAdditional'] ?? null,
-                                'dni_rear_additional'   => $filenames['dniRearAdditional'] ?? null,
-                                'izy_pay_additional'    => $filenames['izyPayAdditional'] ?? null,
-                                'vaucher_additional'    => $filenames['vaucherAdditional'] ?? null,
-                                'school_name_additional' => $schoolName,
-                                'completion_date_additional' => $completionDate,
-                                'created_at' => Carbon::now(),
-                            ];
-                            DB::table('client_registration_images_additional')->insert($updateData);
-                        }
-                    } catch (\Exception $e) {
-                        dd($e->getMessage());
-                    }
-                } else {
-                    if ($request->modalidad_pago_adcional !== null && $request->modalidad_pago_adcional !== "") {
-                        dd('Error: Debes seleccionar alguna modalidad de pago.');
-                    }
-                }
+                $seguimientoAdicional = ClienteMatricula::create($request->all());
                 if ($seguimientoAdicional) {
                     $status = true;
                     DB::commit();
@@ -1188,13 +1056,7 @@ class ClienteController extends Controller
         $SeguimientosAdicionales = ClienteMatricula::where('cliente_id', $request->id)
             ->with('clientes')->with('turnos')->with('sedes')->with('carreras')->with('tipoOperaciones')->with('locales')
             ->with('modalidades')->with('horarios')->orderby('created_at', 'desc')->get();
-        $imgAdicionalesData = DB::table('client_registration_images_additional')
-            ->whereIn('id_client_additional', $SeguimientosAdicionales->pluck('id')->toArray())
-            ->get();
-        if ($imgAdicionalesData->isEmpty()) {
-            $imgAdicionalesData = null;
-        }
-        return response()->json(['data' => $SeguimientosAdicionales, 'imgAdicionalesData' => $imgAdicionalesData]);
+        return response()->json(['data' => $SeguimientosAdicionales]);
     }
 
     public function partialViewExport()
@@ -1263,11 +1125,11 @@ class ClienteController extends Controller
     {
         $status = false;
         $entity = Cliente::find($request->id);
+
         $entity->deleted_modified_by = auth()->user()->id;
-        $cleinteMatricula = DB::table('cliente_matriculas')
-            ->where('cliente_id', $request->id)
-            ->update(['deleted_at' => Carbon::now()]);
         //if($Cliente->save()){ $status = true;}
+
+
         if ($entity->delete() and $entity->save()) $status = true;
         return response()->json(['Success' => $status]);
     }
@@ -1308,11 +1170,11 @@ class ClienteController extends Controller
                 File::makeDirectory($clientFolder, 0777, true, true);
             }
             $filenames = [];
-            foreach (['dniFront', 'dniRear', 'codeWaiver', 'izyPay', 'vaucher', 'additionalVoucher'] as $key) {
+            foreach (['dniFront', 'dniRear', 'izyPay', 'vaucher'] as $key) {
                 if ($request->hasFile($key)) {
                     $file = $request->file($key);
                     $extension = $file->getClientOriginalExtension();
-                    $filename = strtolower(str_replace(['dniFront', 'dniRear', 'codeWaiver', 'izyPay', 'additionalVoucher'], ['dni-front', 'dni-rear', 'code-waiver', 'izy-pay', 'additional-voucher'], $key));
+                    $filename = strtolower(str_replace(['dniFront', 'dniRear', 'izyPay'], ['dni-front', 'dni-rear', 'izy-pay'], $key));
                     $filename = "{$filename}-{$request->idClient}.{$extension}";
                     $file->move($clientFolder, $filename);
                     $filenames[$key] = $filename;
@@ -1324,10 +1186,8 @@ class ClienteController extends Controller
                 $updateData = array_merge((array)$imgData, [
                     'dni_front'  => $filenames['dniFront'] ?? $imgData->dni_front,
                     'dni_rear'   => $filenames['dniRear'] ?? $imgData->dni_rear,
-                    'code_waiver'    => $filenames['codeWaiver'] ?? $imgData->code_waiver,
                     'izy_pay'    => $filenames['izyPay'] ?? $imgData->izy_pay,
                     'vaucher'    => $filenames['vaucher'] ?? $imgData->vaucher,
-                    'additional_voucher'    => $filenames['additionalVoucher'] ?? $imgData->additional_voucher,
                     'school_name' => $schoolName,
                     'completion_date' => $completionDate,
                     'updated_at' => Carbon::now(),
@@ -1340,120 +1200,12 @@ class ClienteController extends Controller
                     'id_client'  => $request->idClient,
                     'dni_front'  => $filenames['dniFront'] ?? null,
                     'dni_rear'   => $filenames['dniRear'] ?? null,
-                    'code_waiver' => $filenames['codeWaiver'] ?? null,
                     'izy_pay'    => $filenames['izyPay'] ?? null,
                     'vaucher'    => $filenames['vaucher'] ?? null,
-                    'additional_voucher'    => $filenames['additionalVoucher'] ?? null,
                     'school_name' => $schoolName,
                     'completion_date' => $completionDate,
                     'created_at' => Carbon::now(),
                 ]);
-            }
-            $updateData = [];
-            if ($request->dniFrontDelete == 1) {
-                $updateData['dni_front'] = null;
-            }
-            if ($request->dniRearDelete == 1) {
-                $updateData['dni_rear'] = null;
-            }
-            if ($request->codeWaiverDelete == 1) {
-                $updateData['code_waiver'] = null;
-            }
-            if ($request->izyPayDelete == 1) {
-                $updateData['izy_pay'] = null;
-            }
-            if ($request->vaucherDelete == 1) {
-                $updateData['vaucher'] = null;
-            }
-            if ($request->additionalVoucherDelete == 1) {
-                $updateData['additional_voucher'] = null;
-            }
-            if (!empty($updateData)) {
-                $updateData['updated_at'] = Carbon::now();
-                DB::table('client_registration_images')
-                    ->where('id_client', $request->idClient)
-                    ->update($updateData);
-            }
-            return response()->json([
-                'success' => true,
-                'message' => '¡Imágenes subidas correctamente!'
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ocurrió un error al subir las imágenes: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-    public function uploadAdditionalBoxImages(Request $request)
-    {
-        try {
-            $imgData = DB::table('client_registration_images_additional')
-                ->where('id_client_additional', $request->idClientAdditional)
-                ->first();
-            $basePath = public_path('assets/img-matriculado-adicional');
-            $clientFolder = $basePath . '/' . $request->idClient;
-            if (!File::exists($clientFolder)) {
-                File::makeDirectory($clientFolder, 0777, true, true);
-            }
-            $filenames = [];
-            foreach (['dniFrontUpdate', 'dniRearUpdate', 'izyPayUpdate', 'vaucherUpdate'] as $key) {
-                if ($request->hasFile($key)) {
-                    $file = $request->file($key);
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = strtolower(str_replace(['dniFrontUpdate', 'dniRearUpdate', 'izyPayUpdate', 'vaucherUpdate'], ['dni-front', 'dni-rear', 'izy-pay', 'voucher'], $key));
-                    $filename = "{$filename}-{$request->idClientAdditional}.{$extension}";
-                    $file->move($clientFolder, $filename);
-                    $filenames[$key] = $filename;
-                }
-            }
-            if ($imgData) {
-                $schoolName = $request->input('schoolNameUpdate') ?: $imgData->school_name_additional;
-                $completionDate = $request->input('completionDateUpdate') ?: $imgData->completion_date_additional;
-                $updateData = array_merge((array)$imgData, [
-                    'dni_front_additional'  => $filenames['dniFrontUpdate'] ?? $imgData->dni_front_additional,
-                    'dni_rear_additional'   => $filenames['dniRearUpdate'] ?? $imgData->dni_rear_additional,
-                    'izy_pay_additional'    => $filenames['izyPayUpdate'] ?? $imgData->izy_pay_additional,
-                    'vaucher_additional'    => $filenames['vaucherUpdate'] ?? $imgData->vaucher_additional,
-                    'school_name_additional' => $schoolName,
-                    'completion_date_additional' => $completionDate,
-                    'updated_at' => Carbon::now(),
-                ]);
-                DB::table('client_registration_images_additional')
-                    ->where('id_client_additional', $request->idClientAdditional)
-                    ->update($updateData);
-            } else {
-                $schoolName = $request->input('schoolNameUpdate') ?: null;
-                $completionDate = $request->input('completionDateUpdate') ?: null;
-                DB::table('client_registration_images_additional')->insert([
-                    'id_client_additional'  => $request->idClientAdditional,
-                    'dni_front_additional'  => $filenames['dniFrontUpdate'] ?? null,
-                    'dni_rear_additional'   => $filenames['dniRearUpdate'] ?? null,
-                    'izy_pay_additional'    => $filenames['izyPayUpdate'] ?? null,
-                    'vaucher_additional'    => $filenames['vaucherUpdate'] ?? null,
-                    'school_name_additional' => $schoolName,
-                    'completion_date_additional' => $completionDate,
-                    'created_at' => Carbon::now(),
-                ]);
-            }
-            $updateData = [];
-            if ($request->dniFrontDelete == 1) {
-                $updateData['dni_front_additional'] = null;
-            }
-            if ($request->dniRearDelete == 1) {
-                $updateData['dni_rear_additional'] = null;
-            }
-            if ($request->izyPayDelete == 1) {
-                $updateData['izy_pay_additional'] = null;
-            }
-            if ($request->vaucherDelete == 1) {
-                $updateData['vaucher_additional'] = null;
-            }
-            if (!empty($updateData)) {
-                $updateData['updated_at'] = Carbon::now();
-                DB::table('client_registration_images_additional')
-                    ->where('id_client_additional', $request->idClientAdditional)
-                    ->update($updateData);
             }
             return response()->json([
                 'success' => true,
@@ -1479,6 +1231,7 @@ class ClienteController extends Controller
     public function notificationsTracking()
     {
         $userLogin = Auth::user();
+
         if (!$userLogin) {
             return response()->json(['error' => 'No autenticado'], 401);
         }
@@ -1491,38 +1244,14 @@ class ClienteController extends Controller
                 'users.name as nameAdvisor',
                 'users.last_name as lastNameAdvisor',
                 'users.id as idAdvisor',
-                'notifications.box_tracking as boxTracking',
-                'notifications.created_at as fecha'
+                'notifications.box_tracking as boxTracking'
             )
-            ->where('notifications.box_tracking', 1)
+            ->whereNotNull('notifications.box_tracking')
             ->where('notifications.estado', false);
-
         if ($userLogin->profile_id == 2) {
             $query->where('notifications.user_id', $userLogin->id);
         }
-        $query1 = DB::table('notifications')
-            ->join('users', 'notifications.user_id', '=', 'users.id')
-            ->join('cliente_matriculas', 'notifications.cliente_id', '=', 'cliente_matriculas.id')
-            ->join('clientes', 'cliente_matriculas.cliente_id', '=', 'clientes.id')
-            ->select(
-                'notifications.cliente_id as idNotification',
-                'clientes.dni as dniClient',
-                'users.name as nameAdvisor',
-                'users.last_name as lastNameAdvisor',
-                'users.id as idAdvisor',
-                'notifications.box_tracking as boxTracking',
-                'notifications.created_at as fecha'
-            )
-            ->where('notifications.box_tracking', 2)
-            ->where('notifications.estado', false);
-        if ($userLogin->profile_id == 2) {
-            $query1->where('notifications.user_id', $userLogin->id);
-        }
-        $notificationsData = $query
-            ->unionAll($query1)
-            ->orderBy('fecha', 'desc')
-            ->get();
-
+        $notificationsData = $query->get();
         return response()->json([
             'data' => $notificationsData
         ]);
@@ -1577,7 +1306,6 @@ class ClienteController extends Controller
                 'clientes.direccion as addressClient',
                 'clientes.celular as phoneClient',
                 'clientes.nombre_titular as nameTitular',
-                'clientes.tipo_operacion_id as idTipoOperacionAdicional',
                 'client_registration_images.school_name as schoolName',
                 'client_registration_images.completion_date as completionDate',
                 DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
@@ -1588,7 +1316,7 @@ class ClienteController extends Controller
             ->whereNull('clientes.deleted_at')
             ->where('clientes.id', $id)
             ->first();
-        $responseData['tipoOperaciones'] = DB::table('tipo_operacions')->whereNull('deleted_at')->get();
+        //dd($responseData);
         return view('auth.cliente.see-observation')->with('responseData', $responseData);
     }
     public function storeSeeObservation(Request $request)
@@ -1611,7 +1339,6 @@ class ClienteController extends Controller
                 'fecha_nacimiento' => $request->date,
                 'direccion' => $request->direction,
                 'nombre_titular' => $request->nameHolder,
-                'tipo_operacion_id' => $request->typeOfOperation,
                 'updated_at' => Carbon::now(),
                 'updated_modified_by' => $userLogin->id,
             ];
@@ -1634,17 +1361,15 @@ class ClienteController extends Controller
             $fileFields = [
                 'dniFrontUpdate' => 'dni_front',
                 'dniRearUpdate' => 'dni_rear',
-                'codeWaiverUpdate' => 'code_waiver',
                 'izyPayUpdate' => 'izy_pay',
-                'vaucherUpdate' => 'vaucher',
-                'vaucherAdditionalUpdate' => 'additional_voucher'
+                'vaucherUpdate' => 'vaucher'
             ];
 
             foreach ($fileFields as $requestKey => $dbColumn) {
                 if ($request->hasFile($requestKey)) {
                     $file = $request->file($requestKey);
                     $extension = $file->getClientOriginalExtension();
-                    $filename = str_replace('_', '-', $dbColumn) . '-' . $request->idClient . '.' . $extension;
+                    $filename = $dbColumn . '-' . $request->idClient . '.' . $extension;
                     $file->move($clientFolder, $filename);
                     $updateImgData[$dbColumn] = $filename;
                 }
@@ -1712,245 +1437,12 @@ class ClienteController extends Controller
                 ->withInput();
         }
     }
+
     private function actualizarSeguimientoAPI($clienteId)
     {
         $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking";
         $data = [
             'cliente_id' => $clienteId,
-        ];
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/x-www-form-urlencoded'
-        ]);
-
-        $response = curl_exec($ch);
-        sleep(1);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $error = curl_error($ch);
-        curl_close($ch);
-
-        if ($response === false) {
-            return [
-                'success' => false,
-                'message' => 'Error en la solicitud cURL',
-                'error' => $error
-            ];
-        }
-
-        $responseData = json_decode($response, true);
-
-        if ($httpCode !== 200 || $responseData === null) {
-            return [
-                'success' => false,
-                'message' => 'Error en la API de seguimiento',
-                'error' => $responseData ?? 'Respuesta no válida'
-            ];
-        }
-
-        return [
-            'success' => true,
-            'data' => $responseData
-        ];
-    }
-    //Adicional
-    public function seeObservationAdditional($id)
-    {
-        // API para actualizar seguimiento
-        $userLogin = Auth::user();
-        // Llamada al API externa
-        $url = "https://seguimiento.ialmarketing.edu.pe/api/bring-follow-up-additional";
-        $data = [
-            'cliente_id_additional' => $id,
-        ];
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/x-www-form-urlencoded'
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-        $responseData = json_decode($response, true);
-        if ($userLogin->profile_id == 2 && $responseData['followUpData']['state_adviser'] == 1) {
-            $url1 = "https://seguimiento.ialmarketing.edu.pe/api/advisor-reviewed-additional";
-            $data1 = [
-                'cliente_id_additional' => $id,
-            ];
-            $ch1 = curl_init($url1);
-            curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch1, CURLOPT_POST, true);
-            curl_setopt($ch1, CURLOPT_POSTFIELDS, http_build_query($data1));
-            curl_setopt($ch1, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/x-www-form-urlencoded'
-            ]);
-            $response1 = curl_exec($ch1);
-            $httpCode = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
-            curl_close($ch1);
-            $responseData1 = json_decode($response1, true);
-        }
-        $responseData['imgData'] = DB::table('cliente_matriculas')
-            ->join('clientes', 'cliente_matriculas.cliente_id', '=', 'clientes.id')
-            ->join('users', 'clientes.user_id', '=', 'users.id')
-            ->leftJoin('client_registration_images_additional', 'cliente_matriculas.id', '=', 'client_registration_images_additional.id_client_additional')
-            ->select(
-                'cliente_matriculas.id as idUnico',
-                'clientes.id as idClient',
-                'clientes.dni as dniClient',
-                'clientes.apellido_paterno as apellidoPaternoClient',
-                'clientes.apellido_materno as apellidoMaternoClient',
-                'clientes.nombres as nombresClient',
-                'clientes.fecha_nacimiento as dateOfBirth',
-                'clientes.email as emailClient',
-                'clientes.direccion as addressClient',
-                'clientes.celular as phoneClient',
-                'cliente_matriculas.nombre_titular_adicional as nameTitular',
-                'cliente_matriculas.tipo_operacion_adicional_id  as idTipoOperacionAdicional',
-                'client_registration_images_additional.school_name_additional as schoolName',
-                'client_registration_images_additional.completion_date_additional as completionDate',
-                DB::raw('CONCAT(users.last_name, " ", users.name) as usersAsesor'),
-                'users.id as idAdvisor'
-            )
-            ->whereNull('cliente_matriculas.deleted_at')
-            ->where('cliente_matriculas.id', $id)
-            ->first();
-        $responseData['tipoOperaciones'] = DB::table('tipo_operacions')->whereNull('deleted_at')->get();
-        return view('auth.cliente.see-observation-additional')->with('responseData', $responseData);
-    }
-    public function storeSeeObservationAdditional(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $userLogin = Auth::user();
-            $lastName = trim($request->paternalSurname . ' ' . $request->maternalSurname);
-
-            // Actualizar datos del cliente
-            $updateData = [
-                'nombres' => $request->name,
-                'apellidos' => $lastName,
-                'apellido_paterno' => $request->paternalSurname,
-                'apellido_materno' => $request->maternalSurname,
-                'email' => $request->email,
-                'dni' => $request->dni,
-                'celular' => $request->celular,
-                'whatsapp' => $request->celular,
-                'fecha_nacimiento' => $request->date,
-                'direccion' => $request->direction,
-                'updated_at' => Carbon::now(),
-                'updated_modified_by' => $userLogin->id,
-            ];
-
-            $updateMatriculaAdicional = [
-                'nombre_titular_adicional' => $request->nameHolder,
-                'tipo_operacion_adicional_id' => $request->typeOfOperation,
-                'updated_at' => Carbon::now()
-            ];
-
-            Cliente::where('id', $request->idClient)->update($updateData);
-
-            ClienteMatricula::where('id', $request->idClientAdditional)->update($updateMatriculaAdicional);
-
-            // Subida de imágenes
-            $imgData = DB::table('client_registration_images_additional')
-                ->where('id_client_additional', $request->idClientAdditional)
-                ->first();
-
-            $basePath = public_path('assets/img-matriculado-adicional');
-            $clientFolder = $basePath . '/' . $request->idClientAdditional;
-
-            if (!File::exists($clientFolder)) {
-                File::makeDirectory($clientFolder, 0777, true, true);
-            }
-
-            $updateImgData = [];
-            $fileFields = [
-                'dniFrontUpdate' => 'dni_front',
-                'dniRearUpdate' => 'dni_rear',
-                'izyPayUpdate' => 'izy_pay',
-                'vaucherUpdate' => 'vaucher'
-            ];
-
-            foreach ($fileFields as $requestKey => $dbColumn) {
-                if ($request->hasFile($requestKey)) {
-                    $file = $request->file($requestKey);
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = $dbColumn . '-' . $request->idClientAdditional . '.' . $extension;
-                    $file->move($clientFolder, $filename);
-                    $updateImgData[$dbColumn . '_additional'] = $filename;
-                }
-            }
-
-            $schoolName = $request->schoolNameUpdate;
-            $completionDate = $request->completionDateUpdate;
-
-            if (!empty($updateImgData) || $schoolName || $completionDate) {
-                $commonData = [
-                    'school_name_additional' => $schoolName,
-                    'completion_date_additional' => $completionDate,
-                    'updated_at' => Carbon::now(),
-                ];
-
-                if ($imgData) {
-                    DB::table('client_registration_images_additional')
-                        ->where('id_client_additional', $request->idClientAdditional)
-                        ->update(array_merge((array) $imgData, $updateImgData, $commonData));
-                } else {
-                    DB::table('client_registration_images_additional')->insert(array_merge([
-                        'id_client_additional' => $request->idClientAdditional,
-                        'created_at' => Carbon::now(),
-                    ], $updateImgData, $commonData));
-                }
-            }
-
-            // Llamar API de seguimiento
-            $responseApi = $this->actualizarSeguimientoAPIAdditional($request->idClientAdditional);
-
-            if ($responseApi['success'] === true) {
-                $updated = DB::table('notifications')
-                    ->where('cliente_id', $request->idClientAdditional)
-                    ->where('estado', 0)
-                    ->whereNull('deleted_at')
-                    ->update([
-                        'estado' => 1,
-                        'updated_at' => Carbon::now()
-                    ]);
-
-                if ($updated === 0) {
-                    DB::rollBack();
-                    return redirect()
-                        ->back()
-                        ->withErrors(['No se encontraron notificaciones pendientes para actualizar.'])
-                        ->withInput();
-                }
-
-                DB::commit();
-                return redirect()
-                    ->back()
-                    ->with('success', '¡Imágenes subidas y seguimiento actualizado correctamente!');
-            } else {
-                DB::rollBack();
-                return redirect()
-                    ->back()
-                    ->withErrors([$responseApi['message'] => $responseApi['error']])
-                    ->withInput();
-            }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()
-                ->back()
-                ->withErrors(['Error inesperado' => $e->getMessage()])
-                ->withInput();
-        }
-    }
-    public function actualizarSeguimientoAPIAdditional($id)
-    {
-        $url = "https://seguimiento.ialmarketing.edu.pe/api/update-tracking-additional";
-        $data = [
-            'cliente_id' => $id,
         ];
 
         $ch = curl_init($url);

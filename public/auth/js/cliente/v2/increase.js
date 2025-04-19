@@ -34,18 +34,44 @@ $("#increaseImgs").click(function (event) {
     let formData = new FormData();
     let dniFront = $("#dniFrontUpdate")[0].files[0];
     let dniRear = $("#dniRearUpdate")[0].files[0];
+    let codeWaiver = $("#codeWaiverUpdate")[0].files[0];
     let izyPay = $("#izyPayUpdate")[0].files[0];
     let vaucher = $("#vaucherUpdate")[0].files[0];
+    let additionalVoucher = null;
+    let additionalVoucherInput = $("#additionalVoucherUpdate");
+    if (additionalVoucherInput.length > 0) {
+        additionalVoucher = additionalVoucherInput[0].files[0] || null;
+    }
     let clientId = $("#id").val();
     let schoolName = $("#schoolNameUpdate").val();
     let completionDate = $("#completionDateUpdate").val();
     if (dniFront) formData.append("dniFront", dniFront);
     if (dniRear) formData.append("dniRear", dniRear);
+    if (codeWaiver) formData.append("codeWaiver", codeWaiver);
     if (izyPay) formData.append("izyPay", izyPay);
     if (vaucher) formData.append("vaucher", vaucher);
+    if (additionalVoucher) formData.append("additionalVoucher", additionalVoucher);
     formData.append("idClient", clientId);
     formData.append("schoolNameUpdate", schoolName);
     formData.append("completionDateUpdate", completionDate);
+    if ($("#dniFrontDelete").is(":checked")) {
+        formData.append("dniFrontDelete", 1);
+    }
+    if ($("#dniRearDelete").is(":checked")) {
+        formData.append("dniRearDelete", 1);
+    }
+    if ($("#codeWaiverDelete").is(":checked")) {
+        formData.append("codeWaiverDelete", 1);
+    }
+    if ($("#izyPayDelete").is(":checked")) {
+        formData.append("izyPayDelete", 1);
+    }
+    if ($("#vaucherDelete").is(":checked")) {
+        formData.append("vaucherDelete", 1);
+    }
+    if ($("#additionalVoucherDelete").is(":checked")) {
+        formData.append("additionalVoucherDelete", 1);
+    }
     $.ajax({
         url: uploadUrl,
         type: "POST",
@@ -81,4 +107,16 @@ $("#increaseImgs").click(function (event) {
             });
         }
     });
+});
+$("#modalidad_pago_adcional").change(function () {
+    let valor = $(this).val();
+    let containerImgAdicional = $("#containerImgAdditional");
+    let containerDiv = $("#containerDiv");
+    if (valor == "2") {
+        containerImgAdicional.fadeIn();
+        containerDiv.fadeOut();
+    } else {
+        containerImgAdicional.fadeOut();
+        containerDiv.fadeIn();
+    }
 });

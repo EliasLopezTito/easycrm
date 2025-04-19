@@ -32,6 +32,24 @@ $(document).ready(function() {
             containerImg.fadeOut();
         }
     });
+    $("#modalidad_pago_adcional").change(function () {
+        let valor = $(this).val();
+        let containerImgAdicional = $("#containerImgAdditional");
+        if (valor == "2") {
+            containerImgAdicional.fadeIn();
+        } else {
+            containerImgAdicional.fadeOut();
+        }
+    });
+    $("#fullPayment").change(function () {
+        let valor = $(this).val();
+        let containerAdditional = $("#containerAdditional");
+        if (valor == "0") {
+            containerAdditional.fadeIn();
+        } else {
+            containerAdditional.fadeOut();
+        }
+    });
     $("#tipo_do").change(function() {
         var seleccionado = $(this).val();
         if (seleccionado == "3") {

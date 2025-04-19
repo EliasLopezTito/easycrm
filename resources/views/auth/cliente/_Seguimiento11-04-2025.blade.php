@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="{{ asset('auth/css/v2/style.css') }}">
 <div class="row">
     <div class="col-md-12">
         <div class="user content-card">
@@ -187,7 +186,7 @@
                             <div class="row">
                                 <div class="col-md-12 mt-3">
                                     <div class="row">
-                                        <div class="col-lg-6 col-12">
+                                        <div class="col-6">
                                             <div class="containerModalidad">
                                                 <select name="modalidad_pago" class="form-input" id="modalidad_pago">
                                                     <option value="1" selected>Modalidad de pago: <b>Presencial</b></option>
@@ -195,24 +194,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+                                        <div class="col-6">
                                             <div class="containerModalidad">
-                                                <select name="codeWaiverSelect" class="form-input" id="codeWaiverSelect">
-                                                    <option value="1" selected>Renuncia de codigo: <b>SI</b></option>
-                                                    <option value="0">Renuncia de codigo: <b>NO</b></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <div class="containerModalidad mt-10">
-                                                <select name="fullPayment" class="form-input" id="fullPayment">
-                                                    <option value="1" selected>Pago Completo: <b>SI</b></option>
-                                                    <option value="0">Pago Completo: <b>NO</b></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-12">
-                                            <div class="containerModalidad mt-10">
                                                 <select name="mayor" class="form-input" id="mayor">
                                                     <option value="1" selected>Mayor de edad: <b>Si</b></option>
                                                     <option value="0">Mayor de edad: <b>No</b></option>
@@ -235,11 +218,6 @@
 
                                         <label for="vaucher" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
                                         <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
-
-                                        <div id="containerAdditional" style="display: none;">
-                                            <label for="additionalVoucher" style="margin-top: 10px;">Foto del Comprobante de Pago Adicional - Opcional </label>
-                                            <input type="file" name="additionalVoucher" id="additionalVoucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                        </div>
 
                                         <label for="schoolName" style="margin-top: 10px;">Nombre del Colegio</label>
                                         <input type="text" name="schoolName" id="schoolName" class="form-input">
@@ -519,96 +497,24 @@
                 <div class="text-center">
                     @if ($Cliente->estado_detalle_id == 8 && Auth::user()->email == "useraul@gmail.com" || Auth::user()->profile_id == 2)
                         <button type="button" class="btn btn-primary" id="seeFromImng">Editar</button>
-                        <div id="formInpuImg" style="display: none;margin-top: 10px;margin-bottom: 10px;">
-                            <div class="row">
-                                <div class="col-lg-10 col-12">
-                                    <div class="form-group">
-                                        <label for="dniFrontUpdate" style="margin-top: 10px; font-weight: bold;">Foto del DNI (Parte Frontal)</label>
-                                        <input type="file" name="dniFrontUpdate" id="dniFrontUpdate" class="form-control" accept="image/png, image/jpeg, image/jpg">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-12">
-                                    <div class="checkbox input-delete-check">
-                                        <label>
-                                            <input type="checkbox" name="dniFrontDelete" id="dniFrontDelete" value="1"> Eliminar Imagen
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-10 col-12">
-                                    <div class="form-group">
-                                        <label for="dniRearUpdate" style="margin-top: 10px;">Foto del DNI (Parte Posterior)</label>
-                                        <input type="file" name="dniRearUpdate" id="dniRearUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-12">
-                                    <div class="checkbox input-delete-check">
-                                        <label>
-                                            <input type="checkbox" name="dniRearDelete" id="dniRearDelete" value="1"> Eliminar Imagen
-                                        </label>    
-                                    </div>
-                                </div>
-                                <div class="col-lg-10 col-12">
-                                    <div class="form-group">
-                                        <label for="codeWaiverUpdate" style="margin-top: 10px;">Foto de la Renuncia Código</label>
-                                        <input type="file" name="codeWaiverUpdate" id="codeWaiverUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-12">
-                                    <div class="checkbox input-delete-check">
-                                        <label>
-                                            <input type="checkbox" name="codeWaiverDelete" id="codeWaiverDelete" value="1"> Eliminar Imagen
-                                        </label>    
-                                    </div>
-                                </div>
-                                <div class="col-lg-10 col-12">
-                                    <div class="form-group">
-                                        <label for="izyPayUpdate" style="margin-top: 10px;">Foto del IZYPAY</label>
-                                        <input type="file" name="izyPayUpdate" id="izyPayUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-12">
-                                    <div class="checkbox input-delete-check">
-                                        <label>
-                                            <input type="checkbox" name="izyPayDelete" id="izyPayDelete" value="1"> Eliminar Imagen
-                                        </label>    
-                                    </div>
-                                </div>
-                                <div class="col-lg-10 col-12">
-                                    <div class="form-group">
-                                        <label for="vaucherUpdate" style="margin-top: 10px;">Foto del Comprobante de Pago</label>
-                                        <input type="file" name="vaucherUpdate" id="vaucherUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-12">
-                                    <div class="checkbox input-delete-check">
-                                        <label>
-                                            <input type="checkbox" name="vaucherDelete" id="vaucherDelete" value="1"> Eliminar Imagen
-                                        </label>    
-                                    </div>
-                                </div>
-                                @if ($Cliente->completo == 0)
-                                    <div class="col-lg-10 col-12">
-                                        <div class="form-group">
-                                            <label for="additionalVoucherUpdate" style="margin-top: 10px;">Foto del Comprobante de Pago Adicional</label>
-                                            <input type="file" name="additionalVoucherUpdate" id="additionalVoucherUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-12">
-                                        <div class="checkbox input-delete-check">
-                                            <label>
-                                                <input type="checkbox" name="additionalVoucherDelete" id="additionalVoucherDelete" value="1"> Eliminar Imagen
-                                            </label>    
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
+                        <div id="formInpuImg" style="display: none" class="mb-5">
+                            <label for="dniFrontUpdate" style="margin-top: 10px;">Foto del DNI (Parte Frontal)</label>
+                            <input type="file" name="dniFrontUpdate" id="dniFrontUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                            
+                            <label for="dniRearUpdate" style="margin-top: 10px;">Foto del DNI (Parte Posterior)</label>
+                            <input type="file" name="dniRearUpdate" id="dniRearUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                            
+                            <label for="izyPayUpdate" style="margin-top: 10px;">Foto del IZYPAY</label>
+                            <input type="file" name="izyPayUpdate" id="izyPayUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
+    
+                            <label for="vaucherUpdate" style="margin-top: 10px;">Foto del Comprobante de Pago</label>
+                            <input type="file" name="vaucherUpdate" id="vaucherUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
                             <label for="schoolNameUpdate" style="margin-top: 10px;">Nombre del Colegio</label>
                             <input type="text" name="schoolNameUpdate" id="schoolNameUpdate" class="form-input">
 
                             <label for="completionDateUpdate" style="margin-top: 10px;">Fecha de Termino</label>
                             <input type="date" name="completionDateUpdate" id="completionDateUpdate" class="form-input">
-
                             <br>
                             <button type="button" id="increaseImgs" class="btn btn-secondary">Guardar</button>
                         </div>
@@ -624,42 +530,11 @@
                         <div class="form-group text-right">
                             <button type="button" class="btn-primary mb-20"><i class="fa fa-plus"></i> Agregar Curso o Carrera</button>
                         </div>
+
                         <div id="datosAdicionales" class="form-group hidden">
                             <h5>Datos adicionales</h5>
                             <hr>
                             <div class="form-group row">
-                                <div class="col-md-4" style="margin-bottom: 15px;">
-                                    <select name="modalidad_pago_adcional" class="form-input" id="modalidad_pago_adcional">
-                                        <option value="1" selected>Modalidad de pago: <b>Presencial</b></option>
-                                        <option value="2">Modalidad de pago: <b>Virtual</b></option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4" style="margin-bottom: 15px;">
-                                    <select name="mayor_adicional" class="form-input" id="mayor_adicional">
-                                        <option value="1" selected>Mayor de edad: <b>Si</b></option>
-                                        <option value="0">Mayor de edad: <b>No</b></option>
-                                    </select>
-                                </div>
-                                <div id="containerImgAdditional" class="col-md-12" style="display: none;margin-bottom: 15px;">
-                                    <label for="dniFrontAdditional" style="margin-top: 10px;">Foto del DNI (Parte Frontal) - Opcional</label>
-                                    <input type="file" name="dniFrontAdditional" id="dniFrontAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
-                                    
-                                    <label for="dniRearAdditional" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
-                                    <input type="file" name="dniRearAdditional" id="dniRearAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
-                                    
-                                    <label for="izyPayAdditional" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE, PLIN o IZY PAY</label>
-                                    <input type="file" name="izyPayAdditional" id="izyPayAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
-
-                                    <label for="vaucherAdditional" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
-                                    <input type="file" name="vaucherAdditional" id="vaucherAdditional" class="form-input" accept="image/png, image/jpeg, image/jpg">
-
-                                    <label for="schoolNameAdditional" style="margin-top: 10px;">Nombre del Colegio</label>
-                                    <input type="text" name="schoolNameAdditional" id="schoolNameAdditional" class="form-input not-required">
-
-                                    <label for="completionDateAdditional" style="margin-top: 10px;">Fecha de Termino</label>
-                                    <input type="date" name="completionDateAdditional" id="completionDateAdditional" class="form-input not-required">
-                                </div>
-                                <div class="col-md-4" style="margin-bottom: 15px;" id="containerDiv"></div>
                                 <div class="col-md-4">
                                     <select name="modalidad_adicional_id" class="form-input" id="modalidad_adicional_id">
                                         <option value="">-- Modalidad --</option>
@@ -874,8 +749,6 @@
         var uploadUrl = "{{ route('user.client.uploadBoxImages') }}";
         var getUrl = "{{ route('user.client.getDataClient') }}";
         var csrfToken = "{{ csrf_token() }}";
-        var uploadAdditional = "{{ route('user.client.uploadAdditionalBoxImages') }}";
     </script>
     <script src="{{ asset('auth/js/cliente/v2/increase.js') }}"></script>
-    <script src="{{ asset('auth/js/cliente/v2/increaseAddional.js') }}"></script>
 @endif

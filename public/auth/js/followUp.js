@@ -10,9 +10,9 @@ $(document).ready(function () {
                 notifications.forEach(v => {
                     const isRejected = v.boxTracking == 2;
                     const color = isRejected ? "text-danger" : "text-warning";
-                    const icon = isRejected ? "fa-ban" : "fa-exclamation-triangle";
-                    const text = isRejected ? "Matrícula rechazada. " : "Hay observaciones pendientes. ";
-                    let url = urlSeeObservation.replace(':id', v.idNotification);
+                    const icon = isRejected ? "fa-exclamation-triangle" : "fa-exclamation-triangle";
+                    const text = isRejected ? "Hay observaciones pendientes. " : "Hay observaciones pendientes. ";
+                    let url = isRejected ? urlSeeObservationAdditional.replace(':id', v.idNotification) : urlSeeObservation.replace(':id', v.idNotification);
                     let advisorInfo = roleProfile == 1 ? `Asesora: ${v.lastNameAdvisor} ${v.nameAdvisor}, ` : "";
                     let html = `<li><a href="${url}" target="_blank" class="card-detail-notification"><i class="fa ${icon} ${color}"></i> ${v.dniClient} - ${text} ${advisorInfo}Por favor, revisa la información.</a></li>`;
                     $list.append(html);

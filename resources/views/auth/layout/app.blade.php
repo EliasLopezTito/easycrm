@@ -202,6 +202,7 @@
 <script>
         const urlBringNotifications = "{{ route('user.client.notifications-tracking') }}";
         const urlSeeObservation = "{{ route('user.client.see-observation', ':id') }}";
+        const urlSeeObservationAdditional = "{{ route('user.client.see-observation-additional', ':id') }}";
         const roleProfile = "{{ Auth::check() ? Auth::user()->profile_id : '' }}";
     </script>
 <script type="text/javascript" src="{{ asset('auth/js/followUp.js') }}"></script>

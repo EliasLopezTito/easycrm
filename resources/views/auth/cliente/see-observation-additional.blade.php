@@ -12,7 +12,7 @@
     <section class="content-header" style="height: 100%;">
         <div class="row" style="width: 100%;">
             <div class="col-md-12 col-12 text-center">
-                <h3>Edición de Matricula</h3>
+                <h3>Edición de Matricula de Nueva Oportunidad</h3>
             </div>
             @if (Auth::check() && Auth::user()->profile_id == 1)
                 <div class="col-md-6 col-12">
@@ -33,37 +33,31 @@
         @if ($responseData['followUpData']['cashier_observation'] != null)
             <div class="form-group">
                 <label for="observationCashier">Observación Cajera</label>
-                <textarea id="observationCashier" name="observationCashier" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['cashier_observation'] }}</textarea>
+                <textarea name="observationCashier" id="observationCashier" name="observationCashier" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['cashier_observation'] }}</textarea>
             </div>
         @endif
         @if ($responseData['followUpData']['supervisory_observation'] != null)
             <div class="form-group">
                 <label for="observationSupervisory">Observación Supervisora</label>
-                <textarea id="observationSupervisory" name="observationSupervisory" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['supervisory_observation'] }}</textarea>
+                <textarea name="observationSupervisory" id="observationSupervisory" name="observationSupervisory" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['supervisory_observation'] }}</textarea>
             </div>
         @endif
         @if ($responseData['followUpData']['dni_front_observation'] != null)
             <div class="form-group">
                 <label for="dniFrontObservation">Observación DNI (Frontal)</label>
-                <textarea id="dniFrontObservation" name="dniFrontObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['dni_front_observation'] }}</textarea>
+                <textarea name="dniFrontObservation" id="dniFrontObservation" name="dniFrontObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['dni_front_observation'] }}</textarea>
             </div>
         @endif
         @if ($responseData['followUpData']['dni_rear_observation'] != null)
             <div class="form-group">
                 <label for="dniDearObservation">Observación DNI (Reverso)</label>
-                <textarea id="dniDearObservation" name="dniDearObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['dni_rear_observation'] }}</textarea>
-            </div>
-        @endif
-        @if ($responseData['followUpData']['code_waiver_observation'] != null)
-            <div class="form-group">
-                <label for="codeWaiverObservation">Oservación Renuncia de Codigo</label>
-                <textarea id="codeWaiverObservation" name="codeWaiverObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['code_waiver_observation'] }}</textarea>
+                <textarea name="dniDearObservation" id="dniDearObservation" name="dniDearObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['dni_rear_observation'] }}</textarea>
             </div>
         @endif
         @if ($responseData['followUpData']['izy_pay_observation'] != null)
             <div class="form-group">
                 <label for="izyPayObservation">Observación IZY PAY</label>
-                <textarea id="izyPayObservation" name="izyPayObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['izy_pay_observation'] }}</textarea>
+                <textarea name="izyPayObservation" id="izyPayObservation" name="izyPayObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['izy_pay_observation'] }}</textarea>
             </div>
         @endif
         @if ($responseData['followUpData']['vaucher_observation'] != null)
@@ -72,15 +66,10 @@
                 <textarea name="vaucherObservation" id="vaucherObservation" name="vaucherObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['vaucher_observation'] }}</textarea>
             </div>
         @endif
-        @if ($responseData['followUpData']['vaucher_additional_observation'] != null)
-            <div class="form-group">
-                <label for="vaucherAdditionalObservation">Observación Aidiconal del Vaucher</label>
-                <textarea id="vaucherAdditionalObservation" name="vaucherAdditionalObservation" cols="30" rows="10" style="resize: none;" class="form-control" disabled>{{ $responseData['followUpData']['vaucher_additional_observation'] }}</textarea>
-            </div>
-        @endif
-        <form action="{{ route('user.client.store-see-observation') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('user.client.store-see-observation-additional') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="idClient" value="{{ $responseData['imgData']->idUnico }}">
+            <input type="hidden" name="idClientAdditional" value="{{ $responseData['imgData']->idUnico }}">
+            <input type="hidden" name="idClient" value="{{ $responseData['imgData']->idClient }}">
             <div class="form-group">
                 <label for="name">Nombres Completos:</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{ $responseData['imgData']->nombresClient }}" @if (Auth::check() && Auth::user()->profile_id != 1) readonly @endif>
@@ -119,12 +108,6 @@
                     <input type="file" name="dniFrontUpdate" id="dniFrontUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg" required>
                 </div>
             @endif
-            @if ($responseData['followUpData']['code_waiver_observation'] != null)
-                <div class="form-group">
-                    <label for="codeWaiverUpdate" style="margin-top: 10px;">Foto de la Renuncia de Codigo</label>
-                    <input type="file" name="codeWaiverUpdate" id="codeWaiverUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg" required>
-                </div>
-            @endif
             @if ($responseData['followUpData']['dni_rear_observation'] != null)
                 <div class="form-group">
                     <label for="dniRearUpdate" style="margin-top: 10px;">Foto del DNI (Parte Posterior)</label>
@@ -141,12 +124,6 @@
                 <div class="form-group">
                     <label for="vaucherUpdate" style="margin-top: 10px;">Foto del Comprobante de Pago</label>
                     <input type="file" name="vaucherUpdate" id="vaucherUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg" required>
-                </div>
-            @endif
-            @if ($responseData['followUpData']['vaucher_additional_observation'] != null)
-                <div class="form-group">
-                    <label for="vaucherAdditionalUpdate" style="margin-top: 10px;">Foto del Comprobante de Pago Adicional</label>
-                    <input type="file" name="vaucherAdditionalUpdate" id="vaucherAdditionalUpdate" class="form-input" accept="image/png, image/jpeg, image/jpg" required>
                 </div>
             @endif
             <div class="form-group">

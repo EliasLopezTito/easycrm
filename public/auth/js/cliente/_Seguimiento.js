@@ -291,6 +291,9 @@ $(function(){
                         if (data.imgData.vaucher) {
                             imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.vaucher}" target="_blank">Ver Voucher</a></p>`;
                         }
+                        if (data.imgData.additional_voucher) {
+                            imgLinks += `<p><a href="/assets/img-matriculado/${v.cliente_id}/${data.imgData.additional_voucher}" target="_blank">Ver Voucher Adicional</a></p>`;
+                        }
                         if(data.imgData.school_name){
                             imgLinks += `<p>Colegio: <b>${data.imgData.school_name}</b></p>`;
                         }
@@ -364,24 +367,69 @@ $(function(){
                 var html = '';
                 var n = data.data.length == 1 ? 1 : data.data.length;
                 $.each(data.data, function(i, v){
-
+                    let imgLinks = '';
+                    if (data.imgAdicionalesData) {
+                        const imgMatch = data.imgAdicionalesData.find(img => img.id_client_additional === v.id);
+                        if (imgMatch) {
+                            if (imgMatch.dni_front_additional) {
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.dni_front_additional}" target="_blank">Ver DNI Frente</a></p>`;
+                            }
+                            if (imgMatch.dni_rear_additional) {
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.dni_rear_additional}" target="_blank">Ver DNI Detrás</a></p>`;
+                            }
+                            if (imgMatch.izy_pay_additional) {
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.izy_pay_additional}" target="_blank">Ver IZYPAY</a></p>`;
+                            }
+                            if (imgMatch.vaucher_additional) {
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.vaucher_additional}" target="_blank">Ver Voucher</a></p>`;
+                            }
+                            if (imgMatch.school_name_additional) {
+                                imgLinks += `<p>Colegio: <b>${imgMatch.school_name_additional}</b></p>`;
+                            }
+                            if (imgMatch.completion_date_additional) {
+                                imgLinks += `<p>Fecha: <b>${imgMatch.completion_date_additional}</b></p>`;
+                            }
+                        }
+                    }
                     /*----SE AGREGO LA CONDICIONAL SI EXISTE LOCAL_ID PARA LAS MATRICULAS PASADAS-----*/
-                    if(v.locales != null){
-                        html += '<div class="item">'+
-                            '<div class="number-image">'+
-                            '<div><span>'+(n--)+'</span></div>'+
-                            '</div><div class="info-details"><div><p class="info-details-title">Nueva matricula: ' + v.modalidades.name  +  ' de ' + v.carreras.name+ ', en la sede: ' + v.sedes.name + ', en el local: ' + v.locales.name +', en el turno: '+ v.turnos.name + ' y en el horario de: ' + v.horarios.horario + ' | N° Operación: ' + v.nro_operacion_adicional+ ' | Monto: S/ ' + v.monto_adicional + '. </p></div>'+
-                            '</div>'+
-                            '</div>'+
-                            '</div>';
-                    }else{
-                        html += '<div class="item">'+
-                            '<div class="number-image">'+
-                            '<div><span>'+(n--)+'</span></div>'+
-                            '</div><div class="info-details"><div><p class="info-details-title">Nueva matricula: ' + v.modalidades.name  +  ' de ' + v.carreras.name+ ', en la sede: ' + v.sedes.name + ', en el turno: '+ v.turnos.name + ' y en el horario de: ' + v.horarios.horario + ' | N° Operación: ' + v.nro_operacion_adicional+ ' | Monto: S/ ' + v.monto_adicional + '. </p></div>'+
-                            '</div>'+
-                            '</div>'+
-                            '</div>';
+                    if (v.locales != null) {
+                        html += `
+                            <div class="item">
+                                <div class="number-image">
+                                    <div><span>${n--}</span></div>
+                                </div>
+                                <div class="info-details">
+                                    <div>
+                                        <p class="info-details-title">
+                                            Nueva matricula: ${v.modalidades.name} de ${v.carreras.name}, en la sede: ${v.sedes.name}, en el local: ${v.locales.name}, en el turno: ${v.turnos.name} y en el horario de: ${v.horarios.horario} | N° Operación: ${v.nro_operacion_adicional} | Monto: S/ ${v.monto_adicional}.
+                                        </p>
+                                        ${imgLinks}
+                                        <div class="text-center mt-2">
+                                            <button type="button" class="btn-editar btn btn-primary" data-id="${v.id}" data-cliente="${v.cliente_id}">Editar</button>
+                                        </div>
+                                        <div class="form-container mt-3" id="form-${v.id}" style="display: none;"></div>
+                                    </div>
+                                </div>
+                            </div>`;
+                    } else {
+                        html += `
+                            <div class="item">
+                                <div class="number-image">
+                                    <div><span>${n--}</span></div>
+                                </div>
+                                <div class="info-details">
+                                    <div>
+                                        <p class="info-details-title">
+                                            Nueva matricula: ${v.modalidades.name} de ${v.carreras.name}, en la sede: ${v.sedes.name}, en el turno: ${v.turnos.name} y en el horario de: ${v.horarios.horario} | N° Operación: ${v.nro_operacion_adicional} | Monto: S/ ${v.monto_adicional}.
+                                        </p>
+                                        ${imgLinks}
+                                        <div class="text-center mt-2">
+                                            <button type="button" class="btn-editar btn btn-primary" data-id="${v.id}" data-cliente="${v.cliente_id}">Editar</button>
+                                        </div>
+                                        <div class="form-container mt-3" id="form-${v.id}" style="display: none;"></div>
+                                    </div>
+                                </div>
+                            </div>`;
                     }
                 });
                 $("#content-history-adicional").append(html);
@@ -398,8 +446,21 @@ $(function(){
         });
     });
 
-    $(".cursosAdicionales button[type=button]").on("click", function(){
-        $("#datosAdicionales").hasClass("hidden") ? $("#datosAdicionales").removeClass("hidden").find("input, select").val("").prop("required", true) : $("#datosAdicionales").addClass("hidden").find("input, select").val("").prop("required", false);
+    $(".cursosAdicionales button[type=button]").on("click", function () {
+        let contenedor = $("#datosAdicionales");
+        if (contenedor.hasClass("hidden")) {
+            contenedor
+                .removeClass("hidden")
+                .find("input:not(.not-required), select:not(.not-required)")
+                .val("")
+                .prop("required", true);
+        } else {
+            contenedor
+                .addClass("hidden")
+                .find("input:not(.not-required), select:not(.not-required)")
+                .val("")
+                .prop("required", false);
+        }
     });
 
     OnSuccessRegistroSeguimiento = (data) => onSuccessForm(data, $form, null, function(data){
