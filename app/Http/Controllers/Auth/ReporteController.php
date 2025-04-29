@@ -834,10 +834,13 @@ class ReporteController extends Controller
                     'updated_at' => Carbon::now(),
                     'updated_modified_by' => $userLogin->id,
                 ]);
-                $seguimientoData = ClienteSeguimiento::where('id', $request->idClient)->where('estado_id', 4)->where('estado_detalle_id', 8)->update([
-                    'comentario' => $request->comentario,
-                    'updated_at' => Carbon::now(),
-                ]);
+                $seguimientoData = ClienteSeguimiento::where('id', $request->idClient)->where('estado_id', 4)->where('estado_detalle_id', 8)->first();
+                if ($seguimientoData) {
+                    $seguimientoData->update([
+                        'comentario' => $request->comentario,
+                        'updated_at' => Carbon::now(),
+                    ]);
+                }
             } else {
                 $clientData = Cliente::where('id', $request->idClient)->update([
                     'nombres' => $request->name,
@@ -852,6 +855,8 @@ class ReporteController extends Controller
                     'provincia_id' => $request->provincia_id,
                     'distrito_id' => $request->distrito_id,
                     'direccion' => $request->direction,
+                    'sede_id' => $request->sede_id,
+                    'local_id' => $request->local_id,
                     'tipo_operacion_id' => $request->tipo_operacion_id,
                     'modalidad_pago' => $request->modalidad_pago,
                     'completo' => $request->completo,
@@ -864,10 +869,13 @@ class ReporteController extends Controller
                     'updated_at' => Carbon::now(),
                     'updated_modified_by' => $userLogin->id,
                 ]);
-                $seguimientoData = ClienteSeguimiento::where('id', $request->idClient)->where('estado_id', 4)->where('estado_detalle_id', 8)->update([
-                    'comentario' => $request->comentario,
-                    'updated_at' => Carbon::now(),
-                ]);
+                $seguimientoData = ClienteSeguimiento::where('id', $request->idClient)->where('estado_id', 4)->where('estado_detalle_id', 8)->first();
+                if ($seguimientoData) {
+                    $seguimientoData->update([
+                        'comentario' => $request->comentario,
+                        'updated_at' => Carbon::now(),
+                    ]);
+                }
             }
             DB::commit();
             return redirect()->back()->with('success', 'Cliente actualizado correctamente.');
