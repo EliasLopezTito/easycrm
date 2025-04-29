@@ -865,7 +865,6 @@ class ReporteController extends Controller
                     'code_waiver' => $request->code_waiver,
                     'promocion' => $request->promocion,
                     'observacion' => $request->observacion,
-                    'comentario' => $request->comentario,
                     'updated_at' => Carbon::now(),
                     'updated_modified_by' => $userLogin->id,
                 ]);
