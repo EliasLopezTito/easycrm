@@ -41,7 +41,7 @@ $(document).ready(function() {
         }
     });
     $("#btnConsultClient").on("click", function () {
-        let numberSearch = $("#numberSearch").val(); // Obtener el valor del input
+        let numberSearch = $("#numberSearch").val();
         if (numberSearch) {
             $.ajax({
                 url: routeAjax,
@@ -70,6 +70,7 @@ $(document).ready(function() {
             clientes.forEach(cliente => {
                 let row = `
                     <tr>
+                        <td>${cliente.nombre_carrera || "No disponible"}</td>
                         <td>${cliente.nombres || "No disponible"}</td>
                         <td>${cliente.apellidos || "No disponible"}</td>
                         <td>${cliente.dni || "No disponible"}</td>

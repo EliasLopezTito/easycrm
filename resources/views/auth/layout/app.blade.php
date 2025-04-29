@@ -13,6 +13,16 @@
     <link rel="stylesheet" href="{{ asset('auth/plugins/sweetalert/sweetalert.css') }}">
     <link rel="stylesheet" href="{{ asset('auth/plugins/toastr/css/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('auth/css/layout/app.min.css') }}">
+    <style>
+        .logo-v2{
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .logo-v2 {
+                width: 150px;
+            }
+        }
+    </style>
     @yield('styles')
 </head>
 
@@ -28,8 +38,8 @@
         <div class="inside-header">
             <a href="/" class="logo">
                 <span class="logo-lg">
-                    <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="light-logo">
-                    <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="dark-logo">
+                    <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="light-logo logo-v2">
+                    <img src="{{ asset('auth/image/logo_3.png') }}" alt="logo" class="dark-logo logo-v2">
                 </span>
             </a>
             <nav class="navbar navbar-static-top">

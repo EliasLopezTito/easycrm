@@ -2,6 +2,19 @@
 
 @section('styles')
     <link rel="stylesheet" type="text/css" href="auth/plugins/daterangepicker/daterangepicker.css" />
+    <style>
+        @media (max-width: 768px) {
+            .sub-title-v2 {
+                font-size: 18px !important;
+                display: inline-block;
+                margin: 0;
+                padding: 0; 
+            }
+            #cards-list{
+                padding: 20px;
+            }
+        }
+    </style>
 @endsection
 
 @section('contenido')
@@ -12,40 +25,50 @@
     </div>
 
     <section class="content-header">
-        <h1>
-            Inicio
-            <small>Control panel</small>
-        </h1>
-
-        <div class="form-group filterSearchContent">
-            <input type="text" name="name" id="name" class="form-input" placeholder="Buscar por DNI, nombres o celular" />
-            <button type="button" class="filterSearch btn-primary"><i class="fa fa-search"></i></button>
-        </div>
-
-        <ol class="breadcrumb">
-
-            @if (Auth::guard('web')->user()->id != 1)
-                @if(\Illuminate\Support\Facades\Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR)
-                <li class="mr-10">
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <select name="reasignar_id" id="reasignar_id" class="form-input">
-                                <option value="">--REASIGNAR--</option>
-                                @foreach($Vendedores as $q)
-                                    <option value="{{ $q->id }}">{{ $q->name }}</option>
-                                @endforeach
-                            </select>
+        <div class="row">
+            <div class="col-lg-4 col-12">
+                <h1 class="sub-title-v2">
+                    Inicio
+                    <small>Control panel</small>
+                </h1>
+            </div>
+            <div class="col-lg-4 col-12">
+                <div class="form-group" style="padding: 10px;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar por DNI, nombres o celular" name="name" id="name">
+                        <div class="input-group-append">
+                            <button class="filterSearch btn-primary" type="button"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
-                </li>
-                @endif
-            @endif
-
-            <li class="breadcrumb-item">
-                <button id="modalFiltroBusqueda" type="button" data-toggle="modal" data-target="#modal-right" class="btn-secondary"><i class="fa fa-search"></i> Búsqueda por Filtro</button>
-                <button id="modalRegistrarInscripcion" type="button" class="btn-primary"><i class="fa fa-pencil-square-o"></i> Registrar Lead</button>
-            </li>
-        </ol>
+                </div>
+            </div>
+            <div class="col-lg-4 col-12">
+                <ol class="breadcrumb">
+    
+                    @if (Auth::guard('web')->user()->id != 1)
+                        @if(\Illuminate\Support\Facades\Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR)
+                        <li class="mr-10">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <select name="reasignar_id" id="reasignar_id" class="form-input">
+                                        <option value="">--REASIGNAR--</option>
+                                        @foreach($Vendedores as $q)
+                                            <option value="{{ $q->id }}">{{ $q->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        @endif
+                    @endif
+        
+                    <li class="breadcrumb-item">
+                        <button id="modalFiltroBusqueda" type="button" data-toggle="modal" data-target="#modal-right" class="btn-secondary"><i class="fa fa-search"></i> Búsqueda por Filtro</button>
+                        <button id="modalRegistrarInscripcion" type="button" class="btn-primary"><i class="fa fa-pencil-square-o"></i> Registrar Lead</button>
+                    </li>
+                </ol>
+            </div>
+        </div>
     </section>
 
     <section id="cards-list" class="content clientes endless-pagination" data-next-page></section>

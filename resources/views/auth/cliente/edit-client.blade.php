@@ -2,7 +2,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('auth/css/report/style.css') }}">
 @endsection
 
@@ -10,26 +10,26 @@
 <div class="content-wrapper">
 
     <section class="content-header">
-        <h1>
-            Editar Cliente
-        </h1>
+        <h3>Buscar cliente</h3>
 
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <label for="fechaInicio">Celular o DNI</label>
-                <input type="text" class="form-control" id="numberSearch" name="numberSearch">
-            </li>
-            <li class="breadcrumb-item btn-link">
-                <button type="button" class="btn btn-primary" id="btnConsultClient">Consultar</button>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="numberSearch" name="numberSearch" placeholder="Celular o DNI">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="btnConsultClient"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
             </li>
         </ol>
     </section>
 
-    <section class="content">
+    <section class="content p-20 bg-white">
 
         <div class="table-responsive">
             <table class="table table-hover" id="clienteDataSearch">
                 <thead>
+                    <th>Carrera o curso</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
                     <th>DNI</th>

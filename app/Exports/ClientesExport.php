@@ -96,7 +96,6 @@ class ClientesExport implements FromView, Responsable
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
         $ClienteMatriculas = ClienteMatricula::with('clientes')->with('clientes.users')
             ->with('clientes.fuentes')->with('clientes.enterados')->with('clientes.estados')
             ->whereHas('clientes', function ($q) use ($vendedor) {

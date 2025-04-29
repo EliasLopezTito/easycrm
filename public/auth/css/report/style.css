@@ -3,13 +3,34 @@
     display: flex;
     align-items: center;
 }
-.btn-link{
+.btn-link {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
+    height: 100%;
+}
+.breadcrumb button{
+    position: static;
+}
+.content{
+    margin: 10px;
+    border-radius: 20px;
+}
+.p-20{
+    padding: 20px;
 }
 .dt-button.btn-success {
     background-color: #28a745 !important;
     border-color: #28a745 !important;
     color: white !important;
+}
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .table-responsive table {
+        width: 100%;
+        min-width: 800px;
+    }
 }

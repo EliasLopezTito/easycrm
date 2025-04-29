@@ -21,6 +21,8 @@ use easyCRM\Turno;
 use easyCRM\User;
 use Illuminate\Http\Request;
 use easyCRM\Http\Controllers\Controller;
+use easyCRM\Sede;
+use easyCRM\TipoOperacion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -775,10 +777,15 @@ class ReporteController extends Controller
     }
     public function storeSearchClient(Request $request)
     {
-        $clientData = Cliente::where('dni', $request->numberSearch)->get();
-        if (!$clientData) {
-            $clientData = Cliente::where('celular', $request->numberSearch)->get();
-        }
+        $clientData = DB::table('clientes as c')
+            ->join('carreras as ca', 'c.carrera_id', '=', 'ca.id')
+            ->select('c.*', 'ca.name as nombre_carrera')
+            ->where(function ($query) use ($request) {
+                $query->where('c.dni', $request->numberSearch)
+                    ->orWhere('c.celular', $request->numberSearch);
+            })
+            ->whereNull('c.deleted_at')
+            ->get();
         return response()->json([
             'data' => $clientData
         ]);
@@ -787,48 +794,88 @@ class ReporteController extends Controller
     {
         $clientData = Cliente::where('id', $id)->first();
         $provincesData = Provincia::whereNull('deleted_at')->get();
-        return view('auth.cliente.edit-client-unit')->with('clientData', $clientData)->with('provincesData', $provincesData);
+        $tipoPagoData = TipoOperacion::whereNull('deleted_at')->get();
+        $sedeData = Sede::whereNull('deleted_at')->get();
+        //
+        $seguimientoData = ClienteSeguimiento::where('cliente_id', $id)->where('estado_id', 4)->where('estado_detalle_id', 8)->first();
+        return view('auth.cliente.edit-client-unit')->with('clientData', $clientData)->with('provincesData', $provincesData)->with('tipoPagoData', $tipoPagoData)->with('sedeData', $sedeData)->with('seguimientoData', $seguimientoData);
     }
     public function storeEditClientUnit(Request $request)
     {
-        $userLogin = Auth::user();
-        $lastName = $request->paternalSurname . " " . $request->maternalSurname;
-        if ($userLogin->email == "useraul@gmail.com" || $userLogin->id == 131) {
-            $clientData = Cliente::where('id', $request->idClient)->update([
-                'codigo_alumno' => $request->codeStudent,
-                'nombres' => $request->name,
-                'apellidos' => $lastName,
-                'apellido_paterno' => $request->paternalSurname,
-                'apellido_materno' => $request->maternalSurname,
-                'email' => $request->email,
-                'dni' => $request->dni,
-                'celular' => $request->celular,
-                'whatsapp' => $request->whatsapp,
-                'fecha_nacimiento' => $request->date,
-                'provincia_id' => $request->provincia_id,
-                'distrito_id' => $request->distrito_id,
-                'direccion' => $request->direction,
-                'updated_at' => Carbon::now(),
-                'updated_modified_by' => $userLogin->id,
-            ]);
-        } else {
-            $clientData = Cliente::where('id', $request->idClient)->update([
-                'nombres' => $request->name,
-                'apellidos' => $lastName,
-                'apellido_paterno' => $request->paternalSurname,
-                'apellido_materno' => $request->maternalSurname,
-                'email' => $request->email,
-                'dni' => $request->dni,
-                'celular' => $request->celular,
-                'whatsapp' => $request->whatsapp,
-                'fecha_nacimiento' => $request->date,
-                'provincia_id' => $request->provincia_id,
-                'distrito_id' => $request->distrito_id,
-                'direccion' => $request->direction,
-                'updated_at' => Carbon::now(),
-                'updated_modified_by' => $userLogin->id,
-            ]);
+        try {
+            DB::beginTransaction();
+            $userLogin = Auth::user();
+            $lastName = $request->paternalSurname . " " . $request->maternalSurname;
+            if ($userLogin->email == "useraul@gmail.com" || $userLogin->id == 131) {
+                $clientData = Cliente::where('id', $request->idClient)->update([
+                    'codigo_alumno' => $request->codeStudent,
+                    'nombres' => $request->name,
+                    'apellidos' => $lastName,
+                    'apellido_paterno' => $request->paternalSurname,
+                    'apellido_materno' => $request->maternalSurname,
+                    'email' => $request->email,
+                    'dni' => $request->dni,
+                    'celular' => $request->celular,
+                    'whatsapp' => $request->whatsapp,
+                    'fecha_nacimiento' => $request->date,
+                    'provincia_id' => $request->provincia_id,
+                    'distrito_id' => $request->distrito_id,
+                    'direccion' => $request->direction,
+                    'sede_id' => $request->sede_id,
+                    'local_id' => $request->local_id,
+                    'tipo_operacion_id' => $request->tipo_operacion_id,
+                    'modalidad_pago' => $request->modalidad_pago,
+                    'completo' => $request->completo,
+                    'nro_operacion' => $request->nro_operacion,
+                    'monto' => $request->monto,
+                    'code_waiver' => $request->code_waiver,
+                    'promocion' => $request->promocion,
+                    'observacion' => $request->observacion,
+                    'updated_at' => Carbon::now(),
+                    'updated_modified_by' => $userLogin->id,
+                ]);
+                $seguimientoData = ClienteSeguimiento::where('id', $request->idClient)->where('estado_id', 4)->where('estado_detalle_id', 8)->update([
+                    'comentario' => $request->comentario,
+                    'updated_at' => Carbon::now(),
+                ]);
+            } else {
+                $clientData = Cliente::where('id', $request->idClient)->update([
+                    'nombres' => $request->name,
+                    'apellidos' => $lastName,
+                    'apellido_paterno' => $request->paternalSurname,
+                    'apellido_materno' => $request->maternalSurname,
+                    'email' => $request->email,
+                    'dni' => $request->dni,
+                    'celular' => $request->celular,
+                    'whatsapp' => $request->whatsapp,
+                    'fecha_nacimiento' => $request->date,
+                    'provincia_id' => $request->provincia_id,
+                    'distrito_id' => $request->distrito_id,
+                    'direccion' => $request->direction,
+                    'sede_id' => $request->sede_id,
+                    'local_id' => $request->local_id,
+                    'tipo_operacion_id' => $request->tipo_operacion_id,
+                    'modalidad_pago' => $request->modalidad_pago,
+                    'completo' => $request->completo,
+                    'nro_operacion' => $request->nro_operacion,
+                    'monto' => $request->monto,
+                    'code_waiver' => $request->code_waiver,
+                    'promocion' => $request->promocion,
+                    'observacion' => $request->observacion,
+                    'comentario' => $request->comentario,
+                    'updated_at' => Carbon::now(),
+                    'updated_modified_by' => $userLogin->id,
+                ]);
+                $seguimientoData = ClienteSeguimiento::where('id', $request->idClient)->where('estado_id', 4)->where('estado_detalle_id', 8)->update([
+                    'comentario' => $request->comentario,
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'Cliente actualizado correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Ocurrió un error al actualizar el cliente: ' . $e->getMessage());
         }
-        return redirect()->back()->with('success', 'Cliente actualizado correctamente.');
     }
 }
