@@ -43,8 +43,7 @@
                 </div>
             </div>
             <div class="col-lg-4 col-12">
-                <ol class="breadcrumb">
-    
+                <ol class="breadcrumb" style="position: static !important;">
                     @if (Auth::guard('web')->user()->id != 1)
                         @if(\Illuminate\Support\Facades\Auth::guard('web')->user()->profile_id == \easyCRM\App::$PERFIL_ADMINISTRADOR)
                         <li class="mr-10">
