@@ -78,22 +78,24 @@
                     <option value="">Seleccionar</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="sede">Sedes:</label>
-                <select name="sede_id" id="sede" class="form-control">
-                    @foreach ($sedeData as $sede)
-                        <option value="{{ $sede->id }}" {{ $sede->id == $clientData->sede_id ? 'selected' : '' }}>
-                            {{ $sede->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="locals">Locales:</label>
-                <select name="local_id" id="locals" class="form-control">
-                    <option value="">Seleccionar</option>
-                </select>
-            </div>
+            @if (Auth::user()->email == "useraul@gmail.com" || Auth::user()->id == 131)
+                <div class="form-group">
+                    <label for="sede">Sedes:</label>
+                    <select name="sede_id" id="sede" class="form-control">
+                        @foreach ($sedeData as $sede)
+                            <option value="{{ $sede->id }}" {{ $sede->id == $clientData->sede_id ? 'selected' : '' }}>
+                                {{ $sede->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="locals">Locales:</label>
+                    <select name="local_id" id="locals" class="form-control">
+                        <option value="">Seleccionar</option>
+                    </select>
+                </div>
+            @endif
             <div class="form-group">
                 <label for="tipo_operacion_id">Tipo de operación:</label>
                 <select name="tipo_operacion_id" id="tipo_operacion_id" class="form-control">
@@ -176,8 +178,10 @@
     <script>
         let routeFiltro = "{{ route('user.filtroDistrito', ':id') }}";
         let idDistrito = "{{ $clientData->distrito_id ?? '' }}";
-        let routeSedeFiltro = "{{ route('user.filtroLocal', ':id') }}";
-        let idLocal = "{{ $clientData->local_id ?? '' }}";
+        @if (Auth::user()->email == "useraul@gmail.com" || Auth::user()->id == 131)
+            let routeSedeFiltro = "{{ route('user.filtroLocal', ':id') }}";
+            let idLocal = "{{ $clientData->local_id ?? '' }}";
+        @endif
     </script>
     <script src="{{ asset('auth/js/cliente/v2/editClient.js') }}"></script>
 @endsection
