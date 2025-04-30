@@ -129,6 +129,10 @@
                 <input type="text" class="form-input decimal" id="monto" name="monto" value="{{ $clientData->monto  }}">
             </div>
             <div class="form-group">
+                <label for="nombre_titular">Nombre del título:</label>
+                <input type="text" class="form-input" id="nombre_titular" name="nombre_titular" value="{{ $clientData->nombre_titular  }}">
+            </div>
+            <div class="form-group">
                 <label for="code_waiver">Renuncia de código:</label>
                 <select name="code_waiver" id="code_waiver" class="form-control">
                     <option value="1" {{ 1 == $clientData->code_waiver ? 'selected' : '' }}>Si</option>
