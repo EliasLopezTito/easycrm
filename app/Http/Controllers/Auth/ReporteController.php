@@ -856,8 +856,6 @@ class ReporteController extends Controller
                     'provincia_id' => $request->provincia_id,
                     'distrito_id' => $request->distrito_id,
                     'direccion' => $request->direction,
-                    'sede_id' => $request->sede_id,
-                    'local_id' => $request->local_id,
                     'tipo_operacion_id' => $request->tipo_operacion_id,
                     'modalidad_pago' => $request->modalidad_pago,
                     'completo' => $request->completo,
