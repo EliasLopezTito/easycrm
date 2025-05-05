@@ -514,7 +514,7 @@
                     <p>No existe historial registrada actualmente.</p>
                 </div>
                 <div class="text-center">
-                    @if ($Cliente->estado_detalle_id == 8 && Auth::user()->email == "useraul@gmail.com" || Auth::user()->profile_id == 2)
+                    @if ($Cliente->estado_detalle_id == 8 && Auth::user()->profile_id == 1 || Auth::user()->profile_id == 2)
                         <button type="button" class="btn btn-primary" id="seeFromImng">Editar</button>
                         <div id="formInpuImg" style="display: none;margin-top: 10px;margin-bottom: 10px;">
                             <div class="row">
