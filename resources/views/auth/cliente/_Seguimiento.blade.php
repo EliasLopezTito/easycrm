@@ -220,34 +220,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="containerImg" style="display: none;">
-                                        <label for="dniFront" style="margin-top: 10px;">Foto del DNI (Parte Frontal) - Opcional</label>
-                                        <input type="file" name="dniFront" id="dniFront" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                        
-                                        <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
-                                        <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                                    <label for="dniFront" style="margin-top: 10px;">Foto del DNI (Parte Frontal) - Opcional</label>
+                                    <input type="file" name="dniFront" id="dniFront" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                                    
+                                    <label for="dniRear" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
+                                    <input type="file" name="dniRear" id="dniRear" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
-                                        <label for="codeWaiver" style="margin-top: 10px;">Foto de la Renuncia Código - Opcional</label>
-                                        <input type="file" name="codeWaiver" id="codeWaiver" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                        
-                                        <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE, PLIN o IZY PAY</label>
-                                        <input type="file" name="izyPay" id="izyPay" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                                    <label for="codeWaiver" style="margin-top: 10px;">Foto de la Renuncia Código - Opcional</label>
+                                    <input type="file" name="codeWaiver" id="codeWaiver" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                                    
+                                    <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE, PLIN o IZY PAY</label>
+                                    <input type="file" name="izyPay" id="izyPay" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
-                                        <label for="vaucher" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
-                                        <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                                    <label for="vaucher" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
+                                    <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
-                                        <div id="containerAdditional" style="display: none;">
-                                            <label for="additionalVoucher" style="margin-top: 10px;">Foto del Comprobante de Pago Adicional - Opcional </label>
-                                            <input type="file" name="additionalVoucher" id="additionalVoucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
-                                        </div>
-
-                                        <label for="schoolName" style="margin-top: 10px;">Nombre del Colegio</label>
-                                        <input type="text" name="schoolName" id="schoolName" class="form-input">
-
-                                        <label for="completionDate" style="margin-top: 10px;">Fecha de Termino</label>
-                                        <input type="date" name="completionDate" id="completionDate" class="form-input">
+                                    <div id="containerAdditional" style="display: none;">
+                                        <label for="additionalVoucher" style="margin-top: 10px;">Foto del Comprobante de Pago Adicional - Opcional </label>
+                                        <input type="file" name="additionalVoucher" id="additionalVoucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
                                     </div>
-                    
+
+                                    <label for="schoolName" style="margin-top: 10px;">Nombre del Colegio</label>
+                                    <input type="text" name="schoolName" id="schoolName" class="form-input">
+
+                                    <label for="completionDate" style="margin-top: 10px;">Fecha de Termino</label>
+                                    <input type="date" name="completionDate" id="completionDate" class="form-input">
                                 </div>
                             </div>
                         </div>
@@ -640,7 +637,7 @@
                                         <option value="0">Mayor de edad: <b>No</b></option>
                                     </select>
                                 </div>
-                                <div id="containerImgAdditional" class="col-md-12" style="display: none;margin-bottom: 15px;">
+                                <div class="col-md-12" style="margin-bottom: 15px;">
                                     <label for="dniFrontAdditional" style="margin-top: 10px;">Foto del DNI (Parte Frontal) - Opcional</label>
                                     <input type="file" name="dniFrontAdditional" id="dniFrontAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
                                     
@@ -651,7 +648,7 @@
                                     <input type="file" name="izyPayAdditional" id="izyPayAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
 
                                     <label for="vaucherAdditional" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
-                                    <input type="file" name="vaucherAdditional" id="vaucherAdditional" class="form-input" accept="image/png, image/jpeg, image/jpg">
+                                    <input type="file" name="vaucherAdditional" id="vaucherAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
 
                                     <label for="schoolNameAdditional" style="margin-top: 10px;">Nombre del Colegio</label>
                                     <input type="text" name="schoolNameAdditional" id="schoolNameAdditional" class="form-input not-required">
@@ -659,7 +656,6 @@
                                     <label for="completionDateAdditional" style="margin-top: 10px;">Fecha de Termino</label>
                                     <input type="date" name="completionDateAdditional" id="completionDateAdditional" class="form-input not-required">
                                 </div>
-                                <div class="col-md-4" style="margin-bottom: 15px;" id="containerDiv"></div>
                                 <div class="col-md-4">
                                     <select name="modalidad_adicional_id" class="form-input" id="modalidad_adicional_id">
                                         <option value="">-- Modalidad --</option>

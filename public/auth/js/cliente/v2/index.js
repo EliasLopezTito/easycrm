@@ -23,15 +23,6 @@ $(document).ready(function() {
             $("#mainContainer").fadeOut();
         }
     });
-    $("#modalidad_pago").change(function () {
-        let valor = $(this).val();
-        let containerImg = $("#containerImg");
-        if (valor == "2") {
-            containerImg.fadeIn();
-        } else {
-            containerImg.fadeOut();
-        }
-    });
     $("#modalidad_pago_adcional").change(function () {
         let valor = $(this).val();
         let containerImgAdicional = $("#containerImgAdditional");
