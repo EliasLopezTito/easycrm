@@ -108,15 +108,3 @@ $("#increaseImgs").click(function (event) {
         }
     });
 });
-$("#modalidad_pago_adcional").change(function () {
-    let valor = $(this).val();
-    let containerImgAdicional = $("#containerImgAdditional");
-    let containerDiv = $("#containerDiv");
-    if (valor == "2") {
-        containerImgAdicional.fadeIn();
-        containerDiv.fadeOut();
-    } else {
-        containerImgAdicional.fadeOut();
-        containerDiv.fadeIn();
-    }
-});
