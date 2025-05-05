@@ -229,10 +229,10 @@
                                     <label for="codeWaiver" style="margin-top: 10px;">Foto de la Renuncia Código - Opcional</label>
                                     <input type="file" name="codeWaiver" id="codeWaiver" class="form-input" accept="image/png, image/jpeg, image/jpg">
                                     
-                                    <label for="izyPay" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE, PLIN o IZY PAY</label>
+                                    <label for="izyPay" style="margin-top: 10px;">  Subir foto del comprobante (IZYPAY) – <strong>Obligatorio solo si el pago es con YAPE, PLIN o IZYPAY y la modalidad es Virtual</strong></label>
                                     <input type="file" name="izyPay" id="izyPay" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
-                                    <label for="vaucher" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
+                                    <label for="vaucher" style="margin-top: 10px; color: #721c24;">  Subir foto del comprobante de pago – <strong>Obligatorio si la modalidad es virtual</strong>. En modalidad presencial, <strong>no es obligatorio si el pago es en efectivo</strong>.</label>
                                     <input type="file" name="vaucher" id="vaucher" class="form-input" accept="image/png, image/jpeg, image/jpg">
 
                                     <div id="containerAdditional" style="display: none;">
@@ -644,10 +644,14 @@
                                     <label for="dniRearAdditional" style="margin-top: 10px;">Foto del DNI (Parte Posterior) - Opcional</label>
                                     <input type="file" name="dniRearAdditional" id="dniRearAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
                                     
-                                    <label for="izyPayAdditional" style="margin-top: 10px;">Foto del IZYPAY - Obligatorio solo cuando es YAPE, PLIN o IZY PAY</label>
+                                    <label for="izyPayAdditional" style="margin-top: 10px;">
+                                        Subir foto del comprobante (IZYPAY) – <strong>Obligatorio solo si el pago es con YAPE, PLIN o IZYPAY y la modalidad es Virtual</strong>
+                                    </label>
                                     <input type="file" name="izyPayAdditional" id="izyPayAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
 
-                                    <label for="vaucherAdditional" style="margin-top: 10px; color: #721c24;">Foto del Comprobante de Pago - Obligatorio </label>
+                                    <label for="vaucherAdditional" style="margin-top: 10px; color: #721c24;">
+                                        Subir foto del comprobante de pago – <strong>Obligatorio si la modalidad es virtual</strong>. En modalidad presencial, <strong>no es obligatorio si el pago es en efectivo</strong>.
+                                    </label>
                                     <input type="file" name="vaucherAdditional" id="vaucherAdditional" class="form-input not-required" accept="image/png, image/jpeg, image/jpg">
 
                                     <label for="schoolNameAdditional" style="margin-top: 10px;">Nombre del Colegio</label>
