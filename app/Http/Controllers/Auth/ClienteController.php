@@ -789,13 +789,16 @@ class ClienteController extends Controller
                         }
                     }
 
-                    if ($request->tipo_operacion_id == 4 || $request->tipo_operacion_id == 5 || $request->tipo_operacion_id == 6) {
-                        if (!$imgData) {
-                            if (!$request->hasFile('vaucher') || !$request->hasFile('izyPay')) {
-                                dd('Error: Debe subir la imagen del comprobante de pago y de IZIPAY.');
+                    if ($request->modalidad_pago == 2) {
+                        if ($request->tipo_operacion_id == 4 || $request->tipo_operacion_id == 5 || $request->tipo_operacion_id == 6) {
+                            if (!$imgData) {
+                                if (!$request->hasFile('vaucher') || !$request->hasFile('izyPay')) {
+                                    dd('Error: Debe subir la imagen del comprobante de pago y de IZIPAY.');
+                                }
                             }
                         }
                     }
+
                     $basePath = public_path('assets/img-matriculado');
                     $clientFolder = $basePath . '/' . $request->cliente_id;
 
@@ -1093,10 +1096,12 @@ class ClienteController extends Controller
                             dd('Error: Debe subir la imagen del comprobante de pagos.');
                         }
                     }
-                    if ($request->tipo_operacion_adicional_id == 4 || $request->tipo_operacion_adicional_id == 5 || $request->tipo_operacion_adicional_id == 6) {
-                        if (!$imgData) {
-                            if (!$request->hasFile('vaucherAdditional') || !$request->hasFile('izyPayAdditional')) {
-                                dd('Error: Debe subir la imagen del comprobante de pago y de IZIPAY.');
+                    if ($request->modalidad_pago_adcional == 2) {
+                        if ($request->tipo_operacion_adicional_id == 4 || $request->tipo_operacion_adicional_id == 5 || $request->tipo_operacion_adicional_id == 6) {
+                            if (!$imgData) {
+                                if (!$request->hasFile('vaucherAdditional') || !$request->hasFile('izyPayAdditional')) {
+                                    dd('Error: Debe subir la imagen del comprobante de pago y de IZIPAY.');
+                                }
                             }
                         }
                     }
