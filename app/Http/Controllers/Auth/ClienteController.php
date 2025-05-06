@@ -1401,7 +1401,7 @@ class ClienteController extends Controller
                 if ($request->hasFile($key)) {
                     $file = $request->file($key);
                     $extension = $file->getClientOriginalExtension();
-                    $filename = strtolower(str_replace(['dniFrontUpdate', 'dniRearUpdate', 'izyPayUpdate', 'vaucherUpdate'], ['dni-front', 'dni-rear', 'izy-pay', 'voucher'], $key));
+                    $filename = strtolower(str_replace(['dniFrontUpdate', 'dniRearUpdate', 'izyPayUpdate', 'vaucherUpdate'], ['dni-front', 'dni-rear', 'izy-pay', 'vaucher'], $key));
                     $filename = "{$filename}-{$request->idClientAdditional}.{$extension}";
                     $file->move($clientFolder, $filename);
                     $filenames[$key] = $filename;
@@ -1871,7 +1871,7 @@ class ClienteController extends Controller
                 'dniFrontUpdate' => 'dni_front',
                 'dniRearUpdate' => 'dni_rear',
                 'izyPayUpdate' => 'izy_pay',
-                'vaucherUpdate' => 'voucher'
+                'vaucherUpdate' => 'vaucher'
             ];
 
             foreach ($fileFields as $requestKey => $dbColumn) {
