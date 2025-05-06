@@ -372,16 +372,16 @@ $(function(){
                         const imgMatch = data.imgAdicionalesData.find(img => img.id_client_additional === v.id);
                         if (imgMatch) {
                             if (imgMatch.dni_front_additional) {
-                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.dni_front_additional}" target="_blank">Ver DNI Frente</a></p>`;
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${v.cliente_id}/${imgMatch.dni_front_additional}" target="_blank">Ver DNI Frente</a></p>`;
                             }
                             if (imgMatch.dni_rear_additional) {
-                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.dni_rear_additional}" target="_blank">Ver DNI Detrás</a></p>`;
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${v.cliente_id}/${imgMatch.dni_rear_additional}" target="_blank">Ver DNI Detrás</a></p>`;
                             }
                             if (imgMatch.izy_pay_additional) {
-                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.izy_pay_additional}" target="_blank">Ver IZYPAY</a></p>`;
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${v.cliente_id}/${imgMatch.izy_pay_additional}" target="_blank">Ver IZYPAY</a></p>`;
                             }
                             if (imgMatch.vaucher_additional) {
-                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${imgMatch.id_client_additional}/${imgMatch.vaucher_additional}" target="_blank">Ver Voucher</a></p>`;
+                                imgLinks += `<p><a href="/assets/img-matriculado-adicional/${v.cliente_id}/${imgMatch.vaucher_additional}" target="_blank">Ver Voucher</a></p>`;
                             }
                             if (imgMatch.school_name_additional) {
                                 imgLinks += `<p>Colegio: <b>${imgMatch.school_name_additional}</b></p>`;
