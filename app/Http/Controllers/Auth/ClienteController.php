@@ -1871,7 +1871,7 @@ class ClienteController extends Controller
                 'dniFrontUpdate' => 'dni_front',
                 'dniRearUpdate' => 'dni_rear',
                 'izyPayUpdate' => 'izy_pay',
-                'vaucherUpdate' => 'vaucher'
+                'vaucherUpdate' => 'voucher'
             ];
 
             foreach ($fileFields as $requestKey => $dbColumn) {
