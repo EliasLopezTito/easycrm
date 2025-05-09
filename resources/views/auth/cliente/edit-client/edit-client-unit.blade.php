@@ -15,6 +15,19 @@
         </h1>
     </section>
 
+    <section class="content-header" style="display: block;height: 125px;margin-top: 20px;">
+        <h1>
+            Matriculas Adicionales
+        </h1>
+        <div class="p-5">
+            @if ($matriculaAdiconalData->isNotEmpty())
+                @foreach ($matriculaAdiconalData as $matriculaAdiconal)
+                    <a href="{{ route('user.edit-client-adicional-unit', $matriculaAdiconal->id) }}" class="btn btn-secondary">{{ $matriculaAdiconal->name }}</a>
+                @endforeach
+            @endif
+        </div>
+    </section>
+
     <section class="content bg-white p-20">
 
         <form action="{{ route('user.store-edit-client-unit') }}">

@@ -68,7 +68,9 @@ Route::group(['middleware' => 'auth:web'], function () {
             Route::get('/reporte-admin', 'Auth\ReporteController@reportAdmin')->name('user.reporte-admin');
             Route::get('/edit-client', 'Auth\ReporteController@editClient')->name('user.edit-client');
             Route::get('/edit-client-unit/{id}', 'Auth\ReporteController@editClientUnit')->name('user.edit-client-unit');
+            Route::get('/edit-client-adicional-unit/{id}', 'Auth\ReporteController@editAdicionalClientUnit')->name('user.edit-client-adicional-unit');
             Route::get('/store-edit-client-unit', 'Auth\ReporteController@storeEditClientUnit')->name('user.store-edit-client-unit');
+            Route::get('/store-edit-client-adicional-unit', 'Auth\ReporteController@storeEditClientAdicionalUnit')->name('user.store-edit-client-adicional-unit');
             Route::post('/store-search-client', 'Auth\ReporteController@storeSearchClient')->name('user.store-search-client');
             Route::post('/store-reporte-admin', 'Auth\ReporteController@storeReportAdmin')->name('user.store-reporte-admin');
 

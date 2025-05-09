@@ -773,7 +773,7 @@ class ReporteController extends Controller
     }
     public function editClient()
     {
-        return view('auth.cliente.edit-client');
+        return view('auth.cliente.edit-client.edit-client');
     }
     public function storeSearchClient(Request $request)
     {
@@ -793,12 +793,18 @@ class ReporteController extends Controller
     public function editClientUnit($id)
     {
         $clientData = Cliente::where('id', $id)->first();
+        //Matriculas Adicionales
+        $matriculaAdiconalData = ClienteMatricula::where('cliente_id', $id)
+            ->join('carreras', 'carreras.id', '=', 'cliente_matriculas.carrera_adicional_id')
+            ->select('cliente_matriculas.id', 'carreras.name')
+            ->whereNull('deleted_at ')->get();
+        //
         $provincesData = Provincia::whereNull('deleted_at')->get();
         $tipoPagoData = TipoOperacion::whereNull('deleted_at')->get();
         $sedeData = Sede::whereNull('deleted_at')->get();
         //
         $seguimientoData = ClienteSeguimiento::where('cliente_id', $id)->where('estado_id', 4)->where('estado_detalle_id', 8)->first();
-        return view('auth.cliente.edit-client-unit')->with('clientData', $clientData)->with('provincesData', $provincesData)->with('tipoPagoData', $tipoPagoData)->with('sedeData', $sedeData)->with('seguimientoData', $seguimientoData);
+        return view('auth.cliente.edit-client.edit-client-unit')->with('clientData', $clientData)->with('provincesData', $provincesData)->with('tipoPagoData', $tipoPagoData)->with('sedeData', $sedeData)->with('seguimientoData', $seguimientoData)->with('matriculaAdiconalData', $matriculaAdiconalData);
     }
     public function storeEditClientUnit(Request $request)
     {
@@ -881,6 +887,53 @@ class ReporteController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Ocurrió un error al actualizar el cliente: ' . $e->getMessage());
+        }
+    }
+    //Adicional
+    public function editAdicionalClientUnit($id)
+    {
+        $clientAdicionalData = ClienteMatricula::where('id', $id)->first();
+        $CarreraData = Carrera::where('id', $clientAdicionalData->carrera_adicional_id)->first();
+        $tipoPagoData = TipoOperacion::whereNull('deleted_at')->get();
+        $sedeData = Sede::whereNull('deleted_at')->get();
+        return view('auth.cliente.edit-client.edit-additional-registration')->with('tipoPagoData', $tipoPagoData)->with('sedeData', $sedeData)->with('clientAdicionalData', $clientAdicionalData)->with('CarreraData', $CarreraData);
+    }
+    public function storeEditClientAdicionalUnit(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $userLogin = Auth::user();
+            if ($userLogin->email == "useraul@gmail.com" || $userLogin->id == 131) {
+                $clientData = ClienteMatricula::where('id', $request->idLeadAdicional)->update([
+                    'codigo_alumno_adicional' => $request->codeStudent,
+                    'sede_adicional_id' => $request->sede_id,
+                    'local_adicional_id' => $request->local_id,
+                    'tipo_operacion_adicional_id' => $request->tipo_operacion_id,
+                    'modalidad_pago_adicional' => $request->modalidad_pago,
+                    'nro_operacion_adicional' => $request->nro_operacion,
+                    'monto_adicional' => $request->monto,
+                    'nombre_titular_adicional' => $request->nombre_titular,
+                    'promocion_adicional' => $request->promocion,
+                    'observacion_adicional' => $request->observacion,
+                    'updated_at' => Carbon::now()
+                ]);
+            } else {
+                $clientData = ClienteMatricula::where('id', $request->idLeadAdicional)->update([
+                    'tipo_operacion_adicional_id' => $request->tipo_operacion_id,
+                    'modalidad_pago_adicional' => $request->modalidad_pago,
+                    'nro_operacion_adicional' => $request->nro_operacion,
+                    'monto_adicional' => $request->monto,
+                    'nombre_titular_adicional' => $request->nombre_titular,
+                    'promocion_adicional' => $request->promocion,
+                    'observacion_adicional' => $request->observacion,
+                    'updated_at' => Carbon::now()
+                ]);
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'Lead Adicional actualizado correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Ocurrió un error al actualizar el Adicional: ' . $e->getMessage());
         }
     }
 }
