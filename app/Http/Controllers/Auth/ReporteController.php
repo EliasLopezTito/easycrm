@@ -797,7 +797,7 @@ class ReporteController extends Controller
         $matriculaAdiconalData = ClienteMatricula::where('cliente_id', $id)
             ->join('carreras', 'carreras.id', '=', 'cliente_matriculas.carrera_adicional_id')
             ->select('cliente_matriculas.id', 'carreras.name')
-            ->whereNull('deleted_at ')->get();
+            ->whereNull('cliente_matriculas.deleted_at')->get();
         //
         $provincesData = Provincia::whereNull('deleted_at')->get();
         $tipoPagoData = TipoOperacion::whereNull('deleted_at')->get();
