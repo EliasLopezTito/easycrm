@@ -1349,7 +1349,7 @@ class HomeController extends Controller
             ->where('clientes.estado_id', 4)
             ->where('clientes.estado_detalle_id', 8)
             ->whereNull('clientes.deleted_at')
-            ->whereIn('clientes.id', [$request->idsLeads])
+            ->whereIn('clientes.id', $request->idsLeads)
             ->get();
         return response()->json([
             'data' => $clientData
