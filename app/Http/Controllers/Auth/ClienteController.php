@@ -1106,7 +1106,7 @@ class ClienteController extends Controller
                         }
                     }
                     $basePath = public_path('assets/img-matriculado-adicional');
-                    $clientFolder = $basePath . '/' . $newId;
+                    $clientFolder = $basePath . '/' . $request->id;
                     if (!File::exists($clientFolder)) {
                         File::makeDirectory($clientFolder, 0777, true, true);
                     }
@@ -1137,7 +1137,7 @@ class ClienteController extends Controller
                             'updated_at' => Carbon::now(),
                         ]);
                         DB::table('client_registration_images_additional')
-                            ->where('id_client', $newId)
+                            ->where('id_client_additional', $newId)
                             ->update($updateData);
                     } else {
                         $updateData = [
