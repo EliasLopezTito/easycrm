@@ -36,6 +36,8 @@ Route::post('/sending-registrations-additional', 'App\HomeController@sendingRegi
 Route::post('/registered-customer-data', 'App\HomeController@registeredCustomerData')->name('registered-customer-data');
 Route::post('/registered-customer-data-additional', 'App\HomeController@registeredCustomerDataAdditional')->name('registered-customer-data-additional');
 Route::post('/send-cashier-notification', 'App\HomeController@sendCashierNotification')->name('send-cashier-notification');
+//Matricula Aprobada
+Route::post('/get-leads-approved', 'App\HomeController@getLeadsApproved')->name('get-leads-approved');
 //Prueba Alisson
 Route::get('/enrolled-current-year', 'App\HomeController@enrolledCurrentYear')->name('enrolled-current-year');
 Route::post('/list-of-errors-in-surnames', 'App\HomeController@listOfErrorsInSurnames')->name('list-of-errors-in-surnames');

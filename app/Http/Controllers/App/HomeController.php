@@ -1325,5 +1325,34 @@ class HomeController extends Controller
 
         return response()->json(['message' => 'Proceso finalizado.']);
     }
-    //
+    //Matriculas aprobadas
+    public function getLeadsApproved(Request $request)
+    {
+        $clientData = DB::table('clientes')
+            ->join('distritos', 'clientes.distrito_id', '=', 'distritos.id')
+            ->join('carreras', 'clientes.carrera_id', '=', 'carreras.id')
+            ->join('modalidads', 'clientes.modalidad_id', '=', 'modalidads.id')
+            ->select(
+                'clientes.id as idUnico',
+                'clientes.ultimo_contacto as endContact',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'distritos.name as districtClient',
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
+                DB::raw('CASE 
+                    WHEN clientes.modalidad_pago = 1 THEN "Presencial" 
+                    WHEN clientes.modalidad_pago = 2 THEN "Virtual" 
+                    ELSE "Desconocido" 
+                    END as modalidadPago'),
+            )
+            ->where('clientes.estado_id', 4)
+            ->where('clientes.estado_detalle_id', 8)
+            ->whereNull('clientes.deleted_at')
+            ->whereIn('clientes.id', [$request->idsLeads])
+            ->first();
+        return response()->json([
+            'data' => $clientData
+        ]);
+    }
 }
