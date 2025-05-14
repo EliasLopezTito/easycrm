@@ -4,6 +4,7 @@ namespace easyCRM\Http\Controllers\App;
 
 use easyCRM\Carrera;
 use easyCRM\Cliente;
+use easyCRM\ClienteMatricula;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
@@ -1380,5 +1381,53 @@ class HomeController extends Controller
         return response()->json([
             'data' => $clientData
         ]);
+    }
+    public function updateRegistration(Request $request)
+    {
+        try {
+            $updateLead = Cliente::where('id', $request->id_lead_additional)->update([
+                'lead_approved' => 1,
+            ]);
+            if ($updateLead) {
+                return response()->json([
+                    'state' => 200,
+                    'message' => 'Actualización exitosa.',
+                ]);
+            } else {
+                return response()->json([
+                    'state' => 404,
+                    'message' => 'Cliente no encontrado o no se realizó ninguna actualización.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'state' => 500,
+                'message' => 'Error al actualizar: ' . $e->getMessage(),
+            ]);
+        }
+    }
+    public function updateRegistrationAdditional(Request $request)
+    {
+        try {
+            $updateLead = ClienteMatricula::where('id', $request->id_lead_additional)->update([
+                'lead_additional_approved' => 1,
+            ]);
+            if ($updateLead) {
+                return response()->json([
+                    'state' => 200,
+                    'message' => 'Actualización exitosa.',
+                ]);
+            } else {
+                return response()->json([
+                    'state' => 404,
+                    'message' => 'Cliente no encontrado o no se realizó ninguna actualización.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'state' => 500,
+                'message' => 'Error al actualizar: ' . $e->getMessage(),
+            ]);
+        }
     }
 }

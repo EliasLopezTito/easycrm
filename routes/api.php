@@ -39,6 +39,9 @@ Route::post('/send-cashier-notification', 'App\HomeController@sendCashierNotific
 //Matricula Aprobada
 Route::post('/get-leads-approved', 'App\HomeController@getLeadsApproved')->name('get-leads-approved');
 Route::post('/get-leads-additionals-approved', 'App\HomeController@getLeadsAdditionalsApproved')->name('get-leads-additionals-approved');
+//
+Route::post('/update-registration', 'App\HomeController@updateRegistration')->name('update-registration');
+Route::post('/update-registration-additional', 'App\HomeController@updateRegistrationAdditional')->name('update-registration-additional');
 //Prueba Alisson
 Route::get('/enrolled-current-year', 'App\HomeController@enrolledCurrentYear')->name('enrolled-current-year');
 Route::post('/list-of-errors-in-surnames', 'App\HomeController@listOfErrorsInSurnames')->name('list-of-errors-in-surnames');
