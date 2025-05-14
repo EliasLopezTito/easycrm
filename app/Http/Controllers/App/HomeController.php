@@ -1355,4 +1355,30 @@ class HomeController extends Controller
             'data' => $clientData
         ]);
     }
+    public function getLeadsAdditionalsApproved(Request $request)
+    {
+        $clientData = DB::table('cliente_matriculas')
+            ->join('clientes', 'cliente_matriculas.cliente_id', '=', 'clientes.id')
+            ->join('carreras', 'cliente_matriculas.carrera_adicional_id', '=', 'carreras.id')
+            ->join('modalidads', 'cliente_matriculas.modalidad_adicional_id', '=', 'modalidads.id')
+            ->select(
+                'clientes.id as idUnico',
+                'clientes.ultimo_contacto as endContact',
+                'clientes.dni as dniClient',
+                DB::raw('CONCAT(clientes.apellidos, " ", clientes.nombres) as nameComplete'),
+                'modalidads.name as nameModalidad',
+                'carreras.name as nameCarrera',
+                DB::raw('CASE 
+                    WHEN clientes.modalidad_pago = 1 THEN "Presencial" 
+                    WHEN clientes.modalidad_pago = 2 THEN "Virtual" 
+                    ELSE "Desconocido" 
+                    END as modalidadPago'),
+            )
+            ->whereNull('clientes.deleted_at')
+            ->whereIn('cliente_matriculas.id', $request->idsLeadsAdditionals)
+            ->get();
+        return response()->json([
+            'data' => $clientData
+        ]);
+    }
 }
