@@ -1385,8 +1385,6 @@ class HomeController extends Controller
     public function updateRegistration(Request $request)
     {
         try {
-            $updateLead = Cliente::where('id', $request->id_lead)->first();
-            dd($updateLead);
             $updateLead = Cliente::where('id', $request->id_lead)->update([
                 'lead_approved' => 1,
             ]);
