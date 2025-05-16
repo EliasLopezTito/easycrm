@@ -25,6 +25,16 @@
                     <label for="codeStudent">Código de Alumno:</label>
                     <input type="text" class="form-control" id="codeStudent" name="codeStudent" value="{{ $clientAdicionalData->codigo_alumno_adicional }}">
                 </div>
+                <div class="form-group">
+                    <label for="carrera_adicional_id">Cursos:</label>
+                    <select name="carrera_adicional_id" id="carrera_adicional_id" class="form-control">
+                        @foreach ($carreraSelect as $carrera)
+                            <option value="{{ $carrera->id }}" {{ $carrera->id == $clientAdicionalData->carrera_adicional_id ? 'selected' : '' }}>
+                                {{ $carrera->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             @endif
             @if (Auth::user()->email == "useraul@gmail.com" || Auth::user()->id == 131)
                 <div class="form-group">

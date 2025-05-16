@@ -894,9 +894,10 @@ class ReporteController extends Controller
     {
         $clientAdicionalData = ClienteMatricula::where('id', $id)->first();
         $CarreraData = Carrera::where('id', $clientAdicionalData->carrera_adicional_id)->first();
+        $carreraSelect = Carrera::where('modalidad_id', 2)->whereNull('deleted_at')->get();
         $tipoPagoData = TipoOperacion::whereNull('deleted_at')->get();
         $sedeData = Sede::whereNull('deleted_at')->get();
-        return view('auth.cliente.edit-client.edit-additional-registration')->with('tipoPagoData', $tipoPagoData)->with('sedeData', $sedeData)->with('clientAdicionalData', $clientAdicionalData)->with('CarreraData', $CarreraData);
+        return view('auth.cliente.edit-client.edit-additional-registration')->with('tipoPagoData', $tipoPagoData)->with('sedeData', $sedeData)->with('clientAdicionalData', $clientAdicionalData)->with('CarreraData', $CarreraData)->with('carreraSelect', $carreraSelect);
     }
     public function storeEditClientAdicionalUnit(Request $request)
     {
@@ -906,6 +907,7 @@ class ReporteController extends Controller
             if ($userLogin->email == "useraul@gmail.com" || $userLogin->id == 131) {
                 $clientData = ClienteMatricula::where('id', $request->idLeadAdicional)->update([
                     'codigo_alumno_adicional' => $request->codeStudent,
+                    'carrera_adicional_id' => $request->carrera_adicional_id,
                     'sede_adicional_id' => $request->sede_id,
                     'local_adicional_id' => $request->local_id,
                     'tipo_operacion_adicional_id' => $request->tipo_operacion_id,
