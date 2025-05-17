@@ -393,6 +393,13 @@ $(function(){
                     }
                     /*----SE AGREGO LA CONDICIONAL SI EXISTE LOCAL_ID PARA LAS MATRICULAS PASADAS-----*/
                     if (v.locales != null) {
+                        let htmlButton = ''; 
+                        if(idRoleuserLogin == 1 || (idRoleuserLogin == 2 && v.lead_additional_approved == 0)){
+                            htmlButton += `
+                            <div class="text-center mt-2">
+                                <button type="button" class="btn-editar btn btn-primary" data-id="${v.id}" data-cliente="${v.cliente_id}">Editar</button>
+                            </div>`;
+                        }
                         html += `
                             <div class="item">
                                 <div class="number-image">
@@ -404,14 +411,19 @@ $(function(){
                                             Nueva matricula: ${v.modalidades.name} de ${v.carreras.name}, en la sede: ${v.sedes.name}, en el local: ${v.locales.name}, en el turno: ${v.turnos.name} y en el horario de: ${v.horarios.horario} | N° Operación: ${v.nro_operacion_adicional} | Monto: S/ ${v.monto_adicional}.
                                         </p>
                                         ${imgLinks}
-                                        <div class="text-center mt-2">
-                                            <button type="button" class="btn-editar btn btn-primary" data-id="${v.id}" data-cliente="${v.cliente_id}">Editar</button>
-                                        </div>
+                                        ${htmlButton}
                                         <div class="form-container mt-3" id="form-${v.id}" style="display: none;"></div>
                                     </div>
                                 </div>
                             </div>`;
                     } else {
+                        let htmlButton = ''; 
+                        if(idRoleuserLogin == 1 || (idRoleuserLogin == 2 && v.lead_additional_approved == 0)){
+                            htmlButton += `
+                            <div class="text-center mt-2">
+                                <button type="button" class="btn-editar btn btn-primary" data-id="${v.id}" data-cliente="${v.cliente_id}">Editar</button>
+                            </div>`;
+                        }
                         html += `
                             <div class="item">
                                 <div class="number-image">

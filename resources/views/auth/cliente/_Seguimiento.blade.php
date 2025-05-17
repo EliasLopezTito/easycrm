@@ -514,7 +514,7 @@
                     <p>No existe historial registrada actualmente.</p>
                 </div>
                 <div class="text-center">
-                    @if ($Cliente->estado_detalle_id == 8 && Auth::user()->profile_id == 1 || Auth::user()->profile_id == 2)
+                    @if ($Cliente->estado_detalle_id == 8 && Auth::user()->profile_id == 1 || Auth::user()->profile_id == 2 && $Cliente->estado_detalle_id == 8 && $Cliente->lead_approved == 0)
                         <button type="button" class="btn btn-primary" id="seeFromImng">Editar</button>
                         <div id="formInpuImg" style="display: none;margin-top: 10px;margin-bottom: 10px;">
                             <div class="row">
@@ -864,6 +864,11 @@
 
 
 <script type="text/javascript" src="auth/plugins/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+@if ($Cliente->estado_detalle_id == 8)
+    <script>
+        var idRoleuserLogin = "{{ Auth::user()->profile_id }}";
+    </script>
+@endif
 <script type="text/javascript" src="auth/js/cliente/_Seguimiento.js"></script>
 @if ($Cliente->estado_detalle_id != 8)
     <script src="{{ asset('auth/js/cliente/v2/index.js') }}"></script>
