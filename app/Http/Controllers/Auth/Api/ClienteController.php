@@ -56,7 +56,7 @@ class ClienteController extends Controller
                 $userTurnId = $user != null ? $user->id : DB::table('users')->select('id')->where('recibe_lead', 1)->where('activo',1)->whereNull('deleted_at')->first()->id;
             } */
             $user = $assessor;
-            $userTurnId = $user != null ? $user->id : DB::table('users')->select('id')->where('recibe_lead', 1)->where('activo',1)->whereNull('deleted_at')->first()->id;
+            $userTurnId = $user != null ? $user->id : DB::table('users')->select('id')->where('recibe_lead', 1)->where('activo', 1)->whereNull('deleted_at')->first()->id;
 
             $clienteExist = Cliente::where('dni', $request->dni)
                 ->orWhere('email', $request->email)
@@ -106,7 +106,7 @@ class ClienteController extends Controller
                     ($request->modalidad_id == App::$MODALIDAD_CARRERA && !in_array(App::$MODALIDAD_CARRERA, $Cliente_Carreras))
                 ) {
                     $register = true;
-                } else if (!in_array($clienteExist->estado_id, [App::$ESTADO_CIERRE])) {
+                } else if (!in_array($clienteExist->estado_id, [App::$ESTADO_CIERRE, 3])) {
                     $reintento = true;
                     $update = true;
                 } else {
