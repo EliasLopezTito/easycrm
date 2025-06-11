@@ -1096,7 +1096,7 @@ class ClienteController extends Controller
                             dd('Error: Debe subir la imagen del comprobante de pagos.');
                         }
                     }
-                    if ($request->modalidad_pago_adcional == 2) {
+                    if ($request->modalidad_pago_adicional == 2) {
                         if ($request->tipo_operacion_adicional_id == 4 || $request->tipo_operacion_adicional_id == 5 || $request->tipo_operacion_adicional_id == 6) {
                             if (!$imgData) {
                                 if (!$request->hasFile('vaucherAdditional') || !$request->hasFile('izyPayAdditional')) {
@@ -1121,7 +1121,7 @@ class ClienteController extends Controller
                             $filenames[$key] = $filename;
                         }
                     }
-                    if ($request->modalidad_pago_adcional == null && $request->modalidad_pago_adcional == "") {
+                    if ($request->modalidad_pago_adicional == null && $request->modalidad_pago_adicional == "") {
                         dd('Error: Debes seleccionar alguna modalidad de pago.');
                     }
                     $schoolName = $request->schoolNameAdditional ?: null;

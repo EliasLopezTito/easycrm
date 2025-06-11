@@ -626,7 +626,7 @@
                             <hr>
                             <div class="form-group row">
                                 <div class="col-md-4" style="margin-bottom: 15px;">
-                                    <select name="modalidad_pago_adcional" class="form-input" id="modalidad_pago_adcional">
+                                    <select name="modalidad_pago_adicional" class="form-input" id="modalidad_pago_adicional">
                                         <option value="1" selected>Modalidad de pago: <b>Presencial</b></option>
                                         <option value="2">Modalidad de pago: <b>Virtual</b></option>
                                     </select>
