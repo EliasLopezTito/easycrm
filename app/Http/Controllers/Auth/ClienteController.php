@@ -1077,7 +1077,6 @@ class ClienteController extends Controller
             }
 
             if (!$validator->fails()) {
-
                 if (
                     count(Cliente::where('id', $request->id)->where('modalidad_id', $request->modalidad_adicional_id)->where('carrera_id', $request->carrera_adicional_id)->get()) > 0 ||
                     count(ClienteMatricula::where('cliente_id', $request->id)->where('modalidad_adicional_id', $request->modalidad_adicional_id)->where('carrera_adicional_id', $request->carrera_adicional_id)->get()) > 0
@@ -1152,6 +1151,7 @@ class ClienteController extends Controller
                         ];
                         DB::table('client_registration_images_additional')->insert($updateData);
                     }
+                    DB::table('cliente_matriculas')->where('id', $newId)->update(["modalidad_pago_adicional" => $request->modalidad_pago_adicional]);
                 } catch (\Exception $e) {
                     dd($e->getMessage());
                 }
